@@ -1,0 +1,136 @@
+(footprint "sk-13D08-G-5-E"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(property "Reference" "REF**"
+		(at -4 -9 0)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(uuid "d84f52e6-dab8-4f04-8216-1f109dd1b15a")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.1)
+			)
+		)
+	)
+	(property "Value" "sk-13D08-G-5-E"
+		(at -4 -7.5 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "38606664-0504-486a-a7aa-113a31b68c47")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "664431d6-1a40-4164-98ce-49602b082929")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "85ad783a-edd2-432f-8864-4616649306a9")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_text user "${REFERENCE}"
+		(at -4 -6 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "576efd8e-61f8-464d-acc5-f6cf7d7b69d5")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(pad "" thru_hole roundrect
+		(at 0 0)
+		(size 2 2)
+		(drill 1.65)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(roundrect_rratio 0.15)
+		(uuid "5fa0c4bc-7b83-4aaa-b850-54a46ba486f2")
+	)
+	(pad "" thru_hole roundrect
+		(at 16 0)
+		(size 2 2)
+		(drill 1.65)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(roundrect_rratio 0.15)
+		(uuid "2d9c8e22-b462-4c21-8edc-3fbae671a974")
+	)
+	(pad "1" thru_hole roundrect
+		(at 3.9 0)
+		(size 1.27 1.27)
+		(drill 0.8)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(roundrect_rratio 0.15)
+		(uuid "9fa7231b-02a6-434e-8050-cb1ebd85622a")
+	)
+	(pad "2" thru_hole roundrect
+		(at 5.9 0)
+		(size 1.27 1.27)
+		(drill 0.8)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(roundrect_rratio 0.15)
+		(uuid "6168978c-63db-4ccb-9c58-100ac2e69946")
+	)
+	(pad "3" thru_hole roundrect
+		(at 7.9 0)
+		(size 1.27 1.27)
+		(drill 0.8)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(roundrect_rratio 0.15)
+		(uuid "70a823dc-0962-4163-a1d3-fe67693c780d")
+	)
+	(pad "4" thru_hole roundrect
+		(at 11.9 0)
+		(size 1.27 1.27)
+		(drill 0.8)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(roundrect_rratio 0.15)
+		(uuid "26a8c707-4e62-42e4-b6b9-12a832bc3f58")
+	)
+	(embedded_fonts no)
+	(model "${KIPRJMOD}/SK-13D08-G-5-E.step"
+		(offset
+			(xyz -0.1 -1.9 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz -0 -0 -0)
+		)
+	)
+)

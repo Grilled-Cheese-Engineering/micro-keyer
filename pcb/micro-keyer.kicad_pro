@@ -39,9 +39,9 @@
         "other_text_thickness": 0.15,
         "other_text_upright": false,
         "pads": {
-          "drill": 0.8,
-          "height": 1.27,
-          "width": 1.27
+          "drill": 0.75,
+          "height": 1.5,
+          "width": 1.05
         },
         "silk_line_width": 0.1,
         "silk_text_italic": false,
@@ -63,7 +63,7 @@
           "min_clearance": 0.5,
           "min_island_area": 10.0,
           "min_thickness": 0.25,
-          "pad_connection": 1,
+          "pad_connection": 3,
           "remove_islands": 0,
           "thermal_relief_gap": 0.5,
           "thermal_relief_spoke_width": 0.5
@@ -623,6 +623,24 @@
           "label": "Description",
           "name": "Description",
           "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Sim.Pins",
+          "name": "Sim.Pins",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Sim.Type",
+          "name": "Sim.Type",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Sim.Device",
+          "name": "Sim.Device",
+          "show": false
         }
       ],
       "filter_string": "",
@@ -673,7 +691,7 @@
         "uuid": "8f7feab7-3497-470c-875a-34341021450c"
       }
     ],
-    "used_designators": "J1,U1",
+    "used_designators": "BT1,TP1-3,SW1-2,BZ1,#FLG1-2,GND1,#PWR1-11,EN1,RV1,SSD1,J1-5,Q1,U1",
     "variants": []
   },
   "sheets": [

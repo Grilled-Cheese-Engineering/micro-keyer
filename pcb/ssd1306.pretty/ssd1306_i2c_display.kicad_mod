@@ -1,0 +1,126 @@
+(footprint "ssd1306_i2c_display"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(property "Reference" "SSD1306**"
+		(at -1 -5 0)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(uuid "d18b0a86-47a5-4b72-a049-c41b9b9ea1a8")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.1)
+			)
+		)
+	)
+	(property "Value" "ssd1306_i2c_display"
+		(at 0 26.5 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "0399e0b0-664c-4b1c-8cd2-e545bc992267")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "c6159ecc-bc57-46db-91e5-cede8a000fe8")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "d46a35a2-0315-4f00-87a3-b5420de88c00")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_rect
+		(start 0 0)
+		(end 27.3 27.3)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.SilkS")
+		(uuid "a21e424d-8175-43a8-bf4f-d8d33031064a")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 28 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "046e9c6b-7b80-4d73-8d4c-8367f8580604")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(pad "1" thru_hole roundrect
+		(at 10.2 1.55)
+		(size 2 2)
+		(drill 1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(roundrect_rratio 0.125)
+		(uuid "4da48796-e1b3-46fa-b38c-fc93999e2dc3")
+	)
+	(pad "2" thru_hole circle
+		(at 12.7 1.55)
+		(size 2 2)
+		(drill 1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "4a2fc45c-6dcd-482a-bdd7-0ac341e16ec6")
+	)
+	(pad "3" thru_hole circle
+		(at 15.2 1.55)
+		(size 2 2)
+		(drill 1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "9eef248e-33c7-4bef-b161-6f61b3c6f0ed")
+	)
+	(pad "4" thru_hole circle
+		(at 17.7 1.55)
+		(size 2 2)
+		(drill 1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "4db0f2fe-c722-400c-8ce5-78e030b00522")
+	)
+	(embedded_fonts no)
+	(model "${KIPRJMOD}/ssd1306.step"
+		(offset
+			(xyz 27.8 0.1 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz -2 -0 -180)
+		)
+	)
+)
