@@ -1,0 +1,388 @@
+(footprint "Potentiometer_Alps_RK09L_Single_Vertical"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(descr " 1140A5L 114001E 1140A2U 114001T Potentiometer, vertical, Alps RK09L Single, https://tech.alpsalpine.com/prod/e/pdf/potentiometer/rotarypotentiometers/rk09l/rk09l.pdf")
+	(tags "Potentiometer vertical Alps RK09L Single")
+	(property "Reference" "REF**"
+		(at 5.725 -5.5 0)
+		(layer "F.SilkS")
+		(uuid "ae28d602-1582-48be-8a84-5ccb04fd5340")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "Potentiometer_Alps_RK09L_Single_Vertical"
+		(at -5.725 -10.5 180)
+		(layer "F.Fab")
+		(uuid "ad569567-0a95-46ee-adf0-ed5719b2c994")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "dd9c6d03-37b9-42ff-af24-1f80ca6a6965")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "a2a2a2a8-f513-4044-bbe6-d4b6113743fe")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr through_hole)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_line
+		(start 0.88 -3.67)
+		(end 0.88 -1.2)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "6371cfdd-5af0-4463-ac5c-3dcbbf61531f")
+	)
+	(fp_line
+		(start 0.88 -3.67)
+		(end 5.546 -3.67)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "91b734df-5e44-4c35-ae12-73527265f36c")
+	)
+	(fp_line
+		(start 0.88 1.2)
+		(end 0.88 1.63)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "ca242506-6aa0-4ff6-9ca1-4453fd68708d")
+	)
+	(fp_line
+		(start 0.88 3.371)
+		(end 0.88 4.13)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "a0af44db-5a88-40dd-9a42-34f951db5793")
+	)
+	(fp_line
+		(start 0.88 5.87)
+		(end 0.88 8.67)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "a23fe829-ebcb-47a7-a1c1-6012fa98c36b")
+	)
+	(fp_line
+		(start 0.88 8.67)
+		(end 5.546 8.67)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "96bd92c4-2372-4601-ba94-257e58dc558a")
+	)
+	(fp_line
+		(start 9.455 -3.67)
+		(end 12.47 -3.67)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "c51bfff3-35f6-4d9b-9d3a-c2d092b5921f")
+	)
+	(fp_line
+		(start 9.455 8.67)
+		(end 12.47 8.67)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "e21d0ce2-6164-4e01-81e4-1da7e6eb50c4")
+	)
+	(fp_line
+		(start 12.47 -3.67)
+		(end 12.47 8.67)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "9ad6c8f4-242d-4f4f-bd94-5b15f156f39e")
+	)
+	(fp_rect
+		(start 2.5 0.5)
+		(end 4 4.5)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.SilkS")
+		(uuid "d2ac9eb5-39a4-45c7-8ee9-1b45cdea394c")
+	)
+	(fp_rect
+		(start 11 0.5)
+		(end 12.5 4.5)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.SilkS")
+		(uuid "c1f2fdbd-588b-4a71-a255-5ba042eb4549")
+	)
+	(fp_line
+		(start -1.15 -4.5)
+		(end -1.15 9.5)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "60217ce0-78bf-4ccf-90a2-1534af96006f")
+	)
+	(fp_line
+		(start -1.15 9.5)
+		(end 12.6 9.5)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "b8b8f528-0222-47b0-9966-d039615cba94")
+	)
+	(fp_line
+		(start 12.6 -4.5)
+		(end -1.15 -4.5)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "b79712c7-d05f-43ee-bf58-ad8218ed3e15")
+	)
+	(fp_line
+		(start 12.6 9.5)
+		(end 12.6 -4.5)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "5f5f8256-551e-4f7b-8cab-60d3ad83f04c")
+	)
+	(fp_line
+		(start 1 -3.55)
+		(end 1 8.55)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "af329dd0-8c2e-448d-be59-598be028976e")
+	)
+	(fp_line
+		(start 1 8.55)
+		(end 12.35 8.55)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "a9841d7e-acbd-4b0e-ad97-81ab1bce9c13")
+	)
+	(fp_line
+		(start 12.35 -3.55)
+		(end 1 -3.55)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "32e1c2d0-b53e-472a-8ba0-7d59e5f9d0e7")
+	)
+	(fp_line
+		(start 12.35 8.55)
+		(end 12.35 -3.55)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "90c1cc4a-9dce-4404-a326-f22296d1222e")
+	)
+	(fp_circle
+		(center 7.5 2.5)
+		(end 10.5 2.5)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "eb184025-ab85-49e0-aa71-6918b27508a4")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 2 2.5 90)
+		(layer "F.Fab")
+		(uuid "ed7173a3-4dfd-4cf8-9126-6ebe428167e3")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(pad "1" thru_hole rect
+		(at 0 0)
+		(size 1.8 1.8)
+		(drill 1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "75fd132c-ddeb-4446-bfb1-60e73a9da274")
+	)
+	(pad "2" thru_hole circle
+		(at 0 2.5)
+		(size 1.8 1.8)
+		(drill 1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "b02fcd24-555c-454b-be90-4a43d67ecfeb")
+	)
+	(pad "3" thru_hole circle
+		(at 0 5)
+		(size 1.8 1.8)
+		(drill 1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "71044658-8be9-4be8-82d1-181fac684d98")
+	)
+	(pad "MP" thru_hole roundrect
+		(at 7.5 -2.25)
+		(size 2 3)
+		(drill oval 1.1 1.8)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(roundrect_rratio 0.25)
+		(uuid "de806615-3353-4204-b9ec-557a8297cd90")
+	)
+	(pad "MP" thru_hole roundrect
+		(at 7.5 7.25)
+		(size 2 3)
+		(drill oval 1.1 1.8)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(roundrect_rratio 0.25)
+		(uuid "849b3b6e-b5a5-406e-a399-ac70e3ec45a2")
+	)
+	(zone
+		(layer "F.Cu")
+		(uuid "6575072a-dbff-4a81-8062-c74ab4f0dfc5")
+		(name "Copper Keep Out")
+		(hatch full 0.508)
+		(connect_pads
+			(clearance 0)
+		)
+		(min_thickness 0.254)
+		(keepout
+			(tracks not_allowed)
+			(vias not_allowed)
+			(pads not_allowed)
+			(copperpour not_allowed)
+			(footprints not_allowed)
+		)
+		(placement
+			(enabled no)
+			(sheetname "")
+		)
+		(fill
+			(thermal_gap 0.508)
+			(thermal_bridge_width 0.508)
+			(island_removal_mode 0)
+		)
+		(polygon
+			(pts
+				(xy 4 4.5) (xy 2.5 4.5) (xy 2.5 0.5) (xy 4 0.5)
+			)
+		)
+	)
+	(zone
+		(layer "F.Cu")
+		(uuid "b52f002f-7a0e-42fe-9009-8989fcb709a9")
+		(name "Copper Keep Out")
+		(hatch full 0.508)
+		(connect_pads
+			(clearance 0)
+		)
+		(min_thickness 0.254)
+		(keepout
+			(tracks not_allowed)
+			(vias not_allowed)
+			(pads not_allowed)
+			(copperpour not_allowed)
+			(footprints not_allowed)
+		)
+		(placement
+			(enabled no)
+			(sheetname "")
+		)
+		(fill
+			(thermal_gap 0.508)
+			(thermal_bridge_width 0.508)
+			(island_removal_mode 0)
+		)
+		(polygon
+			(pts
+				(xy 12.4 4.5) (xy 11 4.5) (xy 11 0.5) (xy 12.4 0.5)
+			)
+		)
+	)
+	(embedded_fonts no)
+	(model "${KIPRJMOD}/rk09l1140a2u.step"
+		(offset
+			(xyz 7.5 -2.5 7.5)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz -180 -0 -90)
+		)
+	)
+)
