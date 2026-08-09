@@ -6,4 +6,5 @@
 	(lib (name "sk-13D08-G-5-E") (type "KiCad") (uri "${KIPRJMOD}/sk-13D08-G-5-E.pretty") (options "") (descr ""))
 	(lib (name "pot") (type "KiCad") (uri "${KIPRJMOD}/pot.pretty") (options "") (descr ""))
 	(lib (name "rot_enc") (type "KiCad") (uri "${KIPRJMOD}/rot_enc.pretty") (options "") (descr ""))
+	(lib (name "connector_battery") (type "KiCad") (uri "${KIPRJMOD}/connector_battery.pretty") (options "") (descr ""))
 )
