@@ -4477,7 +4477,7 @@
 		)
 		(uuid "967bf35c-fc17-4643-9e38-860ee385dddb")
 	)
-	(label "MIDI"
+	(label "HID"
 		(at 186.69 93.98 180)
 		(effects
 			(font
@@ -4828,7 +4828,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "pot:Potentiometer_Alps_RK09L_Single_Vertical"
+		(property "Footprint" "pot:TRIM_3352T-1-103LF"
 			(at 81.28 86.36 0)
 			(hide yes)
 			(show_name no)
@@ -5612,7 +5612,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "rot_enc:RotaryEncoder_Alps_EC11E-Switch_Vertical_H20mm"
 			(at 219.71 72.136 0)
 			(hide yes)
 			(show_name no)
