@@ -5,4 +5,5 @@
 	(lib (name "audio_connector") (type "KiCad") (uri "${KIPRJMOD}/audio_connector.pretty") (options "") (descr ""))
 	(lib (name "sk-13D08-G-5-E") (type "KiCad") (uri "${KIPRJMOD}/sk-13D08-G-5-E.pretty") (options "") (descr ""))
 	(lib (name "pot") (type "KiCad") (uri "${KIPRJMOD}/pot.pretty") (options "") (descr ""))
+	(lib (name "rot_enc") (type "KiCad") (uri "${KIPRJMOD}/rot_enc.pretty") (options "") (descr ""))
 )
