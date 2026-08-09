@@ -524,7 +524,7 @@
     "last_paths": {
       "idf": "",
       "netlist": "",
-      "plot": "",
+      "plot": "grbr/",
       "specctra_dsn": "",
       "step": "",
       "vrml": ""

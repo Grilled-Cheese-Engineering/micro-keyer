@@ -3617,6 +3617,16 @@
 	)
 	(wire
 		(pts
+			(xy 143.51 119.38) (xy 143.51 128.27)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "28315911-69e5-41e8-b64d-fad9725c7ce3")
+	)
+	(wire
+		(pts
 			(xy 217.17 129.54) (xy 232.41 129.54)
 		)
 		(stroke
@@ -3624,16 +3634,6 @@
 			(type default)
 		)
 		(uuid "2aff69c2-e08c-4808-9f1d-c6b123a887dd")
-	)
-	(wire
-		(pts
-			(xy 143.51 119.38) (xy 143.51 128.27)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "3947a110-50cc-4c58-9259-d98638086f85")
 	)
 	(wire
 		(pts
@@ -3647,6 +3647,16 @@
 	)
 	(wire
 		(pts
+			(xy 147.32 119.38) (xy 147.32 125.73)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "45e61273-14f9-49ca-99a5-a8dc6fdcb7b3")
+	)
+	(wire
+		(pts
 			(xy 100.33 90.17) (xy 100.33 124.46)
 		)
 		(stroke
@@ -3654,6 +3664,16 @@
 			(type default)
 		)
 		(uuid "4eaaef23-c24c-4db0-b305-c2c59d8aa8b4")
+	)
+	(wire
+		(pts
+			(xy 143.51 128.27) (xy 140.97 128.27)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "56c79ae1-7b81-4eda-80e8-0d1ef84f99b5")
 	)
 	(wire
 		(pts
@@ -3927,6 +3947,16 @@
 	)
 	(wire
 		(pts
+			(xy 147.32 125.73) (xy 140.97 125.73)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b4f3c63b-f971-4566-ab5a-7b9b00dfc845")
+	)
+	(wire
+		(pts
 			(xy 204.47 105.41) (xy 195.58 105.41)
 		)
 		(stroke
@@ -4007,16 +4037,6 @@
 	)
 	(wire
 		(pts
-			(xy 147.32 119.38) (xy 147.32 128.27)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ea91dfca-1bc9-4030-92e1-a50276c4c2ab")
-	)
-	(wire
-		(pts
 			(xy 123.19 90.17) (xy 100.33 90.17)
 		)
 		(stroke
@@ -4044,16 +4064,6 @@
 			(type default)
 		)
 		(uuid "f37e094a-ef8a-4eaf-a2ad-1f18489aed32")
-	)
-	(wire
-		(pts
-			(xy 143.51 128.27) (xy 144.78 128.27)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f89c62bd-76db-4079-af02-32f07e817852")
 	)
 	(label "Dit"
 		(at 129.54 53.34 180)
@@ -4307,7 +4317,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 147.32 133.35 270)
+		(at 135.89 128.27 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4318,29 +4328,27 @@
 		(fields_autoplaced yes)
 		(uuid "0eee5fe0-91fd-485d-a7df-7415f448bf36")
 		(property "Reference" "J1"
-			(at 149.86 132.0799 90)
+			(at 135.89 119.38 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
 		(property "Value" "Conn_01x02"
-			(at 149.86 134.6199 90)
+			(at 135.89 121.92 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
 		(property "Footprint" "connector_battery:Molex_PicoBlade_53047-0210_1x02_P1.25mm_Vertical"
-			(at 147.32 133.35 0)
+			(at 135.89 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4351,7 +4359,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 147.32 133.35 0)
+			(at 135.89 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4362,7 +4370,7 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
-			(at 147.32 133.35 0)
+			(at 135.89 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4826,7 +4834,6 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "40b2e2ae-7038-4d6a-9d55-7a237a9b56cc")
 		(property "Reference" "SSD1"
 			(at 110.49 135.1279 0)
@@ -4840,7 +4847,7 @@
 			)
 		)
 		(property "Value" "SSD1306"
-			(at 92.71 127 0)
+			(at 92.456 135.382 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
