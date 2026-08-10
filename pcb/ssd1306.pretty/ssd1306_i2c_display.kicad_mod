@@ -7,7 +7,7 @@
 		(at -1 -5 0)
 		(unlocked yes)
 		(layer "F.SilkS")
-		(uuid "2284e625-9107-454c-bb49-a8acb44e2c4b")
+		(uuid "aaaa7c70-6c0f-4074-b8a3-4588d42b0ede")
 		(effects
 			(font
 				(size 1 1)
@@ -19,7 +19,7 @@
 		(at 0 26.5 0)
 		(unlocked yes)
 		(layer "F.Fab")
-		(uuid "7c39af48-3d17-4e43-9d28-c5ea96b55ea9")
+		(uuid "922b3ff3-02ea-4774-b604-8b036c7e2a1d")
 		(effects
 			(font
 				(size 1 1)
@@ -32,7 +32,7 @@
 		(unlocked yes)
 		(layer "F.Fab")
 		(hide yes)
-		(uuid "7f35b114-929d-4442-9e46-4ff5a78b16cd")
+		(uuid "b3e8a3ca-f3e9-4754-8059-cbbb34d71397")
 		(effects
 			(font
 				(size 1 1)
@@ -45,7 +45,7 @@
 		(unlocked yes)
 		(layer "F.Fab")
 		(hide yes)
-		(uuid "05190264-b5d8-4670-8a38-bf703b0aa25a")
+		(uuid "f5bb5279-5cb0-46da-a640-e05166c0b6fd")
 		(effects
 			(font
 				(size 1 1)
@@ -56,32 +56,21 @@
 	(attr through_hole)
 	(duplicate_pad_numbers_are_jumpers no)
 	(fp_rect
-		(start 0 0)
-		(end 27.3 27.3)
-		(stroke
-			(width 0.1)
-			(type solid)
-		)
-		(fill no)
-		(layer "F.SilkS")
-		(uuid "3be5cfbb-1e39-472a-b913-bdf9293d5ada")
-	)
-	(fp_rect
-		(start 7.5 0)
-		(end 19.75 3.25)
+		(start 8.75 0)
+		(end 19 3.25)
 		(stroke
 			(width 0.05)
 			(type default)
 		)
 		(fill no)
 		(layer "F.CrtYd")
-		(uuid "03a10b5f-2ad1-442a-91de-48fe42baefba")
+		(uuid "acb5728b-23f9-4416-9a98-0884f3af4399")
 	)
 	(fp_text user "${REFERENCE}"
 		(at 0 28 0)
 		(unlocked yes)
 		(layer "F.Fab")
-		(uuid "b4f46cca-b7e5-489e-834c-830fdac9a2df")
+		(uuid "47868425-ee8c-4590-a2f4-53659766fe25")
 		(effects
 			(font
 				(size 1 1)
@@ -96,7 +85,7 @@
 		(layers "*.Cu" "*.Mask")
 		(remove_unused_layers no)
 		(roundrect_rratio 0.125)
-		(uuid "e1d8241c-f841-4470-a34a-01ffe4c1a31c")
+		(uuid "47d7e3aa-cf5e-4314-8add-92db4db21ed6")
 	)
 	(pad "2" thru_hole circle
 		(at 12.7 1.55)
@@ -104,7 +93,7 @@
 		(drill 1)
 		(layers "*.Cu" "*.Mask")
 		(remove_unused_layers no)
-		(uuid "fb6d5844-5018-4762-bafd-4a67b2912c84")
+		(uuid "b6f15c88-234f-408a-b5b6-1ed7329dae68")
 	)
 	(pad "3" thru_hole circle
 		(at 15.2 1.55)
@@ -112,7 +101,7 @@
 		(drill 1)
 		(layers "*.Cu" "*.Mask")
 		(remove_unused_layers no)
-		(uuid "e5ad26d0-89a5-420d-97c2-be5215c5ef39")
+		(uuid "cddcf376-219e-4832-b4af-5c295bca3323")
 	)
 	(pad "4" thru_hole circle
 		(at 17.7 1.55)
@@ -120,7 +109,7 @@
 		(drill 1)
 		(layers "*.Cu" "*.Mask")
 		(remove_unused_layers no)
-		(uuid "5aa13a98-18b5-4aad-9920-e34df9190a0e")
+		(uuid "d02033cf-32f8-486e-b570-efa9d03caf33")
 	)
 	(embedded_fonts no)
 	(model "${KIPRJMOD}/ssd1306.step"
@@ -131,7 +120,7 @@
 			(xyz 1 1 1)
 		)
 		(rotate
-			(xyz -2 -0 -180)
+			(xyz -0 -0 -180)
 		)
 	)
 )

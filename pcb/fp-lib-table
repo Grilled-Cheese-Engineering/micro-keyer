@@ -7,4 +7,5 @@
 	(lib (name "pot") (type "KiCad") (uri "${KIPRJMOD}/pot.pretty") (options "") (descr ""))
 	(lib (name "rot_enc") (type "KiCad") (uri "${KIPRJMOD}/rot_enc.pretty") (options "") (descr ""))
 	(lib (name "connector_battery") (type "KiCad") (uri "${KIPRJMOD}/connector_battery.pretty") (options "") (descr ""))
+	(lib (name "buzzer") (type "KiCad") (uri "${KIPRJMOD}/buzzer.pretty") (options "") (descr ""))
 )
