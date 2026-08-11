@@ -18,13 +18,7 @@
 
 #include "usb_descriptors.h"
 
-extern "C" {
-    #include "ssd1306.h"
-    #include "font.h"
-}
-
-ssd1306_t disp;
-
+#include "display.h"
 
 #define FLASH_TARGET_OFFSET (2 * 1024 * 1024 - FLASH_SECTOR_SIZE)
 
@@ -55,14 +49,15 @@ bool recordMode = false;
 std::vector<int> recordArr;
 bool hasSpace = true;
 bool recordLock = false;
-#ifdef KEYBOARD_KEYER
 bool usbState = false;
 uint8_t keycode[6] = { 0 };
-#endif
 
-#ifdef MIDI_KEYER
 uint8_t msg[4];
-#endif
+
+uint8_t buf[64] = { 0 };
+
+UsbMode active_usb_mode;
+
 std::string decodeChar(std::vector<int> elements) {
     std::stringstream stream;
     bool match = true;
@@ -86,7 +81,6 @@ std::string decodeChar(std::vector<int> elements) {
     return "_";
 }
 
-#ifdef KEYBOARD_KEYER
 void sendKey(std::string s) {
     if (tud_suspended()) {
         tud_remote_wakeup();
@@ -98,31 +92,30 @@ void sendKey(std::string s) {
         keycode[0] = conv_table[(int)*s.c_str()][1];
     }
 }
-#endif
 
 void key(bool x) {
     if (x) {
         pwm_set_gpio_level(pwm_pin, level);
-        #ifdef MIDI_KEYER
-        msg[0] = 0x09; // Note On - Channel 1
-        msg[1] = 0x90; // Note Number
-        msg[2] = 1;
-        msg[3] = 0x7F; // Velocity
-        tud_midi_n_stream_write(0, 0, msg, 4);
-        #endif
+        if (active_usb_mode == MODE_MIDI) {
+            msg[0] = 0x09; // Note On - Channel 1
+            msg[1] = 0x90; // Note Number
+            msg[2] = 1;
+            msg[3] = 0x7F; // Velocity
+            tud_midi_n_stream_write(0, 0, msg, 4);
+        }
     } else {
         pwm_set_gpio_level(pwm_pin, 0);
-        #ifdef MIDI_KEYER
-        msg[0] = 0x08; // Note On - Channel 1
-        msg[1] = 0x80; // Note Number
-        msg[2] = 1;
-        msg[3] = 0x0; // Velocity
-        tud_midi_n_stream_write(0, 0, msg, 4);
-        #endif
+        if (active_usb_mode == MODE_MIDI) {
+            msg[0] = 0x08; // Note On - Channel 1
+            msg[1] = 0x80; // Note Number
+            msg[2] = 1;
+            msg[3] = 0x0; // Velocity
+            tud_midi_n_stream_write(0, 0, msg, 4);
+        }
     }
-    #ifdef MIDI_KEYER
-    tud_task();
-    #endif
+    if (active_usb_mode == MODE_MIDI) {
+        tud_task();
+    }
 }
 
 int64_t coolDown(alarm_id_t id, void* user_data) {
@@ -160,8 +153,10 @@ void doDah() {
 
 int main() {
     stdio_init_all();
-    uart_init(uart0, 115200);
+    save_boot_mode(MODE_CDC_SERIAL);
+    active_usb_mode = read_boot_mode();
 
+    uart_init(uart0, 115200);
     gpio_set_function(uart_tx_pin, GPIO_FUNC_UART);
     gpio_set_function(uart_rx_pin, GPIO_FUNC_UART);
 
@@ -177,15 +172,14 @@ int main() {
 
     board_init();
     tusb_init();
-    #ifdef KEYBOARD_KEYER
 
-    // init device stack on configured roothub port
-    const tusb_rhport_init_t rh_init = {
-        .role = TUSB_ROLE_DEVICE,
-        .speed = TUD_OPT_HIGH_SPEED ? TUSB_SPEED_HIGH : TUSB_SPEED_FULL
-    };
-    TU_ASSERT(tud_rhport_init(BOARD_TUD_RHPORT, &rh_init));
-    #endif
+    if (active_usb_mode == MODE_HID) {
+        const tusb_rhport_init_t rh_init = {
+            .role = TUSB_ROLE_DEVICE,
+            .speed = TUD_OPT_HIGH_SPEED ? TUSB_SPEED_HIGH : TUSB_SPEED_FULL
+        };
+        TU_ASSERT(tud_rhport_init(BOARD_TUD_RHPORT, &rh_init));
+    }
     gpio_init(dit_pin);
     gpio_set_dir(dit_pin, GPIO_IN);
     gpio_set_pulls(dit_pin, true, false);
@@ -223,14 +217,13 @@ int main() {
 
     disp.external_vcc = false;
     ssd1306_init(&disp, 128, 64, 0x3C, I2C_PORT);
-    ssd1306_clear(&disp);
-
-    ssd1306_draw_square(&disp, 25, 36, 25, 25);
-    ssd1306_show(&disp);
+    drawMain();
+    if (active_usb_mode == MODE_CDC_SERIAL && tud_cdc_connected()) {
+        tud_cdc_write_str("Hello from Pico!\r\n");
+        tud_cdc_write_flush(); // Forces the data to send immediately
+    }
     while (true) {
-
         tud_task();
-
         dit_state = !gpio_get(dit_pin);
         dah_state = !gpio_get(dah_pin);
         if (dah_state && dit_state) {
@@ -264,9 +257,9 @@ int main() {
 
         if (to_ms_since_boot(get_absolute_time()) - lastChar > basetime * 7 && !hasSpace && curent == -1) {
             uart_puts(uart0, " ");
-            #ifdef KEYBOARD_KEYER
-            sendKey(" ");
-            #endif
+            if (active_usb_mode == MODE_HID) {
+                sendKey(" ");
+            }
 
             hasSpace = true;
             if (recordMode) {
@@ -275,14 +268,14 @@ int main() {
             }
         } else if (elements.size() > 0 && to_ms_since_boot(get_absolute_time()) - lastChar > basetime * 2.8 && curent == -1) {
             uart_puts(uart0, decodeChar(elements).c_str());
-            #ifdef KEYBOARD_KEYER
-            sendKey(decodeChar(elements));
-            #endif
+            if (active_usb_mode == MODE_HID) {
+                sendKey(decodeChar(elements));
+            }
             elements.clear();
             if (recordMode && recordArr.size() > 0) {
                 recordArr.push_back(gap);
             }
-    }
+        }
 
         // if (!gpio_get(playPin)) {
         //     contents = (const uint8_t*)(XIP_BASE + FLASH_TARGET_OFFSET);
@@ -368,18 +361,18 @@ int main() {
         // if (rotloc && gpio_get(rot_a) && gpio_get(rot_b)) {
         //     rotloc = false;
         // }
-        #ifdef KEYBOARD_KEYER
-        if (tud_hid_ready()) {
-            if (!usbState && keycode[0] > 0) {
-                tud_hid_keyboard_report(REPORT_ID_KEYBOARD, 0, keycode);
-                usbState = true;
-            } else if (usbState) {
+        if (active_usb_mode == MODE_HID) {
+            if (tud_hid_ready()) {
+                if (!usbState && keycode[0] > 0) {
+                    tud_hid_keyboard_report(REPORT_ID_KEYBOARD, 0, keycode);
+                    usbState = true;
+                } else if (usbState) {
 
-                keycode[0] = 0;
-                tud_hid_keyboard_report(REPORT_ID_KEYBOARD, 0, keycode);
-                usbState = false;
-}
+                    keycode[0] = 0;
+                    tud_hid_keyboard_report(REPORT_ID_KEYBOARD, 0, keycode);
+                    usbState = false;
+                }
+            }
         }
-        #endif
     }
 }

@@ -1,44 +1,36 @@
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2019 Ha Thach (tinyusb.org)
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- *
- */
-
-#include "bsp/board_api.h"
 #include "tusb.h"
-#include "usb_descriptors.h"
+#include "pico/unique_id.h"
+#include "settings.h" // The header from the flash storage step
 
-#define _PID_MAP(itf, n)  ( (CFG_TUD_##itf) << (n) )
-#define USB_PID           (0x4000 | _PID_MAP(CDC, 0) | _PID_MAP(MSC, 1) | _PID_MAP(HID, 2) | \
-                           _PID_MAP(MIDI, 3) | _PID_MAP(VENDOR, 4) )
+// The global variable that main.cpp reads from flash
+extern UsbMode active_usb_mode;
 
 #define USB_VID   0xCafe
 #define USB_BCD   0x0200
 
- //--------------------------------------------------------------------+
- // Device Descriptors
- //--------------------------------------------------------------------+
-tusb_desc_device_t const desc_device =
-{
+//--------------------------------------------------------------------+
+// Device Descriptors
+//--------------------------------------------------------------------+
+// CDC needs a specific device class to load properly on all OSes (IAD)
+tusb_desc_device_t const desc_device_cdc = {
+    .bLength = sizeof(tusb_desc_device_t),
+    .bDescriptorType = TUSB_DESC_DEVICE,
+    .bcdUSB = USB_BCD,
+    .bDeviceClass = TUSB_CLASS_MISC,
+    .bDeviceSubClass = MISC_SUBCLASS_COMMON,
+    .bDeviceProtocol = MISC_PROTOCOL_IAD,
+    .bMaxPacketSize0 = CFG_TUD_ENDPOINT0_SIZE,
+    .idVendor = USB_VID,
+    .idProduct = 0x4001,
+    .bcdDevice = 0x0100,
+    .iManufacturer = 0x01,
+    .iProduct = 0x02,
+    .iSerialNumber = 0x03,
+    .bNumConfigurations = 0x01
+};
+
+// HID and MIDI can use the standard 0x00 device class
+tusb_desc_device_t const desc_device_other = {
     .bLength = sizeof(tusb_desc_device_t),
     .bDescriptorType = TUSB_DESC_DEVICE,
     .bcdUSB = USB_BCD,
@@ -46,104 +38,83 @@ tusb_desc_device_t const desc_device =
     .bDeviceSubClass = 0x00,
     .bDeviceProtocol = 0x00,
     .bMaxPacketSize0 = CFG_TUD_ENDPOINT0_SIZE,
-
     .idVendor = USB_VID,
-    .idProduct = USB_PID,
-    .bcdDevice = 0x0101, // Incremented to force Windows/macOS to reload descriptors
-
+    .idProduct = 0x4002,
+    .bcdDevice = 0x0100,
     .iManufacturer = 0x01,
     .iProduct = 0x02,
     .iSerialNumber = 0x03,
-
     .bNumConfigurations = 0x01
 };
 
-uint8_t const* tud_descriptor_device_cb(void)
-{
-  return (uint8_t const*)&desc_device;
+uint8_t const* tud_descriptor_device_cb(void) {
+  if (active_usb_mode == MODE_CDC_SERIAL) {
+    return (uint8_t const*)&desc_device_cdc;
+  }
+  return (uint8_t const*)&desc_device_other;
 }
 
 //--------------------------------------------------------------------+
 // HID Report Descriptor
 //--------------------------------------------------------------------+
-uint8_t const desc_hid_report[] =
-{
-  TUD_HID_REPORT_DESC_KEYBOARD(HID_REPORT_ID(REPORT_ID_KEYBOARD)),
+
+enum {
+  REPORT_ID_KEYBOARD = 1,
+  REPORT_ID_MOUSE // Optional, but good to have if you expand later
 };
 
-uint8_t const* tud_hid_descriptor_report_cb(uint8_t instance)
-{
+uint8_t const desc_hid_report[] = {
+    TUD_HID_REPORT_DESC_KEYBOARD(HID_REPORT_ID(REPORT_ID_KEYBOARD)),
+};
+
+uint8_t const* tud_hid_descriptor_report_cb(uint8_t instance) {
   (void)instance;
   return desc_hid_report;
 }
 
 //--------------------------------------------------------------------+
-// Configuration Descriptor
+// Configuration Descriptors
 //--------------------------------------------------------------------+
-enum
-{
-  ITF_NUM_MIDI = 0,
-  ITF_NUM_MIDI_STREAMING,
-  ITF_NUM_HID,
-  ITF_NUM_TOTAL
+
+// --- 1. CDC CONFIGURATION ---
+#define CONFIG_TOTAL_LEN_CDC    (TUD_CONFIG_DESC_LEN + TUD_CDC_DESC_LEN)
+#define EPNUM_CDC_NOTIF   0x81
+#define EPNUM_CDC_OUT     0x02
+#define EPNUM_CDC_IN      0x82
+
+uint8_t const desc_configuration_cdc[] = {
+    TUD_CONFIG_DESCRIPTOR(1, 2, 0, CONFIG_TOTAL_LEN_CDC, 0x00, 100),
+    TUD_CDC_DESCRIPTOR(0, 4, EPNUM_CDC_NOTIF, 8, EPNUM_CDC_OUT, EPNUM_CDC_IN, 64)
 };
 
-// Combined total length of Configuration header + MIDI sub-descriptors + HID sub-descriptors
-#define CONFIG_TOTAL_LEN  (TUD_CONFIG_DESC_LEN + TUD_MIDI_DESC_LEN + TUD_HID_DESC_LEN)
+// --- 2. HID CONFIGURATION ---
+#define CONFIG_TOTAL_LEN_HID    (TUD_CONFIG_DESC_LEN + TUD_HID_DESC_LEN)
+#define EPNUM_HID         0x81
 
-#if CFG_TUSB_MCU == OPT_MCU_LPC175X_6X || CFG_TUSB_MCU == OPT_MCU_LPC177X_8X || CFG_TUSB_MCU == OPT_MCU_LPC40XX
-#define EPNUM_MIDI   0x02
-#else
-#define EPNUM_MIDI   0x01 // OUT: 0x01, IN: 0x81
-#endif
-#define EPNUM_HID    0x82 // Avoids conflict with MIDI IN (0x81)
-
-uint8_t const desc_configuration[] =
-{
-  // Config number, interface count, string index, total length, attribute, power in mA
-  TUD_CONFIG_DESCRIPTOR(1, ITF_NUM_TOTAL, 0, CONFIG_TOTAL_LEN, TUSB_DESC_CONFIG_ATT_REMOTE_WAKEUP, 100),
-
-  // Interface number, string index, EP Out & EP In address, EP size
-  TUD_MIDI_DESCRIPTOR(ITF_NUM_MIDI, 0, EPNUM_MIDI, 0x80 | EPNUM_MIDI, 64),
-
-  // Interface number, string index, protocol, report descriptor len, EP In address, size & polling interval
-  TUD_HID_DESCRIPTOR(ITF_NUM_HID, 0, HID_ITF_PROTOCOL_NONE, sizeof(desc_hid_report), EPNUM_HID, CFG_TUD_HID_EP_BUFSIZE, 5)
+uint8_t const desc_configuration_hid[] = {
+    TUD_CONFIG_DESCRIPTOR(1, 1, 0, CONFIG_TOTAL_LEN_HID, 0x00, 100),
+    TUD_HID_DESCRIPTOR(0, 0, HID_ITF_PROTOCOL_NONE, sizeof(desc_hid_report), EPNUM_HID, 16, 5)
 };
 
-#if TUD_OPT_HIGH_SPEED
-uint8_t desc_other_speed_config[CONFIG_TOTAL_LEN];
+// --- 3. MIDI CONFIGURATION ---
+#define CONFIG_TOTAL_LEN_MIDI   (TUD_CONFIG_DESC_LEN + TUD_MIDI_DESC_LEN)
+#define EPNUM_MIDI_OUT    0x01
+#define EPNUM_MIDI_IN     0x81
 
-tusb_desc_device_qualifier_t const desc_device_qualifier =
-{
-  .bLength = sizeof(tusb_desc_device_qualifier_t),
-  .bDescriptorType = TUSB_DESC_DEVICE_QUALIFIER,
-  .bcdUSB = USB_BCD,
-  .bDeviceClass = 0x00,
-  .bDeviceSubClass = 0x00,
-  .bDeviceProtocol = 0x00,
-  .bMaxPacketSize0 = CFG_TUD_ENDPOINT0_SIZE,
-  .bNumConfigurations = 0x01,
-  .bReserved = 0x00
+uint8_t const desc_configuration_midi[] = {
+    TUD_CONFIG_DESCRIPTOR(1, 2, 0, CONFIG_TOTAL_LEN_MIDI, 0x00, 100),
+    TUD_MIDI_DESCRIPTOR(0, 0, EPNUM_MIDI_OUT, EPNUM_MIDI_IN, 64)
 };
 
-uint8_t const* tud_descriptor_device_qualifier_cb(void)
-{
-  return (uint8_t const*)&desc_device_qualifier;
-}
-
-uint8_t const* tud_descriptor_other_speed_configuration_cb(uint8_t index)
-{
+// --- CONFIGURATION CALLBACK ---
+uint8_t const* tud_descriptor_configuration_cb(uint8_t index) {
   (void)index;
-  memcpy(desc_other_speed_config, desc_configuration, CONFIG_TOTAL_LEN);
-  desc_other_speed_config[1] = TUSB_DESC_OTHER_SPEED_CONFIG;
-  return desc_other_speed_config;
-}
-#endif
-
-uint8_t const* tud_descriptor_configuration_cb(uint8_t index)
-{
-  (void)index;
-  return desc_configuration;
+  switch (active_usb_mode) {
+  case MODE_CDC_SERIAL: return desc_configuration_cdc;
+  case MODE_HID:        return desc_configuration_hid;
+  case MODE_MIDI:       return desc_configuration_midi;
+  }
+  return NULL;
 }
 
 //--------------------------------------------------------------------+
@@ -156,14 +127,13 @@ enum {
   STRID_SERIAL,
 };
 
-char const* string_desc_arr[] =
-{
-  (const char[]) {
-0x09, 0x04
-},
-"TinyUSB",
-"TinyUSB Composite Device",
-NULL,
+char const* string_desc_arr[] = {
+    (const char[]) {
+ 0x09, 0x04
+}, // 0: Supported language is English (0x0409)
+"TinyUSB",                     // 1: Manufacturer
+"Pico Keyer",                  // 2: Product
+NULL,                          // 3: Serial
 };
 
 static uint16_t _desc_str[32 + 1];
@@ -178,9 +148,16 @@ uint16_t const* tud_descriptor_string_cb(uint8_t index, uint16_t langid) {
     chr_count = 1;
     break;
 
-  case STRID_SERIAL:
-    chr_count = board_usb_get_serial(_desc_str + 1, 32);
+  case STRID_SERIAL: {
+    char serial_str[17]; // Pico IDs are 16 hex chars + null terminator
+    pico_get_unique_board_id_string(serial_str, sizeof(serial_str));
+
+    chr_count = strlen(serial_str);
+    for (size_t i = 0; i < chr_count; i++) {
+      _desc_str[1 + i] = serial_str[i];
+    }
     break;
+  }
 
   default:
     if (!(index < sizeof(string_desc_arr) / sizeof(string_desc_arr[0]))) return NULL;
@@ -200,6 +177,9 @@ uint16_t const* tud_descriptor_string_cb(uint8_t index, uint16_t langid) {
   return _desc_str;
 }
 
+//--------------------------------------------------------------------+
+// HID Callbacks (Mandatory for TinyUSB to compile, even if empty)
+//--------------------------------------------------------------------+
 uint16_t tud_hid_get_report_cb(uint8_t instance, uint8_t report_id, hid_report_type_t report_type, uint8_t* buffer, uint16_t reqlen) {
   (void)instance; (void)report_id; (void)report_type; (void)buffer; (void)reqlen;
   return 0;

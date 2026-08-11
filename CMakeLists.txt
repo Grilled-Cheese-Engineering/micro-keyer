@@ -34,7 +34,7 @@ pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(micro-keyer main.cpp usb_descriptors.c ssd1306.c)
+add_executable(micro-keyer main.cpp usb_descriptors.c ssd1306.c display.cpp)
 
 pico_set_program_name(micro-keyer "micro-keyer")
 pico_set_program_version(micro-keyer "0.1")
@@ -65,8 +65,6 @@ target_link_libraries(micro-keyer
         tinyusb_board
         tinyusb_device
         )
-#target_compile_definitions(micro-keyer PRIVATE KEYBOARD_KEYER)
-#target_compile_definitions(micro-keyer PRIVATE MIDI_KEYER)
 
 
 
