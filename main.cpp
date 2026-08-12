@@ -39,6 +39,7 @@ int level = ((125000000 / 125) / tone) / 2;
 int basetime = 1200 / speed;
 
 bool rotloc = false;
+bool swlock = false;
 
 std::string str;
 
@@ -57,6 +58,9 @@ uint8_t msg[4];
 uint8_t buf[64] = { 0 };
 
 UsbMode active_usb_mode;
+
+int selected_item = -1;
+int clicked_item = -1;
 
 std::string decodeChar(std::vector<int> elements) {
     std::stringstream stream;
@@ -153,7 +157,6 @@ void doDah() {
 
 int main() {
     stdio_init_all();
-    save_boot_mode(MODE_CDC_SERIAL);
     active_usb_mode = read_boot_mode();
 
     uart_init(uart0, 115200);
@@ -266,7 +269,7 @@ int main() {
                 recordArr.pop_back();
                 recordArr.push_back(space);
             }
-        } else if (elements.size() > 0 && to_ms_since_boot(get_absolute_time()) - lastChar > basetime * 2.8 && curent == -1) {
+        } else if (elements.size() > 0 && to_ms_since_boot(get_absolute_time()) - lastChar > basetime * 2.5 && curent == -1) {
             uart_puts(uart0, decodeChar(elements).c_str());
             if (active_usb_mode == MODE_HID) {
                 sendKey(decodeChar(elements));
@@ -342,25 +345,80 @@ int main() {
         // }
         //uart_puts(uart0, std::format("a {}, b {}, sw {}\n", gpio_get(rot_a), gpio_get(rot_b), gpio_get(rot_sw)).c_str());
 
-        // if (!gpio_get(rot_a) && gpio_get(rot_b) && !rotloc) {
-        //     rotloc = true;
-        //     speed += 1;
-        //     basetime = 1200 / speed;
-        //     uart_puts(uart0, std::format("speed {}\n", speed).c_str());
-        //     sleep_ms(50);
+        if (!gpio_get(rot_a) && gpio_get(rot_b) && !rotloc) {
+            rotloc = true;
+            if (selected_item == -1) {
+                speed += 1;
+                basetime = 1200 / speed;
+                uart_puts(uart0, std::format("change speed {}\n", speed).c_str());
+                drawMain();
+            } else {
+                if (selected_item < 5) {
+                    selected_item++;
+                    uart_puts(uart0, std::format("selected {} clicked {}\n", selected_item, clicked_item).c_str());
+                    drawMenu();
+                }
+            }
+            sleep_ms(50);
 
-        // }
-        // if (gpio_get(rot_a) && !gpio_get(rot_b) && !rotloc) {
-        //     rotloc = true;
-        //     speed -= 1;
-        //     basetime = 1200 / speed;
-        //     uart_puts(uart0, std::format("speed {}\n", speed).c_str());
-        //     sleep_ms(50);
+        }
+        if (gpio_get(rot_a) && !gpio_get(rot_b) && !rotloc) {
+            rotloc = true;
+            if (selected_item == -1) {
+                speed -= 1;
+                basetime = 1200 / speed;
+                uart_puts(uart0, std::format("change speed {}\n", speed).c_str());
 
-        // }
-        // if (rotloc && gpio_get(rot_a) && gpio_get(rot_b)) {
-        //     rotloc = false;
-        // }
+                drawMain();
+            } else {
+                if (selected_item > 0) {
+                    selected_item--;
+                    uart_puts(uart0, std::format("selected {} clicked {}\n", selected_item, clicked_item).c_str());
+                    drawMenu();
+                }
+            }
+            sleep_ms(50);
+
+        }
+        if (rotloc && gpio_get(rot_a) && gpio_get(rot_b)) {
+            rotloc = false;
+        }
+
+        if (!swlock && !gpio_get(rot_sw)) {
+            swlock = true;
+        }
+        if (swlock && gpio_get(rot_sw)) {
+            // if (active_usb_mode == MODE_CDC_SERIAL) {
+            //     save_boot_mode(MODE_MIDI);
+            //     uart_puts(uart0, std::format("Change mode: MODE_MIDI\n").c_str());
+            // } else if (active_usb_mode == MODE_MIDI) {
+            //     save_boot_mode(MODE_HID);
+            //     uart_puts(uart0, std::format("Change mode: MODE_HID\n").c_str());
+            // } else if (active_usb_mode == MODE_HID) {
+            //     save_boot_mode(MODE_CDC_SERIAL);
+            //     uart_puts(uart0, std::format("Change mode: MODE_CDC_SERIAL\n").c_str());
+            // }
+            // watchdog_reboot(0, 0, 0);
+            if (selected_item == -1) {
+                selected_item = 0;
+                uart_puts(uart0, std::format("selected {} clicked {}\n", selected_item, clicked_item).c_str());
+                drawMenu();
+            } else {
+                clicked_item = selected_item;
+                if (clicked_item == 0) {
+                    clicked_item = -1;
+                    selected_item = -1;
+                    uart_puts(uart0, std::format("selected {} clicked {}\n", selected_item, clicked_item).c_str());
+
+                    drawMain();
+                }
+            }
+            if (clicked_item != -1) {
+                clicked_item = -1;
+            }
+            swlock = false;
+        }
+
         if (active_usb_mode == MODE_HID) {
             if (tud_hid_ready()) {
                 if (!usbState && keycode[0] > 0) {

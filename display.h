@@ -9,5 +9,8 @@ extern "C" {
 extern ssd1306_t disp;
 extern int speed;
 extern int tone;
+extern int selected_item;
+extern int clicked_item;
 
 void drawMain();
+void drawMenu();
