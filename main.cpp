@@ -34,8 +34,9 @@ int next = -1;
 
 int speed = 22;
 int tone = 700;
+int tonemod = 1;
 
-int level = ((125000000 / 125) / tone) / 2;
+int level = ((125000000 / 125) / (tone * tonemod)) / 2;
 int basetime = 1200 / speed;
 
 bool rotloc = false;
@@ -61,6 +62,10 @@ UsbMode active_usb_mode;
 
 int selected_item = -1;
 int clicked_item = -1;
+
+std::string decode;
+
+std::vector<MenuOption> optionList;
 
 std::string decodeChar(std::vector<int> elements) {
     std::stringstream stream;
@@ -167,7 +172,7 @@ int main() {
     uint slice_num = pwm_gpio_to_slice_num(pwm_pin);
     pwm_config config = pwm_get_default_config();
     pwm_config_set_clkdiv_int_frac(&config, 125, 0);
-    pwm_config_set_wrap(&config, (125000000 / 125) / tone);
+    pwm_config_set_wrap(&config, (125000000 / 125) / (tone * tonemod));
     pwm_init(slice_num, &config, true);
     key(true);
     sleep_ms(100);
@@ -225,6 +230,30 @@ int main() {
         tud_cdc_write_str("Hello from Pico!\r\n");
         tud_cdc_write_flush(); // Forces the data to send immediately
     }
+
+
+    optionList.push_back(MenuOption("Speed", "{} WPM", speed, 100, 0,
+        [](MenuOption& self) {self.value += 1;},
+        [](MenuOption& self) {self.value -= 1;},
+        [](MenuOption& self) {setSpeed(self.value);},
+        [](MenuOption& self) {self.value = speed;}
+    ));
+
+
+    optionList.push_back(MenuOption("Tone", "{} Hz", tone, 1000, 0,
+        [](MenuOption& self) {self.value += 10;},
+        [](MenuOption& self) {self.value -= 10;},
+        [](MenuOption& self) {setTone(self.value);},
+        [](MenuOption& self) {self.value = tone;}
+
+    ));
+    optionList.push_back(MenuOption("Mute", std::vector<std::string>{"OFF", "ON"}, 1,
+        [](MenuOption& self) {self.valueIndex = !self.valueIndex;},
+        [](MenuOption& self) {self.valueIndex = !self.valueIndex;},
+        [](MenuOption& self) {tonemod = self.valueIndex; setTone(tone);},
+        [](MenuOption& self) {self.valueIndex = tonemod;}
+    ));
+
     while (true) {
         tud_task();
         dit_state = !gpio_get(dit_pin);
@@ -263,7 +292,10 @@ int main() {
             if (active_usb_mode == MODE_HID) {
                 sendKey(" ");
             }
-
+            decode += " ";
+            if (selected_item == -1) {
+                drawMain();
+            }
             hasSpace = true;
             if (recordMode) {
                 recordArr.pop_back();
@@ -273,6 +305,10 @@ int main() {
             uart_puts(uart0, decodeChar(elements).c_str());
             if (active_usb_mode == MODE_HID) {
                 sendKey(decodeChar(elements));
+            }
+            decode += decodeChar(elements);
+            if (selected_item == -1) {
+                drawMain();
             }
             elements.clear();
             if (recordMode && recordArr.size() > 0) {
@@ -348,16 +384,18 @@ int main() {
         if (!gpio_get(rot_a) && gpio_get(rot_b) && !rotloc) {
             rotloc = true;
             if (selected_item == -1) {
-                speed += 1;
-                basetime = 1200 / speed;
-                uart_puts(uart0, std::format("change speed {}\n", speed).c_str());
+                setSpeed(speed + 1);
                 drawMain();
             } else {
-                if (selected_item < 5) {
-                    selected_item++;
-                    uart_puts(uart0, std::format("selected {} clicked {}\n", selected_item, clicked_item).c_str());
-                    drawMenu();
+                if (clicked_item > -1) {
+                    optionList.at(clicked_item - 1).turnR();
+                } else {
+                    if (selected_item < optionList.size()) {
+                        selected_item++;
+                        uart_puts(uart0, std::format("selected {} clicked {}\n", selected_item, clicked_item).c_str());
+                    }
                 }
+                drawMenu();
             }
             sleep_ms(50);
 
@@ -365,17 +403,18 @@ int main() {
         if (gpio_get(rot_a) && !gpio_get(rot_b) && !rotloc) {
             rotloc = true;
             if (selected_item == -1) {
-                speed -= 1;
-                basetime = 1200 / speed;
-                uart_puts(uart0, std::format("change speed {}\n", speed).c_str());
-
+                setSpeed(speed - 1);
                 drawMain();
             } else {
-                if (selected_item > 0) {
-                    selected_item--;
-                    uart_puts(uart0, std::format("selected {} clicked {}\n", selected_item, clicked_item).c_str());
-                    drawMenu();
+                if (clicked_item > -1) {
+                    optionList.at(clicked_item - 1).turnL();
+                } else {
+                    if (selected_item > 0) {
+                        selected_item--;
+                        uart_puts(uart0, std::format("selected {} clicked {}\n", selected_item, clicked_item).c_str());
+                    }
                 }
+                drawMenu();
             }
             sleep_ms(50);
 
@@ -400,21 +439,32 @@ int main() {
             // }
             // watchdog_reboot(0, 0, 0);
             if (selected_item == -1) {
-                selected_item = 0;
+                selected_item = 1;
                 uart_puts(uart0, std::format("selected {} clicked {}\n", selected_item, clicked_item).c_str());
+                for (int i = 0; i < optionList.size(); i++) {
+                    optionList.at(i).load();
+                }
                 drawMenu();
             } else {
-                clicked_item = selected_item;
-                if (clicked_item == 0) {
+                if (clicked_item != -1) {
                     clicked_item = -1;
-                    selected_item = -1;
-                    uart_puts(uart0, std::format("selected {} clicked {}\n", selected_item, clicked_item).c_str());
+                    optionList.at(selected_item - 1).click();
+                    uart_puts(uart0, std::format("save\n").c_str());
 
-                    drawMain();
+                    drawMenu();
+                } else {
+                    clicked_item = selected_item;
+
+                    drawMenu();
+                    if (clicked_item == 0) {
+                        clicked_item = -1;
+                        selected_item = -1;
+
+                        drawMain();
+                    }
+
                 }
-            }
-            if (clicked_item != -1) {
-                clicked_item = -1;
+                uart_puts(uart0, std::format("selected {} clicked {}\n", selected_item, clicked_item).c_str());
             }
             swlock = false;
         }
@@ -433,4 +483,18 @@ int main() {
             }
         }
     }
+}
+
+
+void setSpeed(int x) {
+    speed = x;
+    basetime = 1200 / speed;
+    uart_puts(uart0, std::format("change speed {}\n", speed).c_str());
+}
+
+void setTone(int x) {
+    tone = x;
+    level = ((125000000 / 125) / (tone * tonemod)) / 2;
+    pwm_set_wrap(pwm_gpio_to_slice_num(pwm_pin), (125000000 / 125) / (tone * tonemod));
+
 }

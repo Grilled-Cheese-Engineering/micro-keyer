@@ -1,16 +1,73 @@
-#pragma once
+#ifndef MENU_OPTION_H
+#define MENU_OPTION_H
 extern "C" {
     #include "ssd1306.h"
     #include "font.h"
 }
 #include "settings.h"
 #include "hardware/watchdog.h"
+#include <string>
+#include <vector>
+#include <functional>
 
 extern ssd1306_t disp;
+
 extern int speed;
 extern int tone;
+extern int tonemod;
+
 extern int selected_item;
 extern int clicked_item;
 
+
+
+extern std::string decode;
+
+void setSpeed(int x);
+void setTone(int x);
+
 void drawMain();
 void drawMenu();
+
+
+class MenuOption {
+public:
+
+    MenuOption(std::string nameStr, std::string format, int val, int maxVal, int minVal, std::function<void(MenuOption&)> inc, std::function<void(MenuOption&)> dec, std::function<void(MenuOption&)> app, std::function<void(MenuOption&)> load) :
+        name(nameStr), format(format), value(val), incVal(inc), decVal(dec), appVal(app), loadVal(load), maxValue(maxVal), minValue(minVal) {
+    }
+
+    MenuOption(std::string nameStr, std::vector<std::string> strArr, int val, std::function<void(MenuOption&)> inc, std::function<void(MenuOption&)> dec, std::function<void(MenuOption&)> app, std::function<void(MenuOption&)> load) :
+        name(nameStr), arr(strArr), valueIndex(val), incVal(inc), decVal(dec), appVal(app), loadVal(load), useValueIndex(true) {
+    }
+
+    std::string name = "Option";
+    std::string format = "{}";
+    bool useValueIndex = false;
+    int valueIndex = 0;
+    std::vector<std::string> arr;
+    int value;
+    int maxValue;
+    int minValue = 0;
+    std::function<void(MenuOption&)> incVal;
+    std::function<void(MenuOption&)> decVal;
+    std::function<void(MenuOption&)> appVal;
+    std::function<void(MenuOption&)> loadVal;
+    void turnL() {
+        decVal(*this);
+    }
+    void turnR() {
+        incVal(*this);
+    }
+    void click() {
+        appVal(*this);
+    }
+    void load() {
+        loadVal(*this);
+    }
+};
+
+
+extern std::vector<MenuOption> optionList;
+
+#endif
