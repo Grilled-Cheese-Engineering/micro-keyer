@@ -20,8 +20,6 @@
 
 #include "display.h"
 
-#define FLASH_TARGET_OFFSET (2 * 1024 * 1024 - FLASH_SECTOR_SIZE)
-
 const uint8_t* contents;
 uint32_t saved_interrupts;
 
@@ -38,6 +36,9 @@ int tonemod = 1;
 
 int level = ((125000000 / 125) / (tone * tonemod)) / 2;
 int basetime = 1200 / speed;
+
+int keyerMode;
+int USBMode;
 
 bool rotloc = false;
 bool swlock = false;
@@ -58,7 +59,6 @@ uint8_t msg[4];
 
 uint8_t buf[64] = { 0 };
 
-UsbMode active_usb_mode;
 
 int selected_item = -1;
 int clicked_item = -1;
@@ -66,6 +66,9 @@ int clicked_item = -1;
 std::string decode;
 
 std::vector<MenuOption> optionList;
+
+extern settings options;
+
 
 std::string decodeChar(std::vector<int> elements) {
     std::stringstream stream;
@@ -105,7 +108,7 @@ void sendKey(std::string s) {
 void key(bool x) {
     if (x) {
         pwm_set_gpio_level(pwm_pin, level);
-        if (active_usb_mode == MODE_MIDI) {
+        if (USBMode == MODE_MIDI) {
             msg[0] = 0x09; // Note On - Channel 1
             msg[1] = 0x90; // Note Number
             msg[2] = 1;
@@ -114,7 +117,7 @@ void key(bool x) {
         }
     } else {
         pwm_set_gpio_level(pwm_pin, 0);
-        if (active_usb_mode == MODE_MIDI) {
+        if (USBMode == MODE_MIDI) {
             msg[0] = 0x08; // Note On - Channel 1
             msg[1] = 0x80; // Note Number
             msg[2] = 1;
@@ -122,7 +125,7 @@ void key(bool x) {
             tud_midi_n_stream_write(0, 0, msg, 4);
         }
     }
-    if (active_usb_mode == MODE_MIDI) {
+    if (USBMode == MODE_MIDI) {
         tud_task();
     }
 }
@@ -162,7 +165,7 @@ void doDah() {
 
 int main() {
     stdio_init_all();
-    active_usb_mode = read_boot_mode();
+    void loadettings();
 
     uart_init(uart0, 115200);
     gpio_set_function(uart_tx_pin, GPIO_FUNC_UART);
@@ -181,7 +184,7 @@ int main() {
     board_init();
     tusb_init();
 
-    if (active_usb_mode == MODE_HID) {
+    if (USBMode == MODE_HID) {
         const tusb_rhport_init_t rh_init = {
             .role = TUSB_ROLE_DEVICE,
             .speed = TUD_OPT_HIGH_SPEED ? TUSB_SPEED_HIGH : TUSB_SPEED_FULL
@@ -226,7 +229,7 @@ int main() {
     disp.external_vcc = false;
     ssd1306_init(&disp, 128, 64, 0x3C, I2C_PORT);
     drawMain();
-    if (active_usb_mode == MODE_CDC_SERIAL && tud_cdc_connected()) {
+    if (USBMode == MODE_CDC_SERIAL && tud_cdc_connected()) {
         tud_cdc_write_str("Hello from Pico!\r\n");
         tud_cdc_write_flush(); // Forces the data to send immediately
     }
@@ -247,7 +250,7 @@ int main() {
         [](MenuOption& self) {self.value = tone;}
 
     ));
-    optionList.push_back(MenuOption("Mute", std::vector<std::string>{"OFF", "ON"}, 1,
+    optionList.push_back(MenuOption("Mute", std::vector<std::string>{"ON", "OFF"}, tonemod,
         [](MenuOption& self) {self.valueIndex = !self.valueIndex;},
         [](MenuOption& self) {self.valueIndex = !self.valueIndex;},
         [](MenuOption& self) {tonemod = self.valueIndex; setTone(tone);},
@@ -289,7 +292,7 @@ int main() {
 
         if (to_ms_since_boot(get_absolute_time()) - lastChar > basetime * 7 && !hasSpace && curent == -1) {
             uart_puts(uart0, " ");
-            if (active_usb_mode == MODE_HID) {
+            if (USBMode == MODE_HID) {
                 sendKey(" ");
             }
             decode += " ";
@@ -303,7 +306,7 @@ int main() {
             }
         } else if (elements.size() > 0 && to_ms_since_boot(get_absolute_time()) - lastChar > basetime * 2.5 && curent == -1) {
             uart_puts(uart0, decodeChar(elements).c_str());
-            if (active_usb_mode == MODE_HID) {
+            if (USBMode == MODE_HID) {
                 sendKey(decodeChar(elements));
             }
             decode += decodeChar(elements);
@@ -427,13 +430,13 @@ int main() {
             swlock = true;
         }
         if (swlock && gpio_get(rot_sw)) {
-            // if (active_usb_mode == MODE_CDC_SERIAL) {
+            // if (USBMode == MODE_CDC_SERIAL) {
             //     save_boot_mode(MODE_MIDI);
             //     uart_puts(uart0, std::format("Change mode: MODE_MIDI\n").c_str());
-            // } else if (active_usb_mode == MODE_MIDI) {
+            // } else if (USBMode == MODE_MIDI) {
             //     save_boot_mode(MODE_HID);
             //     uart_puts(uart0, std::format("Change mode: MODE_HID\n").c_str());
-            // } else if (active_usb_mode == MODE_HID) {
+            // } else if (USBMode == MODE_HID) {
             //     save_boot_mode(MODE_CDC_SERIAL);
             //     uart_puts(uart0, std::format("Change mode: MODE_CDC_SERIAL\n").c_str());
             // }
@@ -469,7 +472,7 @@ int main() {
             swlock = false;
         }
 
-        if (active_usb_mode == MODE_HID) {
+        if (USBMode == MODE_HID) {
             if (tud_hid_ready()) {
                 if (!usbState && keycode[0] > 0) {
                     tud_hid_keyboard_report(REPORT_ID_KEYBOARD, 0, keycode);
@@ -485,7 +488,6 @@ int main() {
     }
 }
 
-
 void setSpeed(int x) {
     speed = x;
     basetime = 1200 / speed;
@@ -497,4 +499,42 @@ void setTone(int x) {
     level = ((125000000 / 125) / (tone * tonemod)) / 2;
     pwm_set_wrap(pwm_gpio_to_slice_num(pwm_pin), (125000000 / 125) / (tone * tonemod));
 
+}
+
+void loadettings() {
+    const settings* opts = (const settings*)(XIP_BASE + FLASH_TARGET_OFFSET);
+    if (opts->speed == 0xFF) {
+        speed = 15;
+    } else {
+        speed = opts->speed;
+    }
+    if (opts->tone == 0xFF) {
+        tone = 440;
+    } else {
+        tone = opts->tone;
+    }
+    if (opts->tonemod == 0xFF) {
+        tonemod = 1;
+    } else {
+        tonemod = opts->tonemod;
+    }
+    if (opts->keyerMode == 0xFF) {
+        keyerMode = 0;
+    } else {
+        keyerMode = opts->keyerMode;
+    }
+    if (opts->USBMode == 0xFF) {
+        USBMode = MODE_CDC_SERIAL;
+    } else {
+        USBMode = opts->USBMode;
+    }
+    saveSettings();
+}
+
+void saveSettings() {
+    options = { speed, tone, tonemod, keyerMode, USBMode };
+    uint32_t ints = save_and_disable_interrupts();
+    flash_range_erase(FLASH_TARGET_OFFSET, FLASH_SECTOR_SIZE);
+    flash_range_program(FLASH_TARGET_OFFSET, (const uint8_t*)&options, FLASH_PAGE_SIZE);
+    restore_interrupts(ints);
 }

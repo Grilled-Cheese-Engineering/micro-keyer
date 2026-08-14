@@ -4,17 +4,20 @@ extern "C" {
     #include "ssd1306.h"
     #include "font.h"
 }
-#include "settings.h"
 #include "hardware/watchdog.h"
 #include <string>
 #include <vector>
 #include <functional>
+#include "hardware/flash.h"
+#include "hardware/sync.h"
 
 extern ssd1306_t disp;
 
 extern int speed;
 extern int tone;
 extern int tonemod;
+extern int USBMode;
+extern int keyerMode;
 
 extern int selected_item;
 extern int clicked_item;
@@ -29,6 +32,26 @@ void setTone(int x);
 void drawMain();
 void drawMenu();
 
+void loadettings();
+void saveSettings();
+
+
+#define MODE_CDC_SERIAL  0
+#define MODE_HID 1
+#define MODE_MIDI 2
+
+#define FLASH_TARGET_OFFSET (2 * 1024 * 1024 - FLASH_SECTOR_SIZE)
+
+
+typedef struct __attribute__((aligned(FLASH_PAGE_SIZE))) {
+    int speed;
+    int tone;
+    int tonemod;
+    int keyerMode;
+    int USBMode;
+} settings;
+
+extern settings options;
 
 class MenuOption {
 public:

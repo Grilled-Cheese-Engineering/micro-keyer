@@ -1,9 +1,6 @@
 #include "tusb.h"
 #include "pico/unique_id.h"
-#include "settings.h" // The header from the flash storage step
-
-// The global variable that main.cpp reads from flash
-extern UsbMode active_usb_mode;
+#include "display.h"
 
 #define USB_VID   0xCafe
 #define USB_BCD   0x0200
