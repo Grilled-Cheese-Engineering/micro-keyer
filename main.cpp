@@ -164,8 +164,8 @@ void doDah() {
 }
 
 int main() {
-
     stdio_init_all();
+    loadSettings();
     uart_init(uart0, 115200);
     gpio_set_function(uart_tx_pin, GPIO_FUNC_UART);
     gpio_set_function(uart_rx_pin, GPIO_FUNC_UART);
@@ -182,7 +182,6 @@ int main() {
 
     board_init();
     tusb_init();
-    loadSettings();
 
     if (USBMode == MODE_HID) {
         const tusb_rhport_init_t rh_init = {
@@ -236,23 +235,23 @@ int main() {
 
 
     optionList.push_back(MenuOption("Speed", "{} WPM", speed, 100, 0,
-        [](MenuOption& self) {self.value += 1;},
-        [](MenuOption& self) {self.value -= 1;},
+        [](MenuOption& self) {self.value += 1; setSpeed(self.value);},
+        [](MenuOption& self) {self.value -= 1; setSpeed(self.value);},
         [](MenuOption& self) {setSpeed(self.value);},
         [](MenuOption& self) {self.value = speed;}
     ));
 
 
     optionList.push_back(MenuOption("Tone", "{} Hz", tone, 1000, 0,
-        [](MenuOption& self) {self.value += 10;},
-        [](MenuOption& self) {self.value -= 10;},
+        [](MenuOption& self) {self.value += 10; setTone(self.value);},
+        [](MenuOption& self) {self.value -= 10; setTone(self.value);},
         [](MenuOption& self) {setTone(self.value);},
         [](MenuOption& self) {self.value = tone;}
 
     ));
     optionList.push_back(MenuOption("Mute", std::vector<std::string>{"ON", "OFF"}, tonemod,
-        [](MenuOption& self) {self.valueIndex = !self.valueIndex;},
-        [](MenuOption& self) {self.valueIndex = !self.valueIndex;},
+        [](MenuOption& self) {self.valueIndex = !self.valueIndex; tonemod = self.valueIndex; setTone(tone);},
+        [](MenuOption& self) {self.valueIndex = !self.valueIndex; tonemod = self.valueIndex; setTone(tone);},
         [](MenuOption& self) {tonemod = self.valueIndex; setTone(tone);},
         [](MenuOption& self) {self.valueIndex = tonemod;}
     ));

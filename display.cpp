@@ -9,10 +9,11 @@ ssd1306_t disp;
 void drawMain() {
 
     ssd1306_clear(&disp);
-    std::string status = std::format("{} WPM", speed);
-    ssd1306_draw_string_with_font(&disp, 128 - ((status.length() * 5) + (status.length() - 1)), 0, 1, font_8x5, status.c_str());
+    std::string status = std::format("{} WPM ", speed);
+    ssd1306_draw_string_with_font(&disp, 128 - ((status.length() * 5) + (status.length() - 1)), 2, 1, font_8x5, status.c_str());
 
-    ssd1306_draw_string_with_font(&disp, 0, 0, 1, font_8x5, "V1.0");
+    ssd1306_draw_string_with_font(&disp, 0, 1, 1, font_8x5, " V1.0");
+    ssd1306_draw_inverted_square(&disp, 0, 0, 129, 10);
 
     std::string arr[] = { "", "", "", "", "" };
     uart_puts(uart0, std::format("{} {}\n", decode.length(), decode.length() / 22).c_str());
@@ -46,11 +47,11 @@ void drawMain() {
         arr[4] = decode.substr(85, 21);
     }
 
-    ssd1306_draw_string_with_font(&disp, 0, 10 * 1, 1, font_8x5, arr[0].c_str());
-    ssd1306_draw_string_with_font(&disp, 0, 10 * 2, 1, font_8x5, arr[1].c_str());
-    ssd1306_draw_string_with_font(&disp, 0, 10 * 3, 1, font_8x5, arr[2].c_str());
-    ssd1306_draw_string_with_font(&disp, 0, 10 * 4, 1, font_8x5, arr[3].c_str());
-    ssd1306_draw_string_with_font(&disp, 0, 10 * 5, 1, font_8x5, arr[4].c_str());
+    ssd1306_draw_string_with_font(&disp, 0, 2 + (10 * 1), 1, font_8x5, arr[0].c_str());
+    ssd1306_draw_string_with_font(&disp, 0, 2 + (10 * 2), 1, font_8x5, arr[1].c_str());
+    ssd1306_draw_string_with_font(&disp, 0, 2 + (10 * 3), 1, font_8x5, arr[2].c_str());
+    ssd1306_draw_string_with_font(&disp, 0, 2 + (10 * 4), 1, font_8x5, arr[3].c_str());
+    ssd1306_draw_string_with_font(&disp, 0, 2 + (10 * 5), 1, font_8x5, arr[4].c_str());
 
     ssd1306_show(&disp);
 }
