@@ -38,11 +38,12 @@ void drawMain() {
         arr[3] = decode.substr(64, 21);
         arr[4] = decode.substr(85, 21);
     } else {
-        arr[0] = decode.substr(decode.length() - (21 * 5), 21);
-        arr[1] = decode.substr(decode.length() - (21 * 4), 21);
-        arr[2] = decode.substr(decode.length() - (21 * 3), 21);
-        arr[3] = decode.substr(decode.length() - (21 * 2), 21);
-        arr[4] = decode.substr(decode.length() - (21 * 1), 21);
+        decode = decode.substr(decode.length() - 105, 105);
+        arr[0] = decode.substr(0, 21);
+        arr[1] = decode.substr(22, 21);
+        arr[2] = decode.substr(43, 21);
+        arr[3] = decode.substr(64, 21);
+        arr[4] = decode.substr(85, 21);
     }
 
     ssd1306_draw_string_with_font(&disp, 0, 10 * 1, 1, font_8x5, arr[0].c_str());

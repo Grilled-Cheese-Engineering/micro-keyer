@@ -30,12 +30,12 @@ int last = -1;
 int curent = -1;
 int next = -1;
 
-int speed = 22;
-int tone = 700;
-int tonemod = 1;
+int speed;
+int tone;
+int tonemod;
 
-int level = ((125000000 / 125) / (tone * tonemod)) / 2;
-int basetime = 1200 / speed;
+int level;
+int basetime;
 
 int keyerMode;
 int USBMode;
@@ -67,7 +67,7 @@ std::string decode;
 
 std::vector<MenuOption> optionList;
 
-extern settings options;
+settings options;
 
 
 std::string decodeChar(std::vector<int> elements) {
@@ -164,9 +164,8 @@ void doDah() {
 }
 
 int main() {
-    stdio_init_all();
-    void loadettings();
 
+    stdio_init_all();
     uart_init(uart0, 115200);
     gpio_set_function(uart_tx_pin, GPIO_FUNC_UART);
     gpio_set_function(uart_rx_pin, GPIO_FUNC_UART);
@@ -183,6 +182,7 @@ int main() {
 
     board_init();
     tusb_init();
+    loadSettings();
 
     if (USBMode == MODE_HID) {
         const tusb_rhport_init_t rh_init = {
@@ -453,6 +453,7 @@ int main() {
                     clicked_item = -1;
                     optionList.at(selected_item - 1).click();
                     uart_puts(uart0, std::format("save\n").c_str());
+                    saveSettings();
 
                     drawMenu();
                 } else {
@@ -492,43 +493,48 @@ void setSpeed(int x) {
     speed = x;
     basetime = 1200 / speed;
     uart_puts(uart0, std::format("change speed {}\n", speed).c_str());
+    saveSettings();
+
 }
 
 void setTone(int x) {
     tone = x;
     level = ((125000000 / 125) / (tone * tonemod)) / 2;
     pwm_set_wrap(pwm_gpio_to_slice_num(pwm_pin), (125000000 / 125) / (tone * tonemod));
-
+    saveSettings();
 }
 
-void loadettings() {
+void loadSettings() {
     const settings* opts = (const settings*)(XIP_BASE + FLASH_TARGET_OFFSET);
-    if (opts->speed == 0xFF) {
+
+    if (opts->speed == -1) {
         speed = 15;
     } else {
         speed = opts->speed;
     }
-    if (opts->tone == 0xFF) {
+    if (opts->tone == -1) {
         tone = 440;
     } else {
         tone = opts->tone;
     }
-    if (opts->tonemod == 0xFF) {
+    if (opts->tonemod == -1) {
         tonemod = 1;
     } else {
         tonemod = opts->tonemod;
     }
-    if (opts->keyerMode == 0xFF) {
+    if (opts->keyerMode == -1) {
         keyerMode = 0;
     } else {
         keyerMode = opts->keyerMode;
     }
-    if (opts->USBMode == 0xFF) {
+    if (opts->USBMode == -1) {
         USBMode = MODE_CDC_SERIAL;
     } else {
         USBMode = opts->USBMode;
     }
     saveSettings();
+    setTone(tone);
+    setSpeed(speed);
 }
 
 void saveSettings() {

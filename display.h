@@ -32,7 +32,7 @@ void setTone(int x);
 void drawMain();
 void drawMenu();
 
-void loadettings();
+void loadSettings();
 void saveSettings();
 
 
@@ -61,13 +61,16 @@ public:
     }
 
     MenuOption(std::string nameStr, std::vector<std::string> strArr, int val, std::function<void(MenuOption&)> inc, std::function<void(MenuOption&)> dec, std::function<void(MenuOption&)> app, std::function<void(MenuOption&)> load) :
-        name(nameStr), arr(strArr), valueIndex(val), incVal(inc), decVal(dec), appVal(app), loadVal(load), useValueIndex(true) {
+        name(nameStr), arr(strArr), incVal(inc), decVal(dec), appVal(app), loadVal(load), useValueIndex(true) {
+        if (val >= 0 && val < arr.size()) {
+            valueIndex = val;
+        }
     }
 
     std::string name = "Option";
     std::string format = "{}";
     bool useValueIndex = false;
-    int valueIndex = 0;
+    uint32_t valueIndex = 0;
     std::vector<std::string> arr;
     int value;
     int maxValue;

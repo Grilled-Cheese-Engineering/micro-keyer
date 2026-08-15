@@ -45,7 +45,7 @@ tusb_desc_device_t const desc_device_other = {
 };
 
 uint8_t const* tud_descriptor_device_cb(void) {
-  if (active_usb_mode == MODE_CDC_SERIAL) {
+  if (USBMode == MODE_CDC_SERIAL) {
     return (uint8_t const*)&desc_device_cdc;
   }
   return (uint8_t const*)&desc_device_other;
@@ -106,7 +106,7 @@ uint8_t const desc_configuration_midi[] = {
 // --- CONFIGURATION CALLBACK ---
 uint8_t const* tud_descriptor_configuration_cb(uint8_t index) {
   (void)index;
-  switch (active_usb_mode) {
+  switch (USBMode) {
   case MODE_CDC_SERIAL: return desc_configuration_cdc;
   case MODE_HID:        return desc_configuration_hid;
   case MODE_MIDI:       return desc_configuration_midi;
