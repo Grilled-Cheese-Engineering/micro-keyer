@@ -1,9 +1,9 @@
-Pin map:
-  dit:GP26
-  dah:GP27
-  PWM/audio:GP28
-  rotary encoder A:GP5
-  rotary encoder B:GP2
-  rotary encoder SW:GP3
-  display SCL:GP7
-  display SDA:GP6
+Pin map:<br><br>
+  dit : GP26 <br>
+  dah : GP27 <br>
+  PWM/audio : GP28 <br>
+  rotary encoder A : GP5 <br>
+  rotary encoder B : GP2 <br>
+  rotary encoder SW : GP3 <br>
+  display SCL : GP7 <br>
+  display SDA : GP6 <br>
