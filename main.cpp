@@ -38,9 +38,9 @@ int level;
 int basetime;
 
 int keyerMode;
-int USBMode;
+bool USBMode[3];
 
-bool rotloc = false;
+bool rotlock = false;
 bool swlock = false;
 
 std::string str;
@@ -108,7 +108,7 @@ void sendKey(std::string s) {
 void key(bool x) {
     if (x) {
         pwm_set_gpio_level(pwm_pin, level);
-        if (USBMode == MODE_MIDI) {
+        if (USBMode[2]) {
             msg[0] = 0x09; // Note On - Channel 1
             msg[1] = 0x90; // Note Number
             msg[2] = 1;
@@ -117,7 +117,7 @@ void key(bool x) {
         }
     } else {
         pwm_set_gpio_level(pwm_pin, 0);
-        if (USBMode == MODE_MIDI) {
+        if (USBMode[2]) {
             msg[0] = 0x08; // Note On - Channel 1
             msg[1] = 0x80; // Note Number
             msg[2] = 1;
@@ -125,7 +125,7 @@ void key(bool x) {
             tud_midi_n_stream_write(0, 0, msg, 4);
         }
     }
-    if (USBMode == MODE_MIDI) {
+    if (USBMode[2]) {
         tud_task();
     }
 }
@@ -183,7 +183,7 @@ int main() {
     board_init();
     tusb_init();
 
-    if (USBMode == MODE_HID) {
+    if (USBMode[1]) {
         const tusb_rhport_init_t rh_init = {
             .role = TUSB_ROLE_DEVICE,
             .speed = TUD_OPT_HIGH_SPEED ? TUSB_SPEED_HIGH : TUSB_SPEED_FULL
@@ -228,7 +228,7 @@ int main() {
     disp.external_vcc = false;
     ssd1306_init(&disp, 128, 64, 0x3C, I2C_PORT);
     drawMain();
-    if (USBMode == MODE_CDC_SERIAL && tud_cdc_connected()) {
+    if (USBMode[0] && tud_cdc_connected()) {
         tud_cdc_write_str("Hello from Pico!\r\n");
         tud_cdc_write_flush(); // Forces the data to send immediately
     }
@@ -249,11 +249,32 @@ int main() {
         [](MenuOption& self) {self.value = tone;}
 
     ));
-    optionList.push_back(MenuOption("Mute", std::vector<std::string>{"ON", "OFF"}, tonemod,
-        [](MenuOption& self) {self.valueIndex = !self.valueIndex; tonemod = self.valueIndex; setTone(tone);},
-        [](MenuOption& self) {self.valueIndex = !self.valueIndex; tonemod = self.valueIndex; setTone(tone);},
-        [](MenuOption& self) {tonemod = self.valueIndex; setTone(tone);},
-        [](MenuOption& self) {self.valueIndex = tonemod;}
+    optionList.push_back(MenuOption("Mute", !tonemod,
+        [](MenuOption& self) {self.value = !self.value; tonemod = !self.value; setTone(tone);},
+        [](MenuOption& self) {self.value = !self.value; tonemod = !self.value; setTone(tone);},
+        [](MenuOption& self) {tonemod = !self.value; setTone(tone);},
+        [](MenuOption& self) {self.value = !tonemod;}
+    ));
+
+    optionList.push_back(MenuOption("SERIAL", USBMode[0],
+        [](MenuOption& self) {self.value = !self.value; USBMode[0] = self.value;},
+        [](MenuOption& self) {self.value = !self.value; USBMode[0] = self.value;},
+        [](MenuOption& self) {USBMode[0] = self.value;},
+        [](MenuOption& self) {self.value = USBMode[0];}
+    ));
+
+    optionList.push_back(MenuOption("HID", USBMode[1],
+        [](MenuOption& self) {self.value = !self.value; USBMode[1] = self.value;},
+        [](MenuOption& self) {self.value = !self.value; USBMode[1] = self.value;},
+        [](MenuOption& self) {USBMode[1] = self.value;},
+        [](MenuOption& self) {self.value = USBMode[1];}
+    ));
+
+    optionList.push_back(MenuOption("MIDI", USBMode[2],
+        [](MenuOption& self) {self.value = !self.value; USBMode[2] = self.value;},
+        [](MenuOption& self) {self.value = !self.value; USBMode[2] = self.value;},
+        [](MenuOption& self) {USBMode[2] = self.value;},
+        [](MenuOption& self) {self.value = USBMode[2];}
     ));
 
     while (true) {
@@ -291,7 +312,7 @@ int main() {
 
         if (to_ms_since_boot(get_absolute_time()) - lastChar > basetime * 7 && !hasSpace && curent == -1) {
             uart_puts(uart0, " ");
-            if (USBMode == MODE_HID) {
+            if (USBMode[1]) {
                 sendKey(" ");
             }
             decode += " ";
@@ -305,7 +326,7 @@ int main() {
             }
         } else if (elements.size() > 0 && to_ms_since_boot(get_absolute_time()) - lastChar > basetime * 2.5 && curent == -1) {
             uart_puts(uart0, decodeChar(elements).c_str());
-            if (USBMode == MODE_HID) {
+            if (USBMode[1]) {
                 sendKey(decodeChar(elements));
             }
             decode += decodeChar(elements);
@@ -383,8 +404,8 @@ int main() {
         // }
         //uart_puts(uart0, std::format("a {}, b {}, sw {}\n", gpio_get(rot_a), gpio_get(rot_b), gpio_get(rot_sw)).c_str());
 
-        if (!gpio_get(rot_a) && gpio_get(rot_b) && !rotloc) {
-            rotloc = true;
+        if (!gpio_get(rot_a) && gpio_get(rot_b) && !rotlock) {
+            rotlock = true;
             if (selected_item == -1) {
                 setSpeed(speed + 1);
                 drawMain();
@@ -402,8 +423,8 @@ int main() {
             sleep_ms(50);
 
         }
-        if (gpio_get(rot_a) && !gpio_get(rot_b) && !rotloc) {
-            rotloc = true;
+        if (gpio_get(rot_a) && !gpio_get(rot_b) && !rotlock) {
+            rotlock = true;
             if (selected_item == -1) {
                 setSpeed(speed - 1);
                 drawMain();
@@ -421,25 +442,25 @@ int main() {
             sleep_ms(50);
 
         }
-        if (rotloc && gpio_get(rot_a) && gpio_get(rot_b)) {
-            rotloc = false;
+        if (rotlock && gpio_get(rot_a) && gpio_get(rot_b)) {
+            rotlock = false;
         }
 
         if (!swlock && !gpio_get(rot_sw)) {
             swlock = true;
         }
         if (swlock && gpio_get(rot_sw)) {
-            // if (USBMode == MODE_CDC_SERIAL) {
+            // if (USBMode[0]) {
             //     save_boot_mode(MODE_MIDI);
             //     uart_puts(uart0, std::format("Change mode: MODE_MIDI\n").c_str());
-            // } else if (USBMode == MODE_MIDI) {
+            // } else if (USBMode[2]) {
             //     save_boot_mode(MODE_HID);
             //     uart_puts(uart0, std::format("Change mode: MODE_HID\n").c_str());
-            // } else if (USBMode == MODE_HID) {
+            // } else if (USBMode[1]) {
             //     save_boot_mode(MODE_CDC_SERIAL);
             //     uart_puts(uart0, std::format("Change mode: MODE_CDC_SERIAL\n").c_str());
             // }
-            // watchdog_reboot(0, 0, 0);
+            //
             if (selected_item == -1) {
                 selected_item = 1;
                 uart_puts(uart0, std::format("selected {} clicked {}\n", selected_item, clicked_item).c_str());
@@ -472,7 +493,7 @@ int main() {
             swlock = false;
         }
 
-        if (USBMode == MODE_HID) {
+        if (USBMode[1]) {
             if (tud_hid_ready()) {
                 if (!usbState && keycode[0] > 0) {
                     tud_hid_keyboard_report(REPORT_ID_KEYBOARD, 0, keycode);
@@ -506,30 +527,23 @@ void setTone(int x) {
 void loadSettings() {
     const settings* opts = (const settings*)(XIP_BASE + FLASH_TARGET_OFFSET);
 
-    if (opts->speed == -1) {
+    if (opts->speed == -1 || opts->tone == -1 || opts->tonemod == -1 || opts->keyerMode == -1) {
         speed = 15;
+        tone = 440;
+        tonemod = 1;
+        keyerMode = 0;
+        USBMode[0] = 1;
+        USBMode[1] = 1;
+        USBMode[2] = 1;
     } else {
         speed = opts->speed;
-    }
-    if (opts->tone == -1) {
-        tone = 440;
-    } else {
         tone = opts->tone;
-    }
-    if (opts->tonemod == -1) {
-        tonemod = 1;
-    } else {
         tonemod = opts->tonemod;
-    }
-    if (opts->keyerMode == -1) {
-        keyerMode = 0;
-    } else {
         keyerMode = opts->keyerMode;
-    }
-    if (opts->USBMode == -1) {
-        USBMode = MODE_CDC_SERIAL;
-    } else {
-        USBMode = opts->USBMode;
+        USBMode[0] = opts->USBMode[0];
+        USBMode[1] = opts->USBMode[1];
+        USBMode[2] = opts->USBMode[2];
+
     }
     saveSettings();
     setTone(tone);
@@ -537,7 +551,7 @@ void loadSettings() {
 }
 
 void saveSettings() {
-    options = { speed, tone, tonemod, keyerMode, USBMode };
+    options = { speed, tone, tonemod, keyerMode, USBMode[3] };
     uint32_t ints = save_and_disable_interrupts();
     flash_range_erase(FLASH_TARGET_OFFSET, FLASH_SECTOR_SIZE);
     flash_range_program(FLASH_TARGET_OFFSET, (const uint8_t*)&options, FLASH_PAGE_SIZE);

@@ -16,7 +16,7 @@ extern ssd1306_t disp;
 extern int speed;
 extern int tone;
 extern int tonemod;
-extern int USBMode;
+extern bool USBMode[3];
 extern int keyerMode;
 
 extern int selected_item;
@@ -48,7 +48,7 @@ typedef struct __attribute__((aligned(FLASH_PAGE_SIZE))) {
     int tone;
     int tonemod;
     int keyerMode;
-    int USBMode;
+    bool USBMode[3];
 } settings;
 
 extern settings options;
@@ -57,11 +57,18 @@ class MenuOption {
 public:
 
     MenuOption(std::string nameStr, std::string format, int val, int maxVal, int minVal, std::function<void(MenuOption&)> inc, std::function<void(MenuOption&)> dec, std::function<void(MenuOption&)> app, std::function<void(MenuOption&)> load) :
-        name(nameStr), format(format), value(val), incVal(inc), decVal(dec), appVal(app), loadVal(load), maxValue(maxVal), minValue(minVal) {
+        name(nameStr), format(format), value(val), incVal(inc), decVal(dec), appVal(app), loadVal(load), maxValue(maxVal), minValue(minVal), useBool(false) {
     }
 
     MenuOption(std::string nameStr, std::vector<std::string> strArr, int val, std::function<void(MenuOption&)> inc, std::function<void(MenuOption&)> dec, std::function<void(MenuOption&)> app, std::function<void(MenuOption&)> load) :
-        name(nameStr), arr(strArr), incVal(inc), decVal(dec), appVal(app), loadVal(load), useValueIndex(true) {
+        name(nameStr), arr(strArr), incVal(inc), decVal(dec), appVal(app), loadVal(load), useValueIndex(true), useBool(false) {
+        if (val >= 0 && val < arr.size()) {
+            valueIndex = val;
+        }
+    }
+
+    MenuOption(std::string nameStr, int val, std::function<void(MenuOption&)> inc, std::function<void(MenuOption&)> dec, std::function<void(MenuOption&)> app, std::function<void(MenuOption&)> load) :
+        name(nameStr), incVal(inc), decVal(dec), appVal(app), loadVal(load), useValueIndex(false), useBool(true) {
         if (val >= 0 && val < arr.size()) {
             valueIndex = val;
         }
@@ -70,6 +77,7 @@ public:
     std::string name = "Option";
     std::string format = "{}";
     bool useValueIndex = false;
+    bool useBool = false;
     uint32_t valueIndex = 0;
     std::vector<std::string> arr;
     int value;

@@ -84,8 +84,10 @@ extern "C" {
     #define CFG_TUD_HID_EP_BUFSIZE    16
 
     // MIDI Buffer Sizes
-    #define CFG_TUD_MIDI_RX_BUFSIZE   (TUD_OPT_HIGH_SPEED ? 512 : 64)
-    #define CFG_TUD_MIDI_TX_BUFSIZE   (TUD_OPT_HIGH_SPEED ? 512 : 64)
+    #define CFG_TUD_MIDI_EP_BUFSIZE  64    // ADD THIS LINE
+    #define CFG_TUD_MIDI_RX_BUFSIZE  64
+    #define CFG_TUD_MIDI_TX_BUFSIZE  64
+
 
     #ifdef __cplusplus
 }

@@ -39,9 +39,9 @@
         "other_text_thickness": 0.15,
         "other_text_upright": false,
         "pads": {
-          "drill": 0.75,
-          "height": 1.5,
-          "width": 1.05
+          "drill": 0.0,
+          "height": 0.3,
+          "width": 0.3
         },
         "silk_line_width": 0.1,
         "silk_text_italic": false,
@@ -156,7 +156,7 @@
         "min_track_width": 0.2,
         "min_via_annular_width": 0.1,
         "min_via_diameter": 0.5,
-        "solder_mask_to_copper_clearance": 0.0,
+        "solder_mask_to_copper_clearance": 0.005,
         "use_height_for_length_calcs": true
       },
       "teardrop_options": [
@@ -691,7 +691,7 @@
         "uuid": "8f7feab7-3497-470c-875a-34341021450c"
       }
     ],
-    "used_designators": "BZ1,#FLG1-2,GND1,#PWR1-17,RV1,SSD1,J1-5,Q1-2,EN1,U1,C1-3,BT1,TP1-3,SW1-4",
+    "used_designators": "C1-3,TP1-3,SW1-4,BT1,#FLG1-2,BZ1,#PWR1-17,GND1,Q1-2,J1-5,U1,EN1,RV1,SSD1,JP1-4",
     "variants": []
   },
   "sheets": [
