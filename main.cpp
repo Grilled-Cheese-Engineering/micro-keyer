@@ -259,21 +259,21 @@ int main() {
     optionList.push_back(MenuOption("SERIAL", USBMode[0],
         [](MenuOption& self) {self.value = !self.value; USBMode[0] = self.value;},
         [](MenuOption& self) {self.value = !self.value; USBMode[0] = self.value;},
-        [](MenuOption& self) {USBMode[0] = self.value;},
+        [](MenuOption& self) {USBMode[0] = self.value;saveSettings();},
         [](MenuOption& self) {self.value = USBMode[0];}
     ));
 
     optionList.push_back(MenuOption("HID", USBMode[1],
         [](MenuOption& self) {self.value = !self.value; USBMode[1] = self.value;},
         [](MenuOption& self) {self.value = !self.value; USBMode[1] = self.value;},
-        [](MenuOption& self) {USBMode[1] = self.value;},
+        [](MenuOption& self) {USBMode[1] = self.value;saveSettings();},
         [](MenuOption& self) {self.value = USBMode[1];}
     ));
 
     optionList.push_back(MenuOption("MIDI", USBMode[2],
         [](MenuOption& self) {self.value = !self.value; USBMode[2] = self.value;},
         [](MenuOption& self) {self.value = !self.value; USBMode[2] = self.value;},
-        [](MenuOption& self) {USBMode[2] = self.value;},
+        [](MenuOption& self) {USBMode[2] = self.value; saveSettings();},
         [](MenuOption& self) {self.value = USBMode[2];}
     ));
 

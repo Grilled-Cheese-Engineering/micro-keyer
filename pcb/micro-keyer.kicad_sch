@@ -4107,7 +4107,7 @@
 		(uuid "97367fba-fe6f-4715-8dc7-9ab508997872")
 	)
 	(no_connect
-		(at 81.28 82.55)
+		(at 81.28 93.98)
 		(uuid "a9c860e3-d3cb-4563-98f8-3572e7156517")
 	)
 	(no_connect
@@ -4163,6 +4163,16 @@
 			(type default)
 		)
 		(uuid "0964af29-f9bf-460e-90ac-01719469ac2e")
+	)
+	(wire
+		(pts
+			(xy 73.66 85.09) (xy 81.28 85.09)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0966702b-a329-420e-8113-7e9e5e361ed2")
 	)
 	(wire
 		(pts
@@ -4366,13 +4376,13 @@
 	)
 	(wire
 		(pts
-			(xy 81.28 90.17) (xy 81.28 93.98)
+			(xy 81.28 85.09) (xy 81.28 86.36)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "89aafabf-49ca-41af-aa56-0e40baa702c9")
+		(uuid "86f1e8e0-4d15-4d5e-9613-5584b2d43195")
 	)
 	(wire
 		(pts
@@ -4466,16 +4476,6 @@
 	)
 	(wire
 		(pts
-			(xy 81.28 93.98) (xy 73.66 93.98)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9c3588d4-450c-41ef-b05b-18eeb6d7aeb8")
-	)
-	(wire
-		(pts
 			(xy 153.67 57.15) (xy 143.51 57.15)
 		)
 		(stroke
@@ -4516,7 +4516,7 @@
 	)
 	(wire
 		(pts
-			(xy 87.63 86.36) (xy 87.63 82.55)
+			(xy 87.63 90.17) (xy 87.63 82.55)
 		)
 		(stroke
 			(width 0)
@@ -4656,7 +4656,7 @@
 	)
 	(wire
 		(pts
-			(xy 85.09 86.36) (xy 87.63 86.36)
+			(xy 85.09 90.17) (xy 87.63 90.17)
 		)
 		(stroke
 			(width 0)
@@ -4814,6 +4814,16 @@
 		)
 		(uuid "46fd8398-26f5-4bfa-a465-13bd805eb539")
 	)
+	(label "AAudio"
+		(at 73.66 85.09 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "51109555-5095-42f6-aa39-f9fca6d972fd")
+	)
 	(label "PWM"
 		(at 74.93 77.47 0)
 		(effects
@@ -4893,16 +4903,6 @@
 			(justify left bottom)
 		)
 		(uuid "967bf35c-fc17-4643-9e38-860ee385dddb")
-	)
-	(label "AAudio"
-		(at 73.66 93.98 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "9e3e778f-c595-43f9-8ca1-042815f81e2c")
 	)
 	(label "Rot SW"
 		(at 240.03 73.66 180)
@@ -5194,7 +5194,7 @@
 	)
 	(symbol
 		(lib_id "Device:R_Potentiometer")
-		(at 81.28 86.36 0)
+		(at 81.28 90.17 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5205,7 +5205,7 @@
 		(fields_autoplaced yes)
 		(uuid "1da41e0d-b26a-4077-a1da-822e909fc217")
 		(property "Reference" "RV1"
-			(at 78.74 85.0899 0)
+			(at 78.74 88.8999 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5216,7 +5216,7 @@
 			)
 		)
 		(property "Value" "Vol Knob"
-			(at 78.74 87.6299 0)
+			(at 78.74 91.4399 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5227,7 +5227,7 @@
 			)
 		)
 		(property "Footprint" "pot:TRIM_3352T-1-103LF"
-			(at 81.28 86.36 0)
+			(at 81.28 90.17 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5238,7 +5238,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 81.28 86.36 0)
+			(at 81.28 90.17 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5249,7 +5249,7 @@
 			)
 		)
 		(property "Description" "Potentiometer"
-			(at 81.28 86.36 0)
+			(at 81.28 90.17 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5260,7 +5260,7 @@
 			)
 		)
 		(property "Sim.Device" "R"
-			(at 81.28 86.36 0)
+			(at 81.28 90.17 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5271,7 +5271,7 @@
 			)
 		)
 		(property "Sim.Type" "POT"
-			(at 81.28 86.36 0)
+			(at 81.28 90.17 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5282,7 +5282,7 @@
 			)
 		)
 		(property "Sim.Pins" "1=r0 2=wiper 3=r1"
-			(at 81.28 86.36 0)
+			(at 81.28 90.17 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
