@@ -240,7 +240,7 @@
       "internal_id": "",
       "mfg": "",
       "mpn": "",
-      "sch_revision": ""
+      "sch_revision": "1.0"
     },
     "layer_pairs": [],
     "layer_presets": [
@@ -762,7 +762,7 @@
         "uuid": "8f7feab7-3497-470c-875a-34341021450c"
       }
     ],
-    "used_designators": "Q1-2,GND1,J1-5,RV1,SSD1,EN1,U1,JP1-4,TP1-3,C1-3,SW1-4,BT1,#FLG1-2,BZ1,#PWR1-17",
+    "used_designators": "#FLG1-2,BT1,#PWR1-17,GND1,BZ1,Q1-2,J1-5,RV1,SSD1,U1,EN1,JP1-4,TP1-3,C1-3,SW1-4",
     "variants": []
   },
   "sheets": [

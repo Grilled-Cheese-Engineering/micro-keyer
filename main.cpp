@@ -551,9 +551,9 @@ void loadSettings() {
 }
 
 void saveSettings() {
-    options = { speed, tone, tonemod, keyerMode, USBMode[3] };
+    options = { speed, tone, tonemod, keyerMode, {USBMode[0],USBMode[1],USBMode[2]} };
     uint32_t ints = save_and_disable_interrupts();
-    flash_range_erase(FLASH_TARGET_OFFSET, FLASH_SECTOR_SIZE);
+    flash_range_erase(FLASH_TARGET_OFFSET, i e s i  FLASH_SECTOR_SIZE);
     flash_range_program(FLASH_TARGET_OFFSET, (const uint8_t*)&options, FLASH_PAGE_SIZE);
     restore_interrupts(ints);
 }
