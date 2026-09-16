@@ -608,7 +608,7 @@
       "method": 0,
       "sort_order": 0
     },
-    "bom_export_filename": "${PROJECTNAME}.csv",
+    "bom_export_filename": "${PROJECTNAME}.txt",
     "bom_fmt_presets": [],
     "bom_fmt_settings": {
       "field_delimiter": ",",
@@ -762,7 +762,7 @@
         "uuid": "8f7feab7-3497-470c-875a-34341021450c"
       }
     ],
-    "used_designators": "TP1-3,JP1-4,SW1-4,C1-3,#FLG1-2,BT1,#PWR1-17,GND1,BZ1,Q1-2,J1-5,RV1,SSD1,U1,EN1",
+    "used_designators": "GND1,#PWR1-18,J1-5,BZ1,SSD1,RV1,EN1,U1,Q1-2,TP1-3,JP1-4,SW1-4,C1-3,#FLG1-2,BT1",
     "variants": []
   },
   "sheets": [

@@ -69,6 +69,7 @@ std::vector<MenuOption> optionList;
 
 settings options;
 
+void gpio_callback(uint gpio, uint32_t events);
 
 std::string decodeChar(std::vector<int> elements) {
     std::stringstream stream;
@@ -132,6 +133,7 @@ void key(bool x) {
 
 int64_t coolDown(alarm_id_t id, void* user_data) {
     curent = -1;
+    gpio_callback(0, 0);
     return 0;
 }
 
@@ -276,40 +278,11 @@ int main() {
         [](MenuOption& self) {USBMode[2] = self.value; saveSettings();},
         [](MenuOption& self) {self.value = USBMode[2];}
     ));
+    gpio_set_irq_enabled_with_callback(dit_pin, GPIO_IRQ_EDGE_FALL, true, gpio_callback);
+    gpio_set_irq_enabled_with_callback(dah_pin, GPIO_IRQ_EDGE_FALL, true, gpio_callback);
 
     while (true) {
         tud_task();
-        dit_state = !gpio_get(dit_pin);
-        dah_state = !gpio_get(dah_pin);
-        if (dah_state && dit_state) {
-            next = 3;
-        } else if (dit_state && !dah_state) {
-            if (curent == dah || curent == -1) {
-                next = dit;
-            }
-        } else if (dah_state && !dit_state) {
-            if (curent == dit || curent == -1) {
-                next = dah;
-            }
-        }
-
-        if (curent == -1) {
-            if (next == dit) {
-                doDit();
-                next = -1;
-            } else if (next == dah) {
-                doDah();
-                next = -1;
-            } else if (next == 3) {
-                if (last == dit) {
-                    doDah();
-                } else if (last == dah) {
-                    doDit();
-                }
-                next = -1;
-            }
-        }
-
         if (to_ms_since_boot(get_absolute_time()) - lastChar > basetime * 7 && !hasSpace && curent == -1) {
             uart_puts(uart0, " ");
             if (USBMode[1]) {
@@ -508,7 +481,40 @@ int main() {
         }
     }
 }
+void gpio_callback(uint gpio, uint32_t events) {
 
+    dit_state = !gpio_get(dit_pin);
+    dah_state = !gpio_get(dah_pin);
+    if (dah_state && dit_state) {
+        next = 3;
+    } else if (dit_state && !dah_state) {
+        if (curent == dah || curent == -1) {
+            next = dit;
+        }
+    } else if (dah_state && !dit_state) {
+        if (curent == dit || curent == -1) {
+            next = dah;
+        }
+    }
+
+    if (curent == -1) {
+        if (next == dit) {
+            doDit();
+            next = -1;
+        } else if (next == dah) {
+            doDah();
+            next = -1;
+        } else if (next == 3) {
+            if (last == dit) {
+                doDah();
+            } else if (last == dah) {
+                doDit();
+            }
+            next = -1;
+        }
+    }
+
+}
 void setSpeed(int x) {
     speed = x;
     basetime = 1200 / speed;

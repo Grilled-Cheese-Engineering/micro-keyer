@@ -4244,10 +4244,6 @@
 		(uuid "e1777feb-efb4-4ecf-a9d6-3c1c94454bb1")
 	)
 	(no_connect
-		(at 138.43 41.91)
-		(uuid "03bf4539-63a8-40b5-b7d1-e0d97fe1f896")
-	)
-	(no_connect
 		(at 114.3 49.53)
 		(uuid "100570a4-7030-48e5-a9cd-307e38436f48")
 	)
@@ -4306,6 +4302,26 @@
 	(no_connect
 		(at 121.92 49.53)
 		(uuid "f518e48d-cdbb-426a-a3d7-8b3179dff1dc")
+	)
+	(wire
+		(pts
+			(xy 109.22 45.72) (xy 118.11 45.72)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "05881f4c-e119-4eb7-8288-6e4001230823")
+	)
+	(wire
+		(pts
+			(xy 27.94 172.72) (xy 40.64 172.72)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "06a67179-2000-42cd-a9be-09951e5617d2")
 	)
 	(wire
 		(pts
@@ -4449,6 +4465,16 @@
 	)
 	(wire
 		(pts
+			(xy 27.94 151.13) (xy 40.64 151.13)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3592fae1-bff6-49e3-bf02-309546075201")
+	)
+	(wire
+		(pts
 			(xy 129.54 140.97) (xy 142.24 140.97)
 		)
 		(stroke
@@ -4456,6 +4482,16 @@
 			(type default)
 		)
 		(uuid "3eb07504-0717-4052-9d4f-d62044b9b1a5")
+	)
+	(wire
+		(pts
+			(xy 118.11 45.72) (xy 118.11 49.53)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "416a432c-688e-4e25-9f1d-9ba9b455c31d")
 	)
 	(wire
 		(pts
@@ -4489,16 +4525,6 @@
 	)
 	(wire
 		(pts
-			(xy 118.11 39.37) (xy 118.11 49.53)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5c040afd-c9d4-4dae-890e-a97c2808b2e0")
-	)
-	(wire
-		(pts
 			(xy 236.22 66.04) (xy 241.3 66.04)
 		)
 		(stroke
@@ -4526,6 +4552,16 @@
 			(type default)
 		)
 		(uuid "69d1879c-9c3c-4ac2-b96b-f48e7657ca66")
+	)
+	(wire
+		(pts
+			(xy 46.99 45.72) (xy 59.69 45.72)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7231212f-6665-4312-bd7e-1fb8de0fd9f2")
 	)
 	(wire
 		(pts
@@ -4646,16 +4682,6 @@
 			(type default)
 		)
 		(uuid "9baac05e-243e-413d-8fa2-a0a0b54cc998")
-	)
-	(wire
-		(pts
-			(xy 128.27 39.37) (xy 118.11 39.37)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a017f2c7-00e7-4d85-96b2-9f60628c881d")
 	)
 	(wire
 		(pts
@@ -4947,6 +4973,16 @@
 		)
 		(uuid "15ce60a0-f8c0-4639-bc37-d1edcf8471c1")
 	)
+	(label "power_SW"
+		(at 27.94 151.13 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "285a07f5-24ba-40c9-8079-b71d4e88c103")
+	)
 	(label "Radio Controll"
 		(at 161.29 72.39 180)
 		(effects
@@ -5027,6 +5063,16 @@
 		)
 		(uuid "6a7dcb00-443a-4c82-b3e5-9a34f5a49acb")
 	)
+	(label "power_SW"
+		(at 46.99 45.72 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "7397a74d-115e-4845-9fb3-1b231f1f339c")
+	)
 	(label "ssd1306_P2"
 		(at 83.82 95.25 180)
 		(effects
@@ -5087,6 +5133,16 @@
 		)
 		(uuid "b4b90b04-c96d-4d4c-8597-7cc1291c5808")
 	)
+	(label "power_SW"
+		(at 27.94 172.72 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "cd37502d-993a-44c0-b744-4cb44b56c9c3")
+	)
 	(label "AAudio"
 		(at 227.33 96.52 180)
 		(effects
@@ -5116,6 +5172,16 @@
 			(justify left bottom)
 		)
 		(uuid "f34e0ee3-2ee9-4f61-9865-8834a5956076")
+	)
+	(label "power_SW"
+		(at 109.22 45.72 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "f746f6a9-a5e3-4719-9b14-2d3b6b7049c4")
 	)
 	(label "ssd1306_P1"
 		(at 83.82 90.17 180)
@@ -5278,6 +5344,85 @@
 			(project "micro-keyer"
 				(path "/8f7feab7-3497-470c-875a-34341021450c"
 					(reference "TP2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 69.85 48.26 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "16200f13-7e1c-432c-ae21-6ae984f5d282")
+		(property "Reference" "#PWR018"
+			(at 66.04 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+3V3"
+			(at 73.66 48.2599 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 69.85 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 69.85 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3\""
+			(at 69.85 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "c9476e99-a9d0-4aee-9467-a478475fe628")
+		)
+		(instances
+			(project "micro-keyer"
+				(path "/8f7feab7-3497-470c-875a-34341021450c"
+					(reference "#PWR018")
 					(unit 1)
 				)
 			)
@@ -5721,7 +5866,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 138.43 36.83 90)
+		(at 69.85 43.18 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5732,7 +5877,7 @@
 		(fields_autoplaced yes)
 		(uuid "385ff82b-d269-4ea6-abc2-2422e7ebd522")
 		(property "Reference" "#PWR017"
-			(at 144.78 36.83 0)
+			(at 76.2 43.18 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5743,7 +5888,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 142.24 36.8299 90)
+			(at 73.66 43.1799 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5754,7 +5899,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 138.43 36.83 0)
+			(at 69.85 43.18 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5765,7 +5910,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 138.43 36.83 0)
+			(at 69.85 43.18 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5776,7 +5921,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 138.43 36.83 0)
+			(at 69.85 43.18 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5793,85 +5938,6 @@
 			(project "micro-keyer"
 				(path "/8f7feab7-3497-470c-875a-34341021450c"
 					(reference "#PWR017")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:+3V3")
-		(at 40.64 172.72 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "387e1e11-2d96-4c02-9f67-7d6ce2778bbb")
-		(property "Reference" "#PWR010"
-			(at 44.45 172.72 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "+3V3"
-			(at 36.83 172.7199 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" ""
-			(at 40.64 172.72 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 40.64 172.72 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+3V3\""
-			(at 40.64 172.72 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "e18f35f5-b51f-40a1-bbd7-263bebe56829")
-		)
-		(instances
-			(project "micro-keyer"
-				(path "/8f7feab7-3497-470c-875a-34341021450c"
-					(reference "#PWR010")
 					(unit 1)
 				)
 			)
@@ -6077,7 +6143,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Package_TO_SOT_THT:TO-92_Inline"
+		(property "Footprint" "Package_TO_SOT_THT:TO-92_Inline_Wide"
 			(at 266.7 97.155 0)
 			(hide yes)
 			(show_name no)
@@ -7152,7 +7218,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Package_TO_SOT_THT:TO-92_Inline"
+		(property "Footprint" "Package_TO_SOT_THT:TO-92_Inline_Wide"
 			(at 232.41 130.175 0)
 			(hide yes)
 			(show_name no)
@@ -7798,7 +7864,7 @@
 	)
 	(symbol
 		(lib_id "Switch:SW_SPDT")
-		(at 133.35 39.37 0)
+		(at 64.77 45.72 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7809,7 +7875,7 @@
 		(fields_autoplaced yes)
 		(uuid "d03b3fd3-429f-4168-acf9-bf00d477d2a6")
 		(property "Reference" "SW3"
-			(at 133.35 30.48 0)
+			(at 64.77 36.83 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7819,7 +7885,7 @@
 			)
 		)
 		(property "Value" "SW_SPDT"
-			(at 133.35 33.02 0)
+			(at 64.77 39.37 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7829,7 +7895,7 @@
 			)
 		)
 		(property "Footprint" "Button_Switch_THT:SW_Slide_SPDT_Angled_CK_OS102011MA1Q"
-			(at 133.35 39.37 0)
+			(at 64.77 45.72 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7840,7 +7906,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 133.35 46.99 0)
+			(at 64.77 53.34 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7851,7 +7917,7 @@
 			)
 		)
 		(property "Description" "Switch, single pole double throw"
-			(at 133.35 39.37 0)
+			(at 64.77 45.72 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8030,85 +8096,6 @@
 			(project "micro-keyer"
 				(path "/8f7feab7-3497-470c-875a-34341021450c"
 					(reference "#PWR05")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:+3V3")
-		(at 40.64 151.13 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "dfef0773-03d7-4738-9823-ae83fc708c99")
-		(property "Reference" "#PWR03"
-			(at 44.45 151.13 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "+3V3"
-			(at 36.83 151.1299 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" ""
-			(at 40.64 151.13 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 40.64 151.13 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+3V3\""
-			(at 40.64 151.13 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "7a491e74-2f4d-4a4f-9b1f-92441a5ae523")
-		)
-		(instances
-			(project "micro-keyer"
-				(path "/8f7feab7-3497-470c-875a-34341021450c"
-					(reference "#PWR03")
 					(unit 1)
 				)
 			)
