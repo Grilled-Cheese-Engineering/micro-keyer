@@ -12,7 +12,7 @@ void drawMain() {
     std::string status = std::format("{} WPM ", speed);
     ssd1306_draw_string_with_font(&disp, 128 - ((status.length() * 5) + (status.length() - 1)), 2, 1, font_8x5, status.c_str());
 
-    ssd1306_draw_string_with_font(&disp, 0, 1, 1, font_8x5, " V1.0");
+    ssd1306_draw_string_with_font(&disp, 0, 1, 1, font_8x5, " V1.1");
     ssd1306_draw_inverted_square(&disp, 0, 0, 129, 10);
 
     std::string arr[] = { "", "", "", "", "" };
