@@ -20,6 +20,8 @@
 
 #include "display.h"
 
+#include "rotary.h"
+
 const uint8_t* contents;
 uint32_t saved_interrupts;
 
@@ -62,6 +64,8 @@ uint8_t buf[64] = { 0 };
 
 int selected_item = -1;
 int clicked_item = -1;
+
+Encoder enc;
 
 std::string decode;
 
@@ -224,6 +228,56 @@ int main() {
     // gpio_init(playPin);
     // gpio_set_dir(playPin, GPIO_IN);
     // gpio_set_pulls(playPin, true, false);
+
+    enc = Encoder(
+        Aarr[i],
+        Barr[i],
+        [x = i + 1]() {
+            if (rotStates[x - 1] == 0) {
+                rotStates[x - 1] = 127;
+            } else {
+                rotStates[x - 1]--;
+            }
+            uint8_t msg[3];
+            msg[0] = 0x90;
+            msg[1] = (x * 2) - 2;
+            msg[2] = 127;
+            tud_midi_n_stream_write(0, 0, msg, 3);
+
+            msg[0] = 0xB0;
+            msg[1] = 101 + x;
+            msg[2] = rotStates[x - 1];
+            tud_midi_n_stream_write(0, 0, msg, 3);
+
+            msg[0] = 0x80;
+            msg[1] = (x * 2) - 2;
+            msg[2] = 0;
+            tud_midi_n_stream_write(0, 0, msg, 3);
+
+        }, [x = i + 1]() {
+            if (rotStates[x - 1] == 127) {
+                rotStates[x - 1] = 0;
+            } else {
+                rotStates[x - 1]++;
+            }
+            uint8_t msg[3];
+            msg[0] = 0x90;
+            msg[1] = (x * 2) - 1;
+            msg[2] = 127;
+            tud_midi_n_stream_write(0, 0, msg, 3);
+
+            msg[0] = 0xB0;
+            msg[1] = 101 + x;
+            msg[2] = rotStates[x - 1];
+            tud_midi_n_stream_write(0, 0, msg, 3);
+
+            msg[0] = 0x80;
+            msg[1] = (x * 2) - 1;
+            msg[2] = 0;
+            tud_midi_n_stream_write(0, 0, msg, 3);
+            },
+            &gpio_callback
+            );
 
     disp.external_vcc = false;
     ssd1306_init(&disp, 128, 64, 0x3C, I2C_PORT);
@@ -551,7 +605,7 @@ void loadSettings() {
 }
 
 void saveSettings() {
-    options = { speed, tone, tonemod, keyerMode, {USBMode[0],USBMode[1],USBMode[2]} };
+    options = { speed, tone, tonemod, keyerMode,{ USBMode[0],USBMode[1],USBMode[2] } };
     uint32_t ints = save_and_disable_interrupts();
     flash_range_erase(FLASH_TARGET_OFFSET, FLASH_SECTOR_SIZE);
     flash_range_program(FLASH_TARGET_OFFSET, (const uint8_t*)&options, FLASH_PAGE_SIZE);
