@@ -65,8 +65,6 @@ uint8_t buf[64] = { 0 };
 int selected_item = -1;
 int clicked_item = -1;
 
-Encoder enc;
-
 std::string decode;
 
 std::vector<MenuOption> optionList;
@@ -228,56 +226,6 @@ int main() {
     // gpio_init(playPin);
     // gpio_set_dir(playPin, GPIO_IN);
     // gpio_set_pulls(playPin, true, false);
-
-    enc = Encoder(
-        Aarr[i],
-        Barr[i],
-        [x = i + 1]() {
-            if (rotStates[x - 1] == 0) {
-                rotStates[x - 1] = 127;
-            } else {
-                rotStates[x - 1]--;
-            }
-            uint8_t msg[3];
-            msg[0] = 0x90;
-            msg[1] = (x * 2) - 2;
-            msg[2] = 127;
-            tud_midi_n_stream_write(0, 0, msg, 3);
-
-            msg[0] = 0xB0;
-            msg[1] = 101 + x;
-            msg[2] = rotStates[x - 1];
-            tud_midi_n_stream_write(0, 0, msg, 3);
-
-            msg[0] = 0x80;
-            msg[1] = (x * 2) - 2;
-            msg[2] = 0;
-            tud_midi_n_stream_write(0, 0, msg, 3);
-
-        }, [x = i + 1]() {
-            if (rotStates[x - 1] == 127) {
-                rotStates[x - 1] = 0;
-            } else {
-                rotStates[x - 1]++;
-            }
-            uint8_t msg[3];
-            msg[0] = 0x90;
-            msg[1] = (x * 2) - 1;
-            msg[2] = 127;
-            tud_midi_n_stream_write(0, 0, msg, 3);
-
-            msg[0] = 0xB0;
-            msg[1] = 101 + x;
-            msg[2] = rotStates[x - 1];
-            tud_midi_n_stream_write(0, 0, msg, 3);
-
-            msg[0] = 0x80;
-            msg[1] = (x * 2) - 1;
-            msg[2] = 0;
-            tud_midi_n_stream_write(0, 0, msg, 3);
-            },
-            &gpio_callback
-            );
 
     disp.external_vcc = false;
     ssd1306_init(&disp, 128, 64, 0x3C, I2C_PORT);
