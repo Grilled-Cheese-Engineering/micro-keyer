@@ -236,7 +236,7 @@ int main() {
 
     optionList.push_back(MenuOption("Speed", "{} WPM", speed, 100, 0,
         [](MenuOption& self) {self.value += 1; setSpeed(self.value);},
-        [](MenuOption& self) {self.value -= 1; setSpeed(self.value);},
+        [](MenuOption& self) {if (self.value > 1) { self.value -= 1; setSpeed(self.value); }},
         [](MenuOption& self) {setSpeed(self.value);},
         [](MenuOption& self) {self.value = speed;}
     ));
@@ -244,7 +244,7 @@ int main() {
 
     optionList.push_back(MenuOption("Tone", "{} Hz", tone, 1000, 0,
         [](MenuOption& self) {self.value += 10; setTone(self.value);},
-        [](MenuOption& self) {self.value -= 10; setTone(self.value);},
+        [](MenuOption& self) {if (self.value > 10) { self.value -= 10; setTone(self.value); }},
         [](MenuOption& self) {setTone(self.value);},
         [](MenuOption& self) {self.value = tone;}
 
@@ -426,8 +426,10 @@ int main() {
         if (gpio_get(rot_a) && !gpio_get(rot_b) && !rotlock) {
             rotlock = true;
             if (selected_item == -1) {
-                setSpeed(speed - 1);
-                drawMain();
+                if (speed > 1) {
+                    setSpeed(speed - 1);
+                    drawMain();
+                }
             } else {
                 if (clicked_item > -1) {
                     optionList.at(clicked_item - 1).turnL();
@@ -510,18 +512,22 @@ int main() {
 }
 
 void setSpeed(int x) {
-    speed = x;
-    basetime = 1200 / speed;
-    uart_puts(uart0, std::format("change speed {}\n", speed).c_str());
-    saveSettings();
+    if (x > 0) {
+        speed = x;
+        basetime = 1200 / speed;
+        uart_puts(uart0, std::format("change speed {}\n", speed).c_str());
+        saveSettings();
+    }
 
 }
 
 void setTone(int x) {
-    tone = x;
-    level = ((125000000 / 125) / (tone * tonemod)) / 2;
-    pwm_set_wrap(pwm_gpio_to_slice_num(pwm_pin), (125000000 / 125) / (tone * tonemod));
-    saveSettings();
+    if (x > 0) {
+        tone = x;
+        level = ((125000000 / 125) / (tone * tonemod)) / 2;
+        pwm_set_wrap(pwm_gpio_to_slice_num(pwm_pin), (125000000 / 125) / (tone * tonemod));
+        saveSettings();
+    }
 }
 
 void loadSettings() {
@@ -551,7 +557,7 @@ void loadSettings() {
 }
 
 void saveSettings() {
-    options = { speed, tone, tonemod, keyerMode, {USBMode[0],USBMode[1],USBMode[2]} };
+    options = { speed, tone, tonemod, keyerMode,{ USBMode[0],USBMode[1],USBMode[2] } };
     uint32_t ints = save_and_disable_interrupts();
     flash_range_erase(FLASH_TARGET_OFFSET, FLASH_SECTOR_SIZE);
     flash_range_program(FLASH_TARGET_OFFSET, (const uint8_t*)&options, FLASH_PAGE_SIZE);
