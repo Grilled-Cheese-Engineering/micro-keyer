@@ -69,6 +69,8 @@ std::vector<MenuOption> optionList;
 
 settings options;
 
+void print(std::string str);
+void playStr(std::string str);
 
 std::string decodeChar(std::vector<int> elements) {
     std::stringstream stream;
@@ -108,6 +110,7 @@ void sendKey(std::string s) {
 void key(bool x) {
     if (x) {
         pwm_set_gpio_level(pwm_pin, level);
+        gpio_pull_up(radio_pin);
         if (USBMode[2]) {
             msg[0] = 0x09; // Note On - Channel 1
             msg[1] = 0x90; // Note Number
@@ -117,6 +120,7 @@ void key(bool x) {
         }
     } else {
         pwm_set_gpio_level(pwm_pin, 0);
+        gpio_pull_down(radio_pin);
         if (USBMode[2]) {
             msg[0] = 0x08; // Note On - Channel 1
             msg[1] = 0x80; // Note Number
@@ -192,23 +196,27 @@ int main() {
     }
     gpio_init(dit_pin);
     gpio_set_dir(dit_pin, GPIO_IN);
-    gpio_set_pulls(dit_pin, true, false);
+    gpio_pull_up(dit_pin);
 
     gpio_init(dah_pin);
     gpio_set_dir(dah_pin, GPIO_IN);
-    gpio_set_pulls(dah_pin, true, false);
+    gpio_pull_up(dah_pin);
+
+    gpio_init(radio_pin);
+    gpio_set_dir(radio_pin, GPIO_IN);
+    gpio_pull_down(radio_pin);
 
     gpio_init(rot_a);
     gpio_set_dir(rot_a, GPIO_IN);
-    gpio_set_pulls(rot_a, true, false);
+    gpio_pull_up(rot_a);
 
     gpio_init(rot_b);
     gpio_set_dir(rot_b, GPIO_IN);
-    gpio_set_pulls(rot_b, true, false);
+    gpio_pull_up(rot_b);
 
     gpio_init(rot_sw);
     gpio_set_dir(rot_sw, GPIO_IN);
-    gpio_set_pulls(rot_sw, true, false);
+    gpio_pull_up(rot_sw);
 
     i2c_init(I2C_PORT, 400 * 1000);
 
@@ -338,71 +346,6 @@ int main() {
                 recordArr.push_back(gap);
             }
         }
-
-        // if (!gpio_get(playPin)) {
-        //     contents = (const uint8_t*)(XIP_BASE + FLASH_TARGET_OFFSET);
-
-        //     for (int i = 0; i < FLASH_PAGE_SIZE; i++) {
-        //         if (contents[i] == end) {
-        //             hasSpace = false;
-        //             break;
-        //         } else if (contents[i] == dit) {
-        //             key(true);
-        //             sleep_ms(basetime);
-        //             key(false);
-        //             sleep_ms(basetime);
-        //             elements.push_back(dit);
-        //         } else if (contents[i] == dah) {
-        //             key(true);
-        //             sleep_ms(basetime * 3);
-        //             key(false);
-        //             sleep_ms(basetime);
-        //             elements.push_back(dah);
-        //         } else if (contents[i] == gap) {
-        //             uart_puts(uart0, decodeChar(elements).c_str());
-        //             elements.clear();
-        //             sleep_ms(basetime * 3);
-        //         } else if (contents[i] == space) {
-        //             uart_puts(uart0, decodeChar(elements).c_str());
-        //             elements.clear();
-        //             uart_puts(uart0, " ");
-        //             sleep_ms(basetime * 7);
-        //         }
-        //     }
-        // }
-
-        // if (gpio_get(recordPin)) {
-        //     recordLock = false;
-        // }
-        // if (!gpio_get(recordPin) && !recordMode && !recordLock) {
-        //     recordLock = true;
-        //     recordMode = true;
-        //     uart_puts(uart0, " start-- ");
-        // } else if (!gpio_get(recordPin) && recordMode && !recordLock) {
-        //     recordLock = true;
-        //     recordMode = false;
-        //     uart_puts(uart0, " --stop ");
-        //     if (recordArr.size() != 0) {
-        //         recordArr.pop_back();
-        //         recordArr.push_back(end);
-
-        //         alignas(4) uint8_t write_buf[FLASH_PAGE_SIZE];
-        //         for (int i = 0; i < FLASH_PAGE_SIZE; i++) {
-        //             write_buf[i] = 4;
-        //         }
-
-        //         for (int i = 0; i < recordArr.size(); i++) {
-        //             write_buf[i] = recordArr.at(i);
-        //         }
-
-        //         saved_interrupts = save_and_disable_interrupts();
-        //         flash_range_erase(FLASH_TARGET_OFFSET, FLASH_SECTOR_SIZE);
-        //         flash_range_program(FLASH_TARGET_OFFSET, write_buf, FLASH_PAGE_SIZE);
-        //         restore_interrupts(saved_interrupts);
-        //         recordArr.clear();
-        //     }
-        // }
-        //uart_puts(uart0, std::format("a {}, b {}, sw {}\n", gpio_get(rot_a), gpio_get(rot_b), gpio_get(rot_sw)).c_str());
 
         if (!gpio_get(rot_a) && gpio_get(rot_b) && !rotlock) {
             rotlock = true;
@@ -562,4 +505,64 @@ void saveSettings() {
     flash_range_erase(FLASH_TARGET_OFFSET, FLASH_SECTOR_SIZE);
     flash_range_program(FLASH_TARGET_OFFSET, (const uint8_t*)&options, FLASH_PAGE_SIZE);
     restore_interrupts(ints);
+}
+
+void print(std::string str) {
+    uart_puts(uart0, str.c_str());
+    tud_cdc_n_write(0, (uint8_t const*)str.c_str(), str.length());
+    tud_cdc_n_write_flush(0);
+}
+
+void playStr(std::string str) {
+    std::transform(str.begin(), str.end(), str.begin(), [](unsigned char c) {return std::toupper(c);});
+    std::vector<int> elements;
+
+    for (int i = 0; i < str.size(); i++) {
+
+        if (str.substr(i, 1) == " ") {
+            print(" ");
+            decode += " ";
+            drawMain();
+            sleep_ms(basetime * 7);
+        } else {
+            for (int x = 0; x < strs.size(); x++) {
+                if (strs[x] == str.substr(i, 1)) {
+                    elements = chars[x];
+                }
+            }
+            for (int x = 0; x < elements.size(); x++) {
+                if (elements[x] == dit) {
+                    key(true);
+                    sleep_ms(basetime);
+                    key(false);
+                    sleep_ms(basetime);
+                } else if (elements[x] == dah) {
+                    key(true);
+                    sleep_ms(basetime * 3);
+                    key(false);
+                    sleep_ms(basetime);
+                }
+
+            }
+            if (i < str.size() - 1) {
+                if (str.substr(i + 1, 1) != " ") {
+                    sleep_ms(basetime * 3);
+                }
+            }
+            print(str.substr(i, 1));
+            decode += str.substr(i, 1);
+            drawMain();
+
+        }
+    }
+    print(" ");
+    decode += " ";
+    drawMain();
+    sleep_ms(basetime * 7);
+}
+
+void tud_cdc_rx_cb(uint8_t itf) {
+    char buf[CFG_TUD_CDC_RX_BUFSIZE] = { 0 };
+    uint32_t count = tud_cdc_n_read(itf, buf, sizeof(buf));
+    playStr(std::string(buf));
 }

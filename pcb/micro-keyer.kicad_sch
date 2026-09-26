@@ -4184,12 +4184,6 @@
 		(uuid "20a54621-0ac3-4bb4-a213-fdbb6fe4c74c")
 	)
 	(junction
-		(at 219.71 132.08)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "389c4386-371f-46f8-8a39-f51c0049a9d3")
-	)
-	(junction
 		(at 116.84 140.97)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -4973,7 +4967,7 @@
 		)
 		(uuid "15ce60a0-f8c0-4639-bc37-d1edcf8471c1")
 	)
-	(label "Radio Controll"
+	(label "Radio Control"
 		(at 161.29 72.39 180)
 		(effects
 			(font
@@ -4983,7 +4977,7 @@
 		)
 		(uuid "2d08fae9-1899-48a7-8f28-f252af4aa156")
 	)
-	(label "Radio Controll"
+	(label "Radio Control"
 		(at 257.81 132.08 180)
 		(effects
 			(font
@@ -6613,84 +6607,6 @@
 			(project "micro-keyer"
 				(path "/8f7feab7-3497-470c-875a-34341021450c"
 					(reference "#PWR011")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 219.71 132.08 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "6d28ba96-bdad-4212-af64-145ad45a91d6")
-		(property "Reference" "#PWR012"
-			(at 226.06 132.08 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 220.472 130.048 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" ""
-			(at 219.71 132.08 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 219.71 132.08 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 219.71 132.08 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "42993220-aa36-4f04-8d7a-e29f969a2869")
-		)
-		(instances
-			(project "micro-keyer"
-				(path "/8f7feab7-3497-470c-875a-34341021450c"
-					(reference "#PWR012")
 					(unit 1)
 				)
 			)
