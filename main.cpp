@@ -57,9 +57,6 @@ uint8_t keycode[6] = { 0 };
 
 uint8_t msg[4];
 
-uint8_t buf[64] = { 0 };
-
-
 int selected_item = -1;
 int clicked_item = -1;
 
@@ -319,7 +316,7 @@ int main() {
         }
 
         if (to_ms_since_boot(get_absolute_time()) - lastChar > basetime * 7 && !hasSpace && curent == -1) {
-            uart_puts(uart0, " ");
+            print(" ");
             if (USBMode[1]) {
                 sendKey(" ");
             }
@@ -333,7 +330,7 @@ int main() {
                 recordArr.push_back(space);
             }
         } else if (elements.size() > 0 && to_ms_since_boot(get_absolute_time()) - lastChar > basetime * 2.5 && curent == -1) {
-            uart_puts(uart0, decodeChar(elements).c_str());
+            print(decodeChar(elements));
             if (USBMode[1]) {
                 sendKey(decodeChar(elements));
             }
@@ -358,7 +355,7 @@ int main() {
                 } else {
                     if (selected_item < optionList.size()) {
                         selected_item++;
-                        uart_puts(uart0, std::format("selected {} clicked {}\n", selected_item, clicked_item).c_str());
+                        print(std::format("selected {} clicked {}\n", selected_item, clicked_item));
                     }
                 }
                 drawMenu();
@@ -379,7 +376,7 @@ int main() {
                 } else {
                     if (selected_item > 0) {
                         selected_item--;
-                        uart_puts(uart0, std::format("selected {} clicked {}\n", selected_item, clicked_item).c_str());
+                        print(std::format("selected {} clicked {}\n", selected_item, clicked_item));
                     }
                 }
                 drawMenu();
@@ -408,7 +405,7 @@ int main() {
             //
             if (selected_item == -1) {
                 selected_item = 1;
-                uart_puts(uart0, std::format("selected {} clicked {}\n", selected_item, clicked_item).c_str());
+                print(std::format("selected {} clicked {}\n", selected_item, clicked_item));
                 for (int i = 0; i < optionList.size(); i++) {
                     optionList.at(i).load();
                 }
@@ -417,7 +414,7 @@ int main() {
                 if (clicked_item != -1) {
                     clicked_item = -1;
                     optionList.at(selected_item - 1).click();
-                    uart_puts(uart0, std::format("save\n").c_str());
+                    print(std::format("save\n"));
                     saveSettings();
 
                     drawMenu();
@@ -433,7 +430,7 @@ int main() {
                     }
 
                 }
-                uart_puts(uart0, std::format("selected {} clicked {}\n", selected_item, clicked_item).c_str());
+                print(std::format("selected {} clicked {}\n", selected_item, clicked_item));
             }
             swlock = false;
         }
@@ -458,7 +455,7 @@ void setSpeed(int x) {
     if (x > 0) {
         speed = x;
         basetime = 1200 / speed;
-        uart_puts(uart0, std::format("change speed {}\n", speed).c_str());
+        print(std::format("change speed {}\n", speed));
         saveSettings();
     }
 
@@ -509,8 +506,8 @@ void saveSettings() {
 
 void print(std::string str) {
     uart_puts(uart0, str.c_str());
-    tud_cdc_n_write(0, (uint8_t const*)str.c_str(), str.length());
-    tud_cdc_n_write_flush(0);
+    // tud_cdc_n_write(0, (uint8_t const*)str.c_str(), str.length());
+    // tud_cdc_n_write_flush(0);
 }
 
 void playStr(std::string str) {
@@ -565,4 +562,23 @@ void tud_cdc_rx_cb(uint8_t itf) {
     char buf[CFG_TUD_CDC_RX_BUFSIZE] = { 0 };
     uint32_t count = tud_cdc_n_read(itf, buf, sizeof(buf));
     playStr(std::string(buf));
+    // for (int i = 0; i < 50;i++) {
+    //     uart_puts(uart0, std::format("{}", (uint8_t)buf[i]).c_str());
+    //     uart_puts(uart0, "\n");
+    // }
+    // for (int i = 2; i < CFG_TUD_CDC_RX_BUFSIZE;i++) {
+    //     buf[i - 2] = buf[i];
+    // }
+
+    // buf[CFG_TUD_CDC_RX_BUFSIZE - 1] = 0;
+    // buf[CFG_TUD_CDC_RX_BUFSIZE - 2] = 0;
+
+    // uart_puts(uart0, "\n");
+    // uart_puts(uart0, buf);
+    // uart_puts(uart0, "\n");
+    // uart_puts(uart0, "\n");
+    // tud_cdc_n_write(0, buf, CFG_TUD_CDC_RX_BUFSIZE);
+    // tud_cdc_n_write_flush(0);
+    // tud_cdc_n_write(0, (void*)0x1f, 1);
+    // tud_cdc_n_write_flush(0);
 }
