@@ -66,8 +66,10 @@ std::vector<MenuOption> optionList;
 
 settings options;
 
+std::string playbackStr;
+
 void print(std::string str);
-void playStr(std::string str);
+void playStr();
 
 std::string decodeChar(std::vector<int> elements) {
     std::stringstream stream;
@@ -284,6 +286,9 @@ int main() {
 
     while (true) {
         tud_task();
+        if (playbackStr.length() > 0) {
+            playStr();
+        }
         dit_state = !gpio_get(dit_pin);
         dah_state = !gpio_get(dah_pin);
         if (dah_state && dit_state) {
@@ -506,27 +511,26 @@ void saveSettings() {
 
 void print(std::string str) {
     uart_puts(uart0, str.c_str());
-    // tud_cdc_n_write(0, (uint8_t const*)str.c_str(), str.length());
-    // tud_cdc_n_write_flush(0);
+    tud_cdc_n_write(0, (uint8_t const*)str.c_str(), str.length());
+    tud_cdc_n_write_flush(0);
 }
 
-void playStr(std::string str) {
-    std::transform(str.begin(), str.end(), str.begin(), [](unsigned char c) {return std::toupper(c);});
+void playStr() {
     std::vector<int> elements;
 
-    for (int i = 0; i < str.size(); i++) {
-
-        if (str.substr(i, 1) == " ") {
-            print(" ");
-            decode += " ";
-            drawMain();
-            sleep_ms(basetime * 7);
-        } else {
-            for (int x = 0; x < strs.size(); x++) {
-                if (strs[x] == str.substr(i, 1)) {
-                    elements = chars[x];
-                }
+    while (true) {
+        elements.clear();
+        for (int x = 0; x < strs.size(); x++) {
+            if (strs[x] == playbackStr.substr(0, 1)) {
+                elements = chars[x];
             }
+        }
+        if (elements.empty()) {
+            decode += playbackStr.substr(0, 1);
+            print(playbackStr.substr(0, 1));
+            sleep_ms(basetime * 7);
+
+        } else {
             for (int x = 0; x < elements.size(); x++) {
                 if (elements[x] == dit) {
                     key(true);
@@ -541,27 +545,35 @@ void playStr(std::string str) {
                 }
 
             }
-            if (i < str.size() - 1) {
-                if (str.substr(i + 1, 1) != " ") {
-                    sleep_ms(basetime * 3);
-                }
-            }
-            print(str.substr(i, 1));
-            decode += str.substr(i, 1);
-            drawMain();
 
+            sleep_ms(basetime * 3);
+
+            print(playbackStr.substr(0, 1));
+            decode += playbackStr.substr(0, 1);
+        }
+        drawMain();
+
+        playbackStr.erase(0, 1);
+        if (playbackStr.length() == 0) {
+            break;
         }
     }
-    print(" ");
+
     decode += " ";
-    drawMain();
+    print(" ");
     sleep_ms(basetime * 7);
 }
 
 void tud_cdc_rx_cb(uint8_t itf) {
     char buf[CFG_TUD_CDC_RX_BUFSIZE] = { 0 };
     uint32_t count = tud_cdc_n_read(itf, buf, sizeof(buf));
-    playStr(std::string(buf));
+
+    for (int i = 0; i < CFG_TUD_CDC_RX_BUFSIZE;i++) {
+        buf[i] = std::toupper(buf[i]);
+    }
+
+    playbackStr += std::string(buf);
+
     // for (int i = 0; i < 50;i++) {
     //     uart_puts(uart0, std::format("{}", (uint8_t)buf[i]).c_str());
     //     uart_puts(uart0, "\n");
