@@ -8,6 +8,7 @@
 #include "hardware/pwm.h"
 #include "hardware/flash.h"
 #include "hardware/sync.h"
+#include "hardware/adc.h"
 #include "chars.h"
 #include "sstream"
 #include <format>
@@ -67,6 +68,8 @@ std::vector<MenuOption> optionList;
 settings options;
 
 std::string playbackStr;
+
+float voltage;
 
 void print(std::string str);
 void playStr();
@@ -168,6 +171,7 @@ void doDah() {
 
 int main() {
     stdio_init_all();
+    adc_init();
     loadSettings();
     uart_init(uart0, 115200);
     gpio_set_function(uart_tx_pin, GPIO_FUNC_UART);
@@ -193,6 +197,16 @@ int main() {
         };
         TU_ASSERT(tud_rhport_init(BOARD_TUD_RHPORT, &rh_init));
     }
+
+    adc_gpio_init(batt_adc_pin);
+    adc_select_input(3);
+
+    voltage = (adc_read() * 2) * (3.3f / (1 << 12));
+
+    gpio_init(batt_adc_en_pin);
+    gpio_set_dir(batt_adc_en_pin, GPIO_IN);
+    gpio_pull_up(batt_adc_en_pin);
+
     gpio_init(dit_pin);
     gpio_set_dir(dit_pin, GPIO_IN);
     gpio_pull_up(dit_pin);
@@ -256,6 +270,14 @@ int main() {
         [](MenuOption& self) {self.value = tone;}
 
     ));
+
+    optionList.push_back(MenuOption("Mode", std::vector<std::string>{"Iambic A", "Iambic B", "Straight key", "Bug Emu"}, keyerMode,
+        [](MenuOption& self) {if (self.valueIndex < 3) { self.valueIndex++; setKeyerMode(self.valueIndex); }},
+        [](MenuOption& self) {if (self.valueIndex > 0) { self.valueIndex--; setKeyerMode(self.valueIndex); }},
+        [](MenuOption& self) {setKeyerMode(self.valueIndex);},
+        [](MenuOption& self) {self.valueIndex = keyerMode;}
+    ));
+
     optionList.push_back(MenuOption("Mute", !tonemod,
         [](MenuOption& self) {self.value = !self.value; tonemod = !self.value; setTone(tone);},
         [](MenuOption& self) {self.value = !self.value; tonemod = !self.value; setTone(tone);},
@@ -291,62 +313,129 @@ int main() {
         }
         dit_state = !gpio_get(dit_pin);
         dah_state = !gpio_get(dah_pin);
-        if (dah_state && dit_state) {
-            next = 3;
-        } else if (dit_state && !dah_state) {
-            if (curent == dah || curent == -1) {
-                next = dit;
+        switch (keyerMode) {
+        case 2:
+            if (dit_state || dah_state) {
+                key(true);
+            } else {
+                key(false);
             }
-        } else if (dah_state && !dit_state) {
-            if (curent == dit || curent == -1) {
-                next = dah;
-            }
-        }
-
-        if (curent == -1) {
-            if (next == dit) {
+            break;
+        case 3:
+            if (curent == -1 && dit_state) {
                 doDit();
-                next = -1;
-            } else if (next == dah) {
-                doDah();
-                next = -1;
-            } else if (next == 3) {
-                if (last == dit) {
-                    doDah();
-                } else if (last == dah) {
-                    doDit();
+            }
+            if (dah_state) {
+                key(true);
+            } else if (!dah_state && curent == -1) {
+                key(false);
+            }
+            break;
+        case 1:
+            if (dah_state && dit_state) {
+                next = 3;
+            } else if (dit_state && !dah_state) {
+                if (curent == dah || curent == -1) {
+                    next = dit;
                 }
-                next = -1;
+            } else if (dah_state && !dit_state) {
+                if (curent == dit || curent == -1) {
+                    next = dah;
+                }
             }
-        }
 
-        if (to_ms_since_boot(get_absolute_time()) - lastChar > basetime * 7 && !hasSpace && curent == -1) {
-            print(" ");
-            if (USBMode[1]) {
-                sendKey(" ");
+            if (curent == -1) {
+                if (next == dit) {
+                    doDit();
+                    next = -1;
+                } else if (next == dah) {
+                    doDah();
+                    next = -1;
+                } else if (next == 3) {
+                    if (last == dit) {
+                        doDah();
+                    } else if (last == dah) {
+                        doDit();
+                    }
+                    next = -1;
+                }
             }
-            decode += " ";
-            if (selected_item == -1) {
-                drawMain();
+
+            if (to_ms_since_boot(get_absolute_time()) - lastChar > basetime * 7 && !hasSpace && curent == -1) {
+                print(" ");
+                if (USBMode[1]) {
+                    sendKey(" ");
+                }
+                decode += " ";
+                if (selected_item == -1) {
+                    drawMain();
+                }
+                hasSpace = true;
+                if (recordMode) {
+                    recordArr.pop_back();
+                    recordArr.push_back(space);
+                }
+            } else if (elements.size() > 0 && to_ms_since_boot(get_absolute_time()) - lastChar > basetime * 2.5 && curent == -1) {
+                print(decodeChar(elements));
+                if (USBMode[1]) {
+                    sendKey(decodeChar(elements));
+                }
+                decode += decodeChar(elements);
+                if (selected_item == -1) {
+                    drawMain();
+                }
+                elements.clear();
+                if (recordMode && recordArr.size() > 0) {
+                    recordArr.push_back(gap);
+                }
             }
-            hasSpace = true;
-            if (recordMode) {
-                recordArr.pop_back();
-                recordArr.push_back(space);
+
+            break;
+        case 0:
+
+            if (curent == -1) {
+                if (last == dit && dit_state && dah_state) {
+                    doDit();
+                } else if (last == dah && dit_state && dah_state) {
+                    doDah();
+                } else if (dit_state) {
+                    doDit();
+                } else if (dah_state) {
+                    doDah();
+                }
             }
-        } else if (elements.size() > 0 && to_ms_since_boot(get_absolute_time()) - lastChar > basetime * 2.5 && curent == -1) {
-            print(decodeChar(elements));
-            if (USBMode[1]) {
-                sendKey(decodeChar(elements));
+            if (to_ms_since_boot(get_absolute_time()) - lastChar > basetime * 7 && !hasSpace && curent == -1) {
+                print(" ");
+                if (USBMode[1]) {
+                    sendKey(" ");
+                }
+                decode += " ";
+                if (selected_item == -1) {
+                    drawMain();
+                }
+                hasSpace = true;
+                if (recordMode) {
+                    recordArr.pop_back();
+                    recordArr.push_back(space);
+                }
+            } else if (elements.size() > 0 && to_ms_since_boot(get_absolute_time()) - lastChar > basetime * 2.5 && curent == -1) {
+                print(decodeChar(elements));
+                if (USBMode[1]) {
+                    sendKey(decodeChar(elements));
+                }
+                decode += decodeChar(elements);
+                if (selected_item == -1) {
+                    drawMain();
+                }
+                elements.clear();
+                if (recordMode && recordArr.size() > 0) {
+                    recordArr.push_back(gap);
+                }
             }
-            decode += decodeChar(elements);
-            if (selected_item == -1) {
-                drawMain();
-            }
-            elements.clear();
-            if (recordMode && recordArr.size() > 0) {
-                recordArr.push_back(gap);
-            }
+
+            break;
+        default:
+            break;
         }
 
         if (!gpio_get(rot_a) && gpio_get(rot_b) && !rotlock) {
@@ -456,6 +545,7 @@ int main() {
     }
 }
 
+
 void setSpeed(int x) {
     if (x > 0) {
         speed = x;
@@ -471,6 +561,13 @@ void setTone(int x) {
         tone = x;
         level = ((125000000 / 125) / (tone * tonemod)) / 2;
         pwm_set_wrap(pwm_gpio_to_slice_num(pwm_pin), (125000000 / 125) / (tone * tonemod));
+        saveSettings();
+    }
+}
+
+void setKeyerMode(int x) {
+    if (x > -1) {
+        keyerMode = x;
         saveSettings();
     }
 }

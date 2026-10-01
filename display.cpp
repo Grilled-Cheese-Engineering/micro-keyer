@@ -3,6 +3,7 @@
 #include <format>
 #include <string_view>
 #include <sstream>
+#include "hardware/adc.h"
 
 ssd1306_t disp;
 
@@ -10,6 +11,23 @@ void drawMain() {
 
     ssd1306_clear(&disp);
     std::string status = std::format("{} WPM ", speed);
+
+    gpio_pull_up(19);
+    sleep_ms(50);
+    float v = 0.0;
+    int x = 0;
+    for (int i = 0; i < 100; i++) {
+        x += adc_read();
+    }
+    gpio_pull_down(19);
+
+    x /= 100;
+
+    v = (((x * 2.0) / 1243.24324) - 3) * 83.33;
+
+    std::string voltage = std::format(" {:.2f}% ", v);
+    ssd1306_draw_string_with_font(&disp, 128 - ((voltage.length() * 5) + (voltage.length() - 1)) - ((status.length() * 5) + (status.length() - 1)) - 8, 2, 1, font_8x5, voltage.c_str());
+
     ssd1306_draw_string_with_font(&disp, 128 - ((status.length() * 5) + (status.length() - 1)), 2, 1, font_8x5, status.c_str());
 
     ssd1306_draw_string_with_font(&disp, 0, 1, 1, font_8x5, " V1.1");
@@ -74,13 +92,11 @@ void drawMenu() {
         if (optionList.at(i + offset - !first).useValueIndex) {
             ssd1306_draw_string_with_font(&disp, 124 - ((optionList.at(i + offset - !first).arr.at(optionList.at(i + offset - !first).valueIndex).length() * 5) + (optionList.at(i + offset - !first).arr.at(optionList.at(i + offset - !first).valueIndex).length() - 1)), 4 + (15 * (i + first)), 1, font_8x5, optionList.at(i + offset - !first).arr.at(optionList.at(i + offset - !first).valueIndex).c_str());
         } else if (optionList.at(i + offset - !first).useBool) {
-            if (!optionList.at(i + offset - !first).value) {
-                ssd1306_draw_empty_square(&disp, 115, 3 + (15 * (i + first)), 8, 8);
-            } else {
-                ssd1306_draw_square(&disp, 115, 3 + (15 * (i + first)), 9, 9);
+            ssd1306_draw_empty_square(&disp, 115, 3 + (15 * (i + first)), 8, 8);
 
+            if (optionList.at(i + offset - !first).value) {
+                ssd1306_draw_square(&disp, 117, 5 + (15 * (i + first)), 5, 5);
             }
-
         } else {
             str << std::vformat(optionList.at(i + offset - !first).format, std::make_format_args(optionList.at(i + offset - !first).value));
             ssd1306_draw_string_with_font(&disp, 124 - ((str.str().length() * 5) + (str.str().length() - 1)), 4 + (15 * (i + first)), 1, font_8x5, str.str().c_str());
@@ -91,8 +107,11 @@ void drawMenu() {
 
     }
     ssd1306_draw_empty_square(&disp, 0, 1 + (15 * (selected_item - offset)), 127, 12);
-    if (clicked_item != -1) {
+    if (clicked_item > 0) {
         ssd1306_draw_inverted_square(&disp, 1, 2 + (15 * (selected_item - offset)), 126, 11);
+        if (optionList.at(clicked_item - 1).useBool) {
+            ssd1306_draw_inverted_square(&disp, 113, 1 + (15 * (selected_item - offset)), 13, 13);
+        }
     }
 
     ssd1306_show(&disp);

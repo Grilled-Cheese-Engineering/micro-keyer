@@ -21,6 +21,9 @@ int rot_sw = 3;
 
 int display_scl = 7;
 int display_sda = 6;
+
+int batt_adc_pin = 29;
+int batt_adc_en_pin = 19;
 #define I2C_PORT i2c1
 
 

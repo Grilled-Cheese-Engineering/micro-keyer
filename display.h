@@ -28,6 +28,7 @@ extern std::string decode;
 
 void setSpeed(int x);
 void setTone(int x);
+void setKeyerMode(int x);
 
 void drawMain();
 void drawMenu();

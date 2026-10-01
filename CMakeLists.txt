@@ -61,6 +61,7 @@ target_link_libraries(micro-keyer
         hardware_timer
         hardware_pwm
         hardware_flash
+        hardware_adc
         pico_unique_id
         tinyusb_board
         tinyusb_device
