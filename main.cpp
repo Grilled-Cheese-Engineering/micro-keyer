@@ -530,8 +530,8 @@ int main() {
                 if (clicked_item > -1) {
                     optionList.at(clicked_item - 1).turnR();
                 } else {
-                    if (selected_item > 0) {
-                        selected_item--;
+                    if (selected_item < optionList.size()) {
+                        selected_item++;
                         print(std::format("selected {} clicked {}\n", selected_item, clicked_item));
                     }
                 }
@@ -551,8 +551,8 @@ int main() {
                 if (clicked_item > -1) {
                     optionList.at(clicked_item - 1).turnL();
                 } else {
-                    if (selected_item < optionList.size()) {
-                        selected_item++;
+                    if (selected_item > 0) {
+                        selected_item--;
                         print(std::format("selected {} clicked {}\n", selected_item, clicked_item));
                     }
                 }
