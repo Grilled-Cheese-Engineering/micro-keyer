@@ -48,6 +48,7 @@ std::string str;
 
 std::vector<int> elements;
 uint32_t lastChar = 0;
+uint32_t straightChar = 0;
 
 bool recordMode = false;
 std::vector<int> recordArr;
@@ -315,11 +316,53 @@ int main() {
         dah_state = !gpio_get(dah_pin);
         switch (keyerMode) {
         case 2:
-            if (dit_state || dah_state) {
+            if (curent != 1 && (dit_state || dah_state)) {
                 key(true);
-            } else {
+                straightChar = to_ms_since_boot(get_absolute_time());
+                curent = 1;
+                hasSpace = false;
+            } else if (curent == 1 && !dit_state && !dah_state && to_ms_since_boot(get_absolute_time()) - straightChar > 20) {
                 key(false);
+                print(std::format("\n{}", (to_ms_since_boot(get_absolute_time()) - straightChar) / basetime));
+                if (to_ms_since_boot(get_absolute_time()) - straightChar > basetime * 0.4 && to_ms_since_boot(get_absolute_time()) - straightChar < basetime * 2.4) {
+                    elements.push_back(dit);
+                } else if (to_ms_since_boot(get_absolute_time()) - straightChar > basetime * 2.4 && to_ms_since_boot(get_absolute_time()) - straightChar < basetime * 6) {
+                    elements.push_back(dah);
+                }
+                curent = -1;
+                lastChar = to_ms_since_boot(get_absolute_time());
+
             }
+
+            if (to_ms_since_boot(get_absolute_time()) - lastChar > basetime * 7 && !hasSpace && curent == -1) {
+                print(" ");
+                if (USBMode[1]) {
+                    sendKey(" ");
+                }
+                decode += " ";
+                if (selected_item == -1) {
+                    drawMain();
+                }
+                hasSpace = true;
+                if (recordMode) {
+                    recordArr.pop_back();
+                    recordArr.push_back(space);
+                }
+            } else if (elements.size() > 0 && to_ms_since_boot(get_absolute_time()) - lastChar > basetime * 2.5 && curent == -1) {
+                print("\n" + decodeChar(elements));
+                if (USBMode[1]) {
+                    sendKey(decodeChar(elements));
+                }
+                decode += decodeChar(elements);
+                if (selected_item == -1) {
+                    drawMain();
+                }
+                elements.clear();
+                if (recordMode && recordArr.size() > 0) {
+                    recordArr.push_back(gap);
+                }
+            }
+
             break;
         case 3:
             if (curent == -1 && dit_state) {
@@ -327,8 +370,48 @@ int main() {
             }
             if (dah_state) {
                 key(true);
-            } else if (!dah_state && curent == -1) {
+                if (curent != dah) {
+                    straightChar = to_ms_since_boot(get_absolute_time());
+                }
+                curent = dah;
+
+                hasSpace = false;
+            } else if (!dah_state && (curent == dah || curent == 3)) {
                 key(false);
+                if (to_ms_since_boot(get_absolute_time()) - straightChar > basetime * 2.4 && to_ms_since_boot(get_absolute_time()) - straightChar < basetime * 6) {
+                    elements.push_back(dah);
+                }
+                curent = -1;
+                lastChar = to_ms_since_boot(get_absolute_time());
+            }
+
+            if (to_ms_since_boot(get_absolute_time()) - lastChar > basetime * 7 && !hasSpace && curent == -1) {
+                print(" ");
+                if (USBMode[1]) {
+                    sendKey(" ");
+                }
+                decode += " ";
+                if (selected_item == -1) {
+                    drawMain();
+                }
+                hasSpace = true;
+                if (recordMode) {
+                    recordArr.pop_back();
+                    recordArr.push_back(space);
+                }
+            } else if (elements.size() > 0 && to_ms_since_boot(get_absolute_time()) - lastChar > basetime * 2.5 && curent == -1) {
+                print("\n" + decodeChar(elements));
+                if (USBMode[1]) {
+                    sendKey(decodeChar(elements));
+                }
+                decode += decodeChar(elements);
+                if (selected_item == -1) {
+                    drawMain();
+                }
+                elements.clear();
+                if (recordMode && recordArr.size() > 0) {
+                    recordArr.push_back(gap);
+                }
             }
             break;
         case 1:
@@ -447,8 +530,8 @@ int main() {
                 if (clicked_item > -1) {
                     optionList.at(clicked_item - 1).turnR();
                 } else {
-                    if (selected_item < optionList.size()) {
-                        selected_item++;
+                    if (selected_item > 0) {
+                        selected_item--;
                         print(std::format("selected {} clicked {}\n", selected_item, clicked_item));
                     }
                 }
@@ -468,8 +551,8 @@ int main() {
                 if (clicked_item > -1) {
                     optionList.at(clicked_item - 1).turnL();
                 } else {
-                    if (selected_item > 0) {
-                        selected_item--;
+                    if (selected_item < optionList.size()) {
+                        selected_item++;
                         print(std::format("selected {} clicked {}\n", selected_item, clicked_item));
                     }
                 }
@@ -513,7 +596,11 @@ int main() {
 
                     drawMenu();
                 } else {
-                    clicked_item = selected_item;
+                    if ((selected_item == 0 || !optionList.at(selected_item - 1).useBool)) {
+                        clicked_item = selected_item;
+                    } else {
+                        optionList.at(selected_item - 1).turnL();
+                    }
 
                     drawMenu();
                     if (clicked_item == 0) {

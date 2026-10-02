@@ -107,11 +107,8 @@ void drawMenu() {
 
     }
     ssd1306_draw_empty_square(&disp, 0, 1 + (15 * (selected_item - offset)), 127, 12);
-    if (clicked_item > 0) {
+    if (clicked_item > 0 && !optionList.at(clicked_item - 1).useBool) {
         ssd1306_draw_inverted_square(&disp, 1, 2 + (15 * (selected_item - offset)), 126, 11);
-        if (optionList.at(clicked_item - 1).useBool) {
-            ssd1306_draw_inverted_square(&disp, 113, 1 + (15 * (selected_item - offset)), 13, 13);
-        }
     }
 
     ssd1306_show(&disp);
