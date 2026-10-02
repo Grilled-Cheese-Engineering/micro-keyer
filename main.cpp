@@ -663,12 +663,12 @@ void loadSettings() {
     const settings* opts = (const settings*)(XIP_BASE + FLASH_TARGET_OFFSET);
 
     if (opts->speed == -1 || opts->tone == -1 || opts->tonemod == -1 || opts->keyerMode == -1) {
-        speed = 15;
-        tone = 440;
+        speed = 20;
+        tone = 340;
         tonemod = 1;
-        keyerMode = 0;
+        keyerMode = 1;
         USBMode[0] = 1;
-        USBMode[1] = 1;
+        USBMode[1] = 0;
         USBMode[2] = 1;
     } else {
         speed = opts->speed;
