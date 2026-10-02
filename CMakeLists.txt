@@ -37,7 +37,7 @@ pico_sdk_init()
 add_executable(micro-keyer main.cpp usb_descriptors.cpp ssd1306.c display.cpp)
 
 pico_set_program_name(micro-keyer "micro-keyer")
-pico_set_program_version(micro-keyer "0.1")
+pico_set_program_version(micro-keyer "1.2")
 
 # Generate PIO header
 
