@@ -13,15 +13,15 @@ void drawMain() {
     std::string status = std::format("{} WPM ", speed);
 
     gpio_pull_up(19);
-    sleep_ms(50);
+    sleep_ms(2);
     float v = 0.0;
     int x = 0;
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 50; i++) {
         x += adc_read();
     }
     gpio_pull_down(19);
 
-    x /= 100;
+    x /= 50;
 
     v = (((x * 2.0) / 1243.24324) - 3) * 83.33;
 

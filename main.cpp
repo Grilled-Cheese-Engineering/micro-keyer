@@ -206,7 +206,7 @@ int main() {
 
     gpio_init(batt_adc_en_pin);
     gpio_set_dir(batt_adc_en_pin, GPIO_IN);
-    gpio_pull_up(batt_adc_en_pin);
+    gpio_pull_down(batt_adc_en_pin);
 
     gpio_init(dit_pin);
     gpio_set_dir(dit_pin, GPIO_IN);
@@ -323,7 +323,7 @@ int main() {
                 hasSpace = false;
             } else if (curent == 1 && !dit_state && !dah_state && to_ms_since_boot(get_absolute_time()) - straightChar > 20) {
                 key(false);
-                print(std::format("\n{}", (to_ms_since_boot(get_absolute_time()) - straightChar) / basetime));
+                print(std::format("\n{}", (to_ms_since_boot(get_absolute_time()) - straightChar)));
                 if (to_ms_since_boot(get_absolute_time()) - straightChar > basetime * 0.4 && to_ms_since_boot(get_absolute_time()) - straightChar < basetime * 2.4) {
                     elements.push_back(dit);
                 } else if (to_ms_since_boot(get_absolute_time()) - straightChar > basetime * 2.4 && to_ms_since_boot(get_absolute_time()) - straightChar < basetime * 6) {
