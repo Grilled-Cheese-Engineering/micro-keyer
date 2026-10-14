@@ -9,6 +9,7 @@
 #include "hardware/flash.h"
 #include "hardware/sync.h"
 #include "hardware/adc.h"
+#include "pico/bootrom.h"
 #include "chars.h"
 #include "sstream"
 #include <format>
@@ -239,22 +240,15 @@ int main() {
     gpio_pull_up(display_sda);
     gpio_pull_up(display_scl);
 
-    // gpio_init(recordPin);
-    // gpio_set_dir(recordPin, GPIO_IN);
-    // gpio_set_pulls(recordPin, true, false);
-
-    // gpio_init(playPin);
-    // gpio_set_dir(playPin, GPIO_IN);
-    // gpio_set_pulls(playPin, true, false);
-
     disp.external_vcc = false;
     ssd1306_init(&disp, 128, 64, 0x3C, I2C_PORT);
     drawMain();
-    if (USBMode[0] && tud_cdc_connected()) {
-        tud_cdc_write_str("Hello from Pico!\r\n");
-        tud_cdc_write_flush(); // Forces the data to send immediately
-    }
 
+
+
+    optionList.push_back(MenuOption("<- Back",
+        [](MenuOption& self) {clicked_item = -1; selected_item = -1; drawMain();}
+    ));
 
     optionList.push_back(MenuOption("Speed", "{} WPM", speed, 100, 0,
         [](MenuOption& self) {self.value += 1; setSpeed(self.value);},
@@ -281,30 +275,26 @@ int main() {
 
     optionList.push_back(MenuOption("Mute", !tonemod,
         [](MenuOption& self) {self.value = !self.value; tonemod = !self.value; setTone(tone);},
-        [](MenuOption& self) {self.value = !self.value; tonemod = !self.value; setTone(tone);},
-        [](MenuOption& self) {tonemod = !self.value; setTone(tone);},
         [](MenuOption& self) {self.value = !tonemod;}
     ));
 
     optionList.push_back(MenuOption("SERIAL", USBMode[0],
-        [](MenuOption& self) {self.value = !self.value; USBMode[0] = self.value;},
-        [](MenuOption& self) {self.value = !self.value; USBMode[0] = self.value;},
-        [](MenuOption& self) {USBMode[0] = self.value;saveSettings();},
+        [](MenuOption& self) {self.value = !self.value; USBMode[0] = self.value; saveSettings();},
         [](MenuOption& self) {self.value = USBMode[0];}
     ));
 
     optionList.push_back(MenuOption("HID", USBMode[1],
-        [](MenuOption& self) {self.value = !self.value; USBMode[1] = self.value;},
-        [](MenuOption& self) {self.value = !self.value; USBMode[1] = self.value;},
-        [](MenuOption& self) {USBMode[1] = self.value;saveSettings();},
+        [](MenuOption& self) {self.value = !self.value; USBMode[1] = self.value; saveSettings();},
         [](MenuOption& self) {self.value = USBMode[1];}
     ));
 
     optionList.push_back(MenuOption("MIDI", USBMode[2],
-        [](MenuOption& self) {self.value = !self.value; USBMode[2] = self.value;},
-        [](MenuOption& self) {self.value = !self.value; USBMode[2] = self.value;},
-        [](MenuOption& self) {USBMode[2] = self.value; saveSettings();},
+        [](MenuOption& self) {self.value = !self.value; USBMode[2] = self.value; saveSettings();},
         [](MenuOption& self) {self.value = USBMode[2];}
+    ));
+
+    optionList.push_back(MenuOption("Flash Firmware    ->",
+        [](MenuOption& self) {drawFlashMode(); reset_usb_boot(0, 0);}
     ));
 
     while (true) {
@@ -528,9 +518,9 @@ int main() {
                 drawMain();
             } else {
                 if (clicked_item > -1) {
-                    optionList.at(clicked_item - 1).turnR();
+                    optionList.at(clicked_item).turnR();
                 } else {
-                    if (selected_item < optionList.size()) {
+                    if (selected_item < optionList.size() - 1) {
                         selected_item++;
                         print(std::format("selected {} clicked {}\n", selected_item, clicked_item));
                     }
@@ -549,7 +539,7 @@ int main() {
                 }
             } else {
                 if (clicked_item > -1) {
-                    optionList.at(clicked_item - 1).turnL();
+                    optionList.at(clicked_item).turnL();
                 } else {
                     if (selected_item > 0) {
                         selected_item--;
@@ -569,17 +559,6 @@ int main() {
             swlock = true;
         }
         if (swlock && gpio_get(rot_sw)) {
-            // if (USBMode[0]) {
-            //     save_boot_mode(MODE_MIDI);
-            //     uart_puts(uart0, std::format("Change mode: MODE_MIDI\n").c_str());
-            // } else if (USBMode[2]) {
-            //     save_boot_mode(MODE_HID);
-            //     uart_puts(uart0, std::format("Change mode: MODE_HID\n").c_str());
-            // } else if (USBMode[1]) {
-            //     save_boot_mode(MODE_CDC_SERIAL);
-            //     uart_puts(uart0, std::format("Change mode: MODE_CDC_SERIAL\n").c_str());
-            // }
-            //
             if (selected_item == -1) {
                 selected_item = 1;
                 print(std::format("selected {} clicked {}\n", selected_item, clicked_item));
@@ -590,25 +569,22 @@ int main() {
             } else {
                 if (clicked_item != -1) {
                     clicked_item = -1;
-                    optionList.at(selected_item - 1).click();
+                    optionList.at(selected_item).click();
                     print(std::format("save\n"));
                     saveSettings();
 
                     drawMenu();
                 } else {
-                    if ((selected_item == 0 || !optionList.at(selected_item - 1).useBool)) {
-                        clicked_item = selected_item;
+                    if (optionList.at(selected_item).useBool) {
+                        optionList.at(selected_item).select();
+                        drawMenu();
+                    } else if (optionList.at(selected_item).useAction) {
+                        optionList.at(selected_item).select();
                     } else {
-                        optionList.at(selected_item - 1).turnL();
+                        clicked_item = selected_item;
+                        drawMenu();
                     }
 
-                    drawMenu();
-                    if (clicked_item == 0) {
-                        clicked_item = -1;
-                        selected_item = -1;
-
-                        drawMain();
-                    }
 
                 }
                 print(std::format("selected {} clicked {}\n", selected_item, clicked_item));

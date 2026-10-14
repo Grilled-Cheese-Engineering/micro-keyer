@@ -78,28 +78,25 @@ void drawMain() {
 void drawMenu() {
     std::stringstream str;
     ssd1306_clear(&disp);
-    bool first = 0;
     int offset = selected_item - 3;
     if (offset <= 0) {
         offset = 0;
-        ssd1306_draw_string_with_font(&disp, 4, 4 + (15 * 0), 1, font_8x5, "<- Back");
-        first = true;
     }
+    for (int i = 0; i + offset < optionList.size() && i < 5; i++) {
 
-    for (int i = 0; i < optionList.size() && i < 4 - first; i++) {
+        ssd1306_draw_string_with_font(&disp, 4, 4 + (15 * i), 1, font_8x5, optionList.at(i + offset).name.c_str());
+        if (optionList.at(i + offset).useValueIndex) {
+            ssd1306_draw_string_with_font(&disp, 124 - ((optionList.at(i + offset).arr.at(optionList.at(i + offset).valueIndex).length() * 5) + (optionList.at(i + offset).arr.at(optionList.at(i + offset).valueIndex).length() - 1)), 4 + (15 * i), 1, font_8x5, optionList.at(i + offset).arr.at(optionList.at(i + offset).valueIndex).c_str());
+        } else if (optionList.at(i + offset).useBool) {
+            ssd1306_draw_empty_square(&disp, 115, 3 + (15 * i), 8, 8);
 
-        ssd1306_draw_string_with_font(&disp, 4, 4 + (15 * (i + first)), 1, font_8x5, optionList.at(i + offset - !first).name.c_str());
-        if (optionList.at(i + offset - !first).useValueIndex) {
-            ssd1306_draw_string_with_font(&disp, 124 - ((optionList.at(i + offset - !first).arr.at(optionList.at(i + offset - !first).valueIndex).length() * 5) + (optionList.at(i + offset - !first).arr.at(optionList.at(i + offset - !first).valueIndex).length() - 1)), 4 + (15 * (i + first)), 1, font_8x5, optionList.at(i + offset - !first).arr.at(optionList.at(i + offset - !first).valueIndex).c_str());
-        } else if (optionList.at(i + offset - !first).useBool) {
-            ssd1306_draw_empty_square(&disp, 115, 3 + (15 * (i + first)), 8, 8);
-
-            if (optionList.at(i + offset - !first).value) {
-                ssd1306_draw_square(&disp, 117, 5 + (15 * (i + first)), 5, 5);
+            if (optionList.at(i + offset).value) {
+                ssd1306_draw_square(&disp, 117, 5 + (15 * i), 5, 5);
             }
-        } else {
-            str << std::vformat(optionList.at(i + offset - !first).format, std::make_format_args(optionList.at(i + offset - !first).value));
-            ssd1306_draw_string_with_font(&disp, 124 - ((str.str().length() * 5) + (str.str().length() - 1)), 4 + (15 * (i + first)), 1, font_8x5, str.str().c_str());
+        } else if (!optionList.at(i + offset).useAction) {
+
+            str << std::vformat(optionList.at(i + offset).format, std::make_format_args(optionList.at(i + offset).value));
+            ssd1306_draw_string_with_font(&disp, 124 - ((str.str().length() * 5) + (str.str().length() - 1)), 4 + (15 * i), 1, font_8x5, str.str().c_str());
         }
         str.str("");
         str.clear();
@@ -107,9 +104,15 @@ void drawMenu() {
 
     }
     ssd1306_draw_empty_square(&disp, 0, 1 + (15 * (selected_item - offset)), 127, 12);
-    if (clicked_item > 0 && !optionList.at(clicked_item - 1).useBool) {
+    if (clicked_item > 0 && !optionList.at(clicked_item).useBool) {
         ssd1306_draw_inverted_square(&disp, 1, 2 + (15 * (selected_item - offset)), 126, 11);
     }
 
+    ssd1306_show(&disp);
+}
+
+void drawFlashMode() {
+    ssd1306_clear(&disp);
+    ssd1306_draw_string_with_font(&disp, 8 + (128 / 2) - ((13 * 7) / 2), 32 - (8 / 2), 1, font_8x5, "Flashing Mode");
     ssd1306_show(&disp);
 }

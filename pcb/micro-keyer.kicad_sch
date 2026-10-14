@@ -4258,10 +4258,6 @@
 		(uuid "5f982361-2035-49fd-8135-35a831763a3f")
 	)
 	(no_connect
-		(at 125.73 49.53)
-		(uuid "65591f0d-aab4-4961-8d13-ee8faa2d868b")
-	)
-	(no_connect
 		(at 143.51 92.71)
 		(uuid "8a2643a3-6c0f-4b84-b34b-faa9a0e74445")
 	)
@@ -4509,6 +4505,16 @@
 	)
 	(wire
 		(pts
+			(xy 125.73 41.91) (xy 125.73 49.53)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5ee6abf4-9c01-43f0-af9f-b29b748d0e52")
+	)
+	(wire
+		(pts
 			(xy 236.22 66.04) (xy 241.3 66.04)
 		)
 		(stroke
@@ -4656,6 +4662,16 @@
 			(type default)
 		)
 		(uuid "9baac05e-243e-413d-8fa2-a0a0b54cc998")
+	)
+	(wire
+		(pts
+			(xy 125.73 41.91) (xy 134.62 41.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a06b98e2-aef4-43cc-bee7-bbc5d4fc6a62")
 	)
 	(wire
 		(pts
@@ -5116,6 +5132,16 @@
 			(justify right bottom)
 		)
 		(uuid "9284fc34-b04a-4064-9dfe-4d5fdcbcc5cc")
+	)
+	(label "Rot SW"
+		(at 134.62 41.91 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "94d9ce7a-1f5f-4940-aae6-e357a59b0237")
 	)
 	(label "Dah"
 		(at 91.44 60.96 0)

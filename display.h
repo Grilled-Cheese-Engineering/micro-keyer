@@ -32,6 +32,7 @@ void setKeyerMode(int x);
 
 void drawMain();
 void drawMenu();
+void drawFlashMode();
 
 void loadSettings();
 void saveSettings();
@@ -57,37 +58,43 @@ extern settings options;
 class MenuOption {
 public:
 
-    MenuOption(std::string nameStr, std::string format, int val, int maxVal, int minVal, std::function<void(MenuOption&)> inc, std::function<void(MenuOption&)> dec, std::function<void(MenuOption&)> app, std::function<void(MenuOption&)> load) :
-        name(nameStr), format(format), value(val), incVal(inc), decVal(dec), appVal(app), loadVal(load), maxValue(maxVal), minValue(minVal), useBool(false) {
+    MenuOption(std::string nameStr, std::string f, int val, int maxVal, int minVal, std::function<void(MenuOption&)> inc, std::function<void(MenuOption&)> dec, std::function<void(MenuOption&)> app, std::function<void(MenuOption&)> load) :
+        name(nameStr), format(f), value(val), incVal(inc), decVal(dec), appVal(app), loadVal(load), maxValue(maxVal), minValue(minVal) {
     }
 
     MenuOption(std::string nameStr, std::vector<std::string> strArr, int val, std::function<void(MenuOption&)> inc, std::function<void(MenuOption&)> dec, std::function<void(MenuOption&)> app, std::function<void(MenuOption&)> load) :
-        name(nameStr), arr(strArr), incVal(inc), decVal(dec), appVal(app), loadVal(load), useValueIndex(true), useBool(false) {
+        name(nameStr), arr(strArr), incVal(inc), decVal(dec), appVal(app), loadVal(load), useValueIndex(true) {
         if (val >= 0 && val < arr.size()) {
             valueIndex = val;
         }
     }
 
-    MenuOption(std::string nameStr, int val, std::function<void(MenuOption&)> inc, std::function<void(MenuOption&)> dec, std::function<void(MenuOption&)> app, std::function<void(MenuOption&)> load) :
-        name(nameStr), incVal(inc), decVal(dec), appVal(app), loadVal(load), useValueIndex(false), useBool(true) {
+    MenuOption(std::string nameStr, int val, std::function<void(MenuOption&)> act, std::function<void(MenuOption&)> load) :
+        name(nameStr), action(act), loadVal(load), useBool(true) {
         if (val >= 0 && val < arr.size()) {
             valueIndex = val;
         }
+    }
+
+    MenuOption(std::string nameStr, std::function<void(MenuOption&)> act) :
+        name(nameStr), action(act), useAction(true) {
     }
 
     std::string name = "Option";
     std::string format = "{}";
     bool useValueIndex = false;
     bool useBool = false;
+    bool useAction = false;
     uint32_t valueIndex = 0;
     std::vector<std::string> arr;
     int value;
     int maxValue;
     int minValue = 0;
-    std::function<void(MenuOption&)> incVal;
-    std::function<void(MenuOption&)> decVal;
-    std::function<void(MenuOption&)> appVal;
-    std::function<void(MenuOption&)> loadVal;
+    std::function<void(MenuOption&)> incVal = [](MenuOption& self) {};
+    std::function<void(MenuOption&)> decVal = [](MenuOption& self) {};
+    std::function<void(MenuOption&)> appVal = [](MenuOption& self) {};
+    std::function<void(MenuOption&)> loadVal = [](MenuOption& self) {};
+    std::function<void(MenuOption&)> action = [](MenuOption& self) {};
     void turnL() {
         decVal(*this);
     }
@@ -99,6 +106,9 @@ public:
     }
     void load() {
         loadVal(*this);
+    }
+    void select() {
+        action(*this);
     }
 };
 
