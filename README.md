@@ -2,15 +2,15 @@
 
 <div style="display: flex; gap: 10px; justify-content: space-between;">
 
-  <img src="main.jpg" alt="Alt text" height="400">
-  <img src="main2.jpg" alt="Alt text" height="400">
+  <img src="images/main.jpg" alt="Alt text" height="400">
+  <img src="images/main2.jpg" alt="Alt text" height="400">
 </div>
 <div style="display: flex; gap: 10px; justify-content: space-between;">
-  <img src="open screen.jpg" alt="Alt text" height="150">
-  <img src="open front.jpg" alt="Alt text" height="150">
-  <img src="open back.jpg" alt="Alt text" height="150">
-  <img src="pcb front.jpg" alt="Alt text" height="150">
-  <img src="pcb back.jpg" alt="Alt text" height="150">
+  <img src="images/open screen.jpg" alt="Alt text" height="150">
+  <img src="images/open front.jpg" alt="Alt text" height="150">
+  <img src="images/open back.jpg" alt="Alt text" height="150">
+  <img src="images/pcb front.jpg" alt="Alt text" height="150">
+  <img src="images/pcb back.jpg" alt="Alt text" height="150">
 </div>
 
 <br>
@@ -32,6 +32,6 @@ The <b>Micro Keyer</b> is a small morse code keyer that can be used as a practic
       <br>
       (Note: the two side pins on the switch are not connected to anything so it is okay if the jumper wire is making contact with them. 
       <br>
-      <img src="open back.jpg" alt="Alt text" height="150">
+      <img src="images/open back.jpg" alt="Alt text" height="150">
   </li>
 </ul>
