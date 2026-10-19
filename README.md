@@ -16,8 +16,10 @@
 <br>
 <br>
 The <b>Micro Keyer</b> is a small morse code keyer that can be used as a practice oscillator. It supports Iambic A, Iambic B, bug emulation, and straight key keying modes.
-
-
+<br>
+<br>
+<br>
+<h1><u><b><a href="https://grilled-cheese-engineering.github.io/micro-keyer/" target="_blank">View bill of materials</a></b></u></h1>
 
 
 <h2><u><b>Version notes</b></u></h2>
