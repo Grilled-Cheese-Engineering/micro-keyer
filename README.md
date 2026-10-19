@@ -31,8 +31,7 @@ The <b>Micro Keyer</b> is a small morse code keyer that can be used as a practic
         <li>Connect a jumper wire between top leg of Q1 (3V) to the left side of the power switch.</li>  
         <li>Solder a wire from the center pin of the switch to the power pin on the display.</li> 
       </ol>
-      <br>
-      (Note: the two side pins on the switch are not connected to anything so it is okay if the jumper wire is making contact with them. 
+      <h5>(Note: the two side pins on the switch are not connected to anything so it is okay if the jumper wire is making contact with them.)</h5>
       <br>
       <img src="images/open back.jpg" alt="Alt text" height="150">
   </li>
