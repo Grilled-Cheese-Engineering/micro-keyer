@@ -6848,7 +6848,7 @@
 			(justify left bottom mirror)
 		)
 	)
-	(gr_text "Micro Keyer V1.1.2\nPCB Design By: Lucas Moidel KO6LBA\nFirmware By: Lucas Moidel KO6LBA"
+	(gr_text "Micro Keyer V1.1\nPCB Design By: Lucas Moidel KO6LBA\nFirmware By: Lucas Moidel KO6LBA"
 		(at 141 120 270)
 		(layer "B.SilkS")
 		(uuid "c91b9e58-8f2b-4984-8bf5-34767a5e67f3")
