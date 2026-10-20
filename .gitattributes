@@ -1,2 +1,1 @@
-index.html linguist-vendored
-pcb/bom/* linguist-vendored
+*.html linguist-vendored
