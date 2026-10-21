@@ -358,7 +358,7 @@ int main() {
             if (curent == -1 && dit_state) {
                 doDit();
             }
-            if (dah_state) {
+            if (dah_state && curent == -1) {
                 key(true);
                 if (curent != dah) {
                     straightChar = to_ms_since_boot(get_absolute_time());
@@ -368,7 +368,9 @@ int main() {
                 hasSpace = false;
             } else if (!dah_state && (curent == dah || curent == 3)) {
                 key(false);
-                if (to_ms_since_boot(get_absolute_time()) - straightChar > basetime * 2.4 && to_ms_since_boot(get_absolute_time()) - straightChar < basetime * 6) {
+                if (to_ms_since_boot(get_absolute_time()) - straightChar > basetime * 0.4 && to_ms_since_boot(get_absolute_time()) - straightChar < basetime * 2.4) {
+                    elements.push_back(dit);
+                } else if (to_ms_since_boot(get_absolute_time()) - straightChar > basetime * 2.4 && to_ms_since_boot(get_absolute_time()) - straightChar < basetime * 6) {
                     elements.push_back(dah);
                 }
                 curent = -1;
@@ -407,11 +409,11 @@ int main() {
         case 1:
             if (dah_state && dit_state) {
                 next = 3;
-            } else if (dit_state && !dah_state) {
+            } else if (dit_state && !dah_state && next != 3) {
                 if (curent == dah || curent == -1) {
                     next = dit;
                 }
-            } else if (dah_state && !dit_state) {
+            } else if (dah_state && !dit_state && next != 3) {
                 if (curent == dit || curent == -1) {
                     next = dah;
                 }

@@ -201,7 +201,7 @@ void ssd1306_clear_square(ssd1306_t* p, uint32_t x, uint32_t y, uint32_t width, 
 	@param[in] width : width of square
 	@param[in] height : height of square
 */
-void ssd1306_draw_square(ssd1306_t* p, float x, float y, float width, float height);
+void ssd1306_draw_square(ssd1306_t* p, uint32_t x, uint32_t y, uint32_t width, uint32_t height);
 
 /**
 	@brief draw inverted square at given position with given size
@@ -256,7 +256,7 @@ void ssd1306_bmp_show_image(ssd1306_t* p, const uint8_t* data, const long size);
 	@param[in] font : pointer to font
 	@param[in] c : character to draw
 */
-void ssd1306_draw_char_with_font(ssd1306_t* p, uint32_t x, uint32_t y, float scale, const uint8_t* font, char c);
+void ssd1306_draw_char_with_font(ssd1306_t* p, uint32_t x, uint32_t y, uint32_t scale, const uint8_t* font, char c);
 
 /**
 	@brief draw char with builtin font
@@ -279,7 +279,7 @@ void ssd1306_draw_char(ssd1306_t* p, uint32_t x, uint32_t y, uint32_t scale, cha
 	@param[in] font : pointer to font
 	@param[in] s : text to draw
 */
-void ssd1306_draw_string_with_font(ssd1306_t* p, uint32_t x, uint32_t y, float scale, const uint8_t* font, const char* s);
+void ssd1306_draw_string_with_font(ssd1306_t* p, uint32_t x, uint32_t y, uint32_t scale, const uint8_t* font, const char* s);
 
 /**
 	@brief draw string with builtin font
