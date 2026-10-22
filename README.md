@@ -53,5 +53,5 @@ The <b>Micro Keyer</b> is a small morse code keyer that can be used as a practic
   <li>HID: This will enable the ability to use it as a USB keyboard.</li>
   <li>MIDI: This will enable the ability to use it as a USB MIDI device.</li>
   <li>Dumb MIDI: This disables some features and only puts out the paddle state over midi. (Experimental)</li>
-  <li>Flash Mode: This puts the device into boot mode to allow for firmware flashing. It will appear on a computer as a USB mass storage device. To flash the firmware just copy the .UF2 firmware file onto it.</li>
+  <li>Flash Firmware: This puts the device into boot mode to allow for firmware flashing. It will appear on a computer as a USB mass storage device. To flash the firmware just copy the .UF2 firmware file onto it.</li>
 </ul>
