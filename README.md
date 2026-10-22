@@ -39,6 +39,11 @@ The <b>Micro Keyer</b> is a small morse code keyer that can be used as a practic
 
 <h2><u><b>Menu Usage:</b></u></h2>
 <ul>
+<br>
+
+You can clear the decoded text by holding the knob down for 2 seconds.
+<br>
+  
   <li>Speed: Sending speed in words per minute.</li>
   <li>Tone: Audio tone for sending in hetrz. (It may not sound exactly right on the built in buzzer compared to a real speaker.)</li>
   <li>Mode:</li> <ol type="1">
