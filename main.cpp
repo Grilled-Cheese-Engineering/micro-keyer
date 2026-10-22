@@ -48,12 +48,13 @@ bool reverse;
 
 bool rotlock = false;
 bool swlock = false;
-
+bool cllock = false;
 std::string str;
 
 std::vector<int> elements;
 uint32_t lastChar = 0;
 uint32_t straightChar = 0;
+uint32_t rotPress = 0;
 
 bool recordMode = false;
 std::vector<int> recordArr;
@@ -615,41 +616,51 @@ int main() {
 
         if (!swlock && !gpio_get(rot_sw)) {
             swlock = true;
+            rotPress = to_ms_since_boot(get_absolute_time());
+            cllock = false;
         }
-        if (swlock && gpio_get(rot_sw)) {
-            if (selected_item == -1) {
-                selected_item = 1;
-                print(std::format("selected {} clicked {}\n", selected_item, clicked_item));
-                for (int i = 0; i < optionList.size(); i++) {
-                    optionList.at(i).load();
-                }
-                drawMenu();
-            } else {
-                if (clicked_item != -1) {
-                    clicked_item = -1;
-                    optionList.at(selected_item).click();
-                    print(std::format("save\n"));
-                    saveSettings();
 
+        if (swlock && gpio_get(rot_sw)) {
+            swlock = false;
+            if (!cllock) {
+                if (selected_item == -1) {
+                    selected_item = 1;
+                    print(std::format("selected {} clicked {}\n", selected_item, clicked_item));
+                    for (int i = 0; i < optionList.size(); i++) {
+                        optionList.at(i).load();
+                    }
                     drawMenu();
                 } else {
-                    if (optionList.at(selected_item).useBool) {
-                        optionList.at(selected_item).select();
+                    if (clicked_item != -1) {
+                        clicked_item = -1;
+                        optionList.at(selected_item).click();
+                        print(std::format("save\n"));
+                        saveSettings();
+
                         drawMenu();
-                    } else if (optionList.at(selected_item).useAction) {
-                        optionList.at(selected_item).select();
                     } else {
-                        clicked_item = selected_item;
-                        drawMenu();
+                        if (optionList.at(selected_item).useBool) {
+                            optionList.at(selected_item).select();
+                            drawMenu();
+                        } else if (optionList.at(selected_item).useAction) {
+                            optionList.at(selected_item).select();
+                        } else {
+                            clicked_item = selected_item;
+                            drawMenu();
+                        }
+
+
                     }
-
-
+                    print(std::format("selected {} clicked {}\n", selected_item, clicked_item));
                 }
-                print(std::format("selected {} clicked {}\n", selected_item, clicked_item));
             }
-            swlock = false;
-        }
 
+        }
+        if (swlock && !gpio_get(rot_sw) && to_ms_since_boot(get_absolute_time()) - rotPress > 1000 && !cllock) {
+            cllock = true;
+            decode = "";
+            drawMain();
+        }
         if (USBMode[1]) {
             if (tud_hid_ready()) {
                 if (!usbState && keycode[0] > 0) {
