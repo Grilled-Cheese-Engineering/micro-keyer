@@ -84,28 +84,28 @@ void drawMenu() {
     }
     for (int i = 0; i + offset < optionList.size() && i < 5; i++) {
 
-        ssd1306_draw_string_with_font(&disp, 4, 4 + (15 * i), 1, font_8x5, optionList.at(i + offset).name.c_str());
+        ssd1306_draw_string_with_font(&disp, 4, 5 + (15 * i), 1, font_8x5, optionList.at(i + offset).name.c_str());
         if (optionList.at(i + offset).useValueIndex) {
-            ssd1306_draw_string_with_font(&disp, 124 - ((optionList.at(i + offset).arr.at(optionList.at(i + offset).valueIndex).length() * 5) + (optionList.at(i + offset).arr.at(optionList.at(i + offset).valueIndex).length() - 1)), 4 + (15 * i), 1, font_8x5, optionList.at(i + offset).arr.at(optionList.at(i + offset).valueIndex).c_str());
+            ssd1306_draw_string_with_font(&disp, 124 - ((optionList.at(i + offset).arr.at(optionList.at(i + offset).valueIndex).length() * 5) + (optionList.at(i + offset).arr.at(optionList.at(i + offset).valueIndex).length() - 1)), 5 + (15 * i), 1, font_8x5, optionList.at(i + offset).arr.at(optionList.at(i + offset).valueIndex).c_str());
         } else if (optionList.at(i + offset).useBool) {
-            ssd1306_draw_empty_square(&disp, 115, 3 + (15 * i), 8, 8);
+            ssd1306_draw_empty_square(&disp, 115, 4 + (15 * i), 8, 8);
 
             if (optionList.at(i + offset).value) {
-                ssd1306_draw_square(&disp, 117, 5 + (15 * i), 5, 5);
+                ssd1306_draw_square(&disp, 117, 6 + (15 * i), 5, 5);
             }
         } else if (!optionList.at(i + offset).useAction) {
 
             str << std::vformat(optionList.at(i + offset).format, std::make_format_args(optionList.at(i + offset).value));
-            ssd1306_draw_string_with_font(&disp, 124 - ((str.str().length() * 5) + (str.str().length() - 1)), 4 + (15 * i), 1, font_8x5, str.str().c_str());
+            ssd1306_draw_string_with_font(&disp, 124 - ((str.str().length() * 5) + (str.str().length() - 1)), 5 + (15 * i), 1, font_8x5, str.str().c_str());
         }
         str.str("");
         str.clear();
 
 
     }
-    ssd1306_draw_empty_square(&disp, 0, 1 + (15 * (selected_item - offset)), 127, 12);
+    ssd1306_draw_empty_square(&disp, 0, 2 + (15 * (selected_item - offset)), 127, 12);
     if (clicked_item > 0 && !optionList.at(clicked_item).useBool) {
-        ssd1306_draw_inverted_square(&disp, 1, 2 + (15 * (selected_item - offset)), 126, 11);
+        ssd1306_draw_inverted_square(&disp, 1, 3 + (15 * (selected_item - offset)), 126, 11);
     }
 
     ssd1306_show(&disp);

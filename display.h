@@ -51,6 +51,8 @@ typedef struct __attribute__((aligned(FLASH_PAGE_SIZE))) {
     int tonemod;
     int keyerMode;
     bool USBMode[3];
+    bool dumbMIDI;
+    bool reverse;
 } settings;
 
 extern settings options;
