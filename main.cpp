@@ -291,7 +291,7 @@ int main() {
         [](MenuOption& self) {self.value = !tonemod;}
     ));
 
-    optionList.push_back(MenuOption("SERIAL", USBMode[0],
+    optionList.push_back(MenuOption("Serial", USBMode[0],
         [](MenuOption& self) {self.value = !self.value; USBMode[0] = self.value; saveSettings();},
         [](MenuOption& self) {self.value = USBMode[0];}
     ));
