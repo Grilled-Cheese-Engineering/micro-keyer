@@ -70,7 +70,20 @@
         }
       },
       "diff_pair_dimensions": [],
-      "drc_exclusions": [],
+      "drc_exclusions": [
+        [
+          "invalid_outline|136099999|106400000|04185283-91e4-4952-ac37-142fa8f49136|a715cee4-aac9-49c6-8190-92f7d4ddfb9a",
+          ""
+        ],
+        [
+          "invalid_outline|136099999|114561270|520ff68e-1a59-4441-90ed-5883281f8a60|a715cee4-aac9-49c6-8190-92f7d4ddfb9a",
+          ""
+        ],
+        [
+          "invalid_outline|179346534|99400000|51545458-8b97-4442-9db1-142dc60be330|a715cee4-aac9-49c6-8190-92f7d4ddfb9a",
+          ""
+        ]
+      ],
       "meta": {
         "version": 2
       },
@@ -778,7 +791,7 @@
         "uuid": "8f7feab7-3497-470c-875a-34341021450c"
       }
     ],
-    "used_designators": "#FLG1-2,#PWR1-18,BT1,BZ1,C1-3,DISP1,EN1,GND1,J1-5,JP1-4,Q1-2,RV1,SSD1,SW1-4,TP1-3,U1",
+    "used_designators": "#FLG1-2,#PWR1-18,BT1,BZ1,C1-3,DISP1,EN1,GND1,J1-6,JP1-4,Q1-2,RV1,SSD1,SW1-4,TP1-3,U1",
     "variants": []
   },
   "sheets": [

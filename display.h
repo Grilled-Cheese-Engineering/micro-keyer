@@ -15,9 +15,11 @@ extern ssd1306_t disp;
 
 extern int speed;
 extern int tone;
-extern int tonemod;
+extern int mute;
 extern bool USBMode[3];
 extern int keyerMode;
+extern bool reverse;
+extern bool dumbMIDI;
 
 extern int selected_item;
 extern int clicked_item;
@@ -48,7 +50,7 @@ void saveSettings();
 typedef struct __attribute__((aligned(FLASH_PAGE_SIZE))) {
     int speed;
     int tone;
-    int tonemod;
+    int mute;
     int keyerMode;
     bool USBMode[3];
     bool dumbMIDI;

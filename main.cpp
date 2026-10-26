@@ -34,7 +34,7 @@ int next = -1;
 
 int speed;
 int tone;
-int tonemod;
+int mute;
 
 int level;
 int basetime;
@@ -191,7 +191,7 @@ int main() {
     uint slice_num = pwm_gpio_to_slice_num(pwm_pin);
     pwm_config config = pwm_get_default_config();
     pwm_config_set_clkdiv_int_frac(&config, 125, 0);
-    pwm_config_set_wrap(&config, (125000000 / 125) / (tone * tonemod));
+    pwm_config_set_wrap(&config, (125000000 / 125) / (tone * !mute));
     pwm_init(slice_num, &config, true);
     key(true);
     sleep_ms(100);
@@ -283,13 +283,13 @@ int main() {
     ));
 
     optionList.push_back(MenuOption("Reverse", reverse,
-        [](MenuOption& self) {self.value = !self.value; tonemod = self.value; if (self.value) { dit_pin = 27;dah_pin = 26; } else { dit_pin = 26;dah_pin = 27; }saveSettings();},
-        [](MenuOption& self) {self.value = !tonemod;}
+        [](MenuOption& self) {self.value = !self.value; reverse = self.value; if (self.value) { dit_pin = 27;dah_pin = 26; } else { dit_pin = 26;dah_pin = 27; }saveSettings();},
+        [](MenuOption& self) {self.value = reverse;}
     ));
 
-    optionList.push_back(MenuOption("Mute", !tonemod,
-        [](MenuOption& self) {self.value = !self.value; tonemod = !self.value; setTone(tone);},
-        [](MenuOption& self) {self.value = !tonemod;}
+    optionList.push_back(MenuOption("Mute", mute,
+        [](MenuOption& self) {self.value = !self.value; mute = self.value; setTone(tone);},
+        [](MenuOption& self) {self.value = mute;}
     ));
 
     optionList.push_back(MenuOption("Serial", USBMode[0],
@@ -423,14 +423,16 @@ int main() {
 
                     hasSpace = false;
                 } else if (!dah_state && (curent == dah || curent == 3)) {
-                    key(false);
-                    if (to_ms_since_boot(get_absolute_time()) - straightChar > basetime * 0.4 && to_ms_since_boot(get_absolute_time()) - straightChar < basetime * 2.4) {
-                        elements.push_back(dit);
-                    } else if (to_ms_since_boot(get_absolute_time()) - straightChar > basetime * 2.4 && to_ms_since_boot(get_absolute_time()) - straightChar < basetime * 6) {
-                        elements.push_back(dah);
+                    if (to_ms_since_boot(get_absolute_time()) - straightChar > 5) {
+                        key(false);
+                        if (to_ms_since_boot(get_absolute_time()) - straightChar > basetime * 0.4 && to_ms_since_boot(get_absolute_time()) - straightChar < basetime * 2.4) {
+                            elements.push_back(dit);
+                        } else if (to_ms_since_boot(get_absolute_time()) - straightChar > basetime * 2.4 && to_ms_since_boot(get_absolute_time()) - straightChar < basetime * 6) {
+                            elements.push_back(dah);
+                        }
+                        curent = -1;
+                        lastChar = to_ms_since_boot(get_absolute_time());
                     }
-                    curent = -1;
-                    lastChar = to_ms_since_boot(get_absolute_time());
                 }
 
                 if (to_ms_since_boot(get_absolute_time()) - lastChar > basetime * 7 && !hasSpace && curent == -1) {
@@ -691,8 +693,8 @@ void setSpeed(int x) {
 void setTone(int x) {
     if (x > 0) {
         tone = x;
-        level = ((125000000 / 125) / (tone * tonemod)) / 2;
-        pwm_set_wrap(pwm_gpio_to_slice_num(pwm_pin), (125000000 / 125) / (tone * tonemod));
+        level = ((125000000 / 125) / (tone * !mute)) / 2;
+        pwm_set_wrap(pwm_gpio_to_slice_num(pwm_pin), (125000000 / 125) / (tone * !mute));
         saveSettings();
     }
 }
@@ -707,10 +709,10 @@ void setKeyerMode(int x) {
 void loadSettings() {
     const settings* opts = (const settings*)(XIP_BASE + FLASH_TARGET_OFFSET);
 
-    if (opts->speed == -1 || opts->tone == -1 || opts->tonemod == -1 || opts->keyerMode == -1) {
+    if (opts->speed == -1 || opts->tone == -1 || opts->mute == -1 || opts->keyerMode == -1) {
         speed = 20;
         tone = 340;
-        tonemod = 1;
+        mute = 0;
         keyerMode = 1;
         USBMode[0] = 1;
         USBMode[1] = 0;
@@ -720,7 +722,7 @@ void loadSettings() {
     } else {
         speed = opts->speed;
         tone = opts->tone;
-        tonemod = opts->tonemod;
+        mute = opts->mute;
         keyerMode = opts->keyerMode;
         USBMode[0] = opts->USBMode[0];
         USBMode[1] = opts->USBMode[1];
@@ -735,7 +737,7 @@ void loadSettings() {
 }
 
 void saveSettings() {
-    options = { speed, tone, tonemod, keyerMode,{ USBMode[0],USBMode[1],USBMode[2] },dumbMIDI,reverse };
+    options = { speed, tone, mute, keyerMode,{ USBMode[0],USBMode[1],USBMode[2] },dumbMIDI,reverse };
     uint32_t ints = save_and_disable_interrupts();
     flash_range_erase(FLASH_TARGET_OFFSET, FLASH_SECTOR_SIZE);
     flash_range_program(FLASH_TARGET_OFFSET, (const uint8_t*)&options, FLASH_PAGE_SIZE);

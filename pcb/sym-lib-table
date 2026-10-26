@@ -2,4 +2,5 @@
 	(version 7)
 	(lib (name "Seeed_Studio_XIAO_Series") (type "KiCad") (uri "${KIPRJMOD}/Seeed_Studio_XIAO_Series.kicad_sym") (options "") (descr ""))
 	(lib (name "ssd1306") (type "KiCad") (uri "${KIPRJMOD}/ssd1306.kicad_sym") (options "") (descr ""))
+	(lib (name "2026-10-22_06-42-34") (type "KiCad") (uri "${KIPRJMOD}/2026-10-22_06-42-34.kicad_sym") (options "") (descr ""))
 )

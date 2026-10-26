@@ -793,205 +793,6 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Connector_Audio:AudioJack3"
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "J"
-				(at 0 8.89 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "AudioJack3"
-				(at 0 6.35 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" "Audio Jack, 3 Poles (Stereo / TRS)"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_keywords" "audio jack receptacle stereo headphones phones TRS connector"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_fp_filters" "Jack*"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "AudioJack3_0_1"
-				(rectangle
-					(start -5.08 -5.08)
-					(end -6.35 -2.54)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(polyline
-					(pts
-						(xy -1.905 -2.54) (xy -1.27 -3.175) (xy -0.635 -2.54) (xy -0.635 0) (xy 2.54 0)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 -2.54) (xy 0.635 -3.175) (xy 1.27 -2.54) (xy 2.54 -2.54)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(rectangle
-					(start 2.54 3.81)
-					(end -5.08 -5.08)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type background)
-					)
-				)
-				(polyline
-					(pts
-						(xy 2.54 2.54) (xy -2.54 2.54) (xy -2.54 -2.54) (xy -3.175 -3.175) (xy -3.81 -2.54)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "AudioJack3_1_1"
-				(pin passive line
-					(at 5.08 0 180)
-					(length 2.54)
-					(name ""
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "R"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 5.08 2.54 180)
-					(length 2.54)
-					(name ""
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "S"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 5.08 -2.54 180)
-					(length 2.54)
-					(name ""
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "T"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 		(symbol "Connector_Generic:Conn_01x02"
 			(pin_names
 				(offset 1.016)
@@ -4297,52 +4098,16 @@
 		(uuid "0f4b8918-8e4d-45f3-95bb-9a739917ac96")
 	)
 	(junction
-		(at 116.84 148.59)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "20a54621-0ac3-4bb4-a213-fdbb6fe4c74c")
-	)
-	(junction
-		(at 116.84 140.97)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "3af2a487-ac79-4128-8e27-3a81b276544e")
-	)
-	(junction
-		(at 129.54 140.97)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "3be597cc-2361-4643-825c-fcfd9b09396b")
-	)
-	(junction
 		(at 68.58 90.17)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "4c467c54-287c-48e2-8139-abd863b10956")
 	)
 	(junction
-		(at 219.71 137.16)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "4f66fc58-031a-4a98-a788-e66dd0724040")
-	)
-	(junction
 		(at 152.4 64.77)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "68162905-2114-4167-98b5-d240546e137d")
-	)
-	(junction
-		(at 241.3 68.58)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "8dab65e6-93dd-422b-ad6d-999b3352cf83")
-	)
-	(junction
-		(at 129.54 148.59)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "97868a7d-372d-4c79-94e3-a7049594587d")
 	)
 	(junction
 		(at 50.8 172.72)
@@ -4363,10 +4128,10 @@
 		(uuid "aacbc19c-4c4a-4c3b-90ad-00c9b9d2bf12")
 	)
 	(junction
-		(at 241.3 66.04)
+		(at 222.25 128.27)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "b1ae5bd4-d29b-4592-ae6e-8ef93dfb4c3e")
+		(uuid "c83b0f1e-512c-4db2-ad78-f3c4e907488e")
 	)
 	(junction
 		(at 50.8 151.13)
@@ -4397,8 +4162,20 @@
 		(uuid "3ab3b6e9-76be-4550-942d-cc530850ffe0")
 	)
 	(no_connect
+		(at 218.44 135.89)
+		(uuid "472f59ad-c518-4f02-b944-3e6e18627f2c")
+	)
+	(no_connect
 		(at 110.49 49.53)
 		(uuid "5f982361-2035-49fd-8135-35a831763a3f")
+	)
+	(no_connect
+		(at 218.44 130.81)
+		(uuid "653c81d4-b407-4443-a402-1d35c5b0282f")
+	)
+	(no_connect
+		(at 224.79 66.04)
+		(uuid "75d655a3-59f7-4a67-b74b-d47f84a5b118")
 	)
 	(no_connect
 		(at 143.51 92.71)
@@ -4407,6 +4184,10 @@
 	(no_connect
 		(at 143.51 85.09)
 		(uuid "97367fba-fe6f-4715-8dc7-9ab508997872")
+	)
+	(no_connect
+		(at 224.79 60.96)
+		(uuid "a1d95307-6b23-4305-a4c8-71aab32df1c0")
 	)
 	(no_connect
 		(at 257.81 111.76)
@@ -4455,16 +4236,6 @@
 			(type default)
 		)
 		(uuid "08944a01-c514-45ce-aef6-f4d4558269e5")
-	)
-	(wire
-		(pts
-			(xy 241.3 66.04) (xy 247.65 66.04)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0964af29-f9bf-460e-90ac-01719469ac2e")
 	)
 	(wire
 		(pts
@@ -4558,16 +4329,6 @@
 	)
 	(wire
 		(pts
-			(xy 219.71 137.16) (xy 234.95 137.16)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1e9a9847-d3a8-4fd3-8c26-a589caf66ee8")
-	)
-	(wire
-		(pts
 			(xy 143.51 68.58) (xy 161.29 68.58)
 		)
 		(stroke
@@ -4588,16 +4349,6 @@
 	)
 	(wire
 		(pts
-			(xy 116.84 148.59) (xy 129.54 148.59)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "240c9cda-4c4a-4c5d-9d72-c1221c0ca048")
-	)
-	(wire
-		(pts
 			(xy 118.11 101.6) (xy 118.11 115.57)
 		)
 		(stroke
@@ -4608,7 +4359,7 @@
 	)
 	(wire
 		(pts
-			(xy 242.57 132.08) (xy 257.81 132.08)
+			(xy 242.57 133.35) (xy 257.81 133.35)
 		)
 		(stroke
 			(width 0)
@@ -4648,16 +4399,6 @@
 	)
 	(wire
 		(pts
-			(xy 129.54 140.97) (xy 142.24 140.97)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "3eb07504-0717-4052-9d4f-d62044b9b1a5")
-	)
-	(wire
-		(pts
 			(xy 121.92 101.6) (xy 121.92 113.03)
 		)
 		(stroke
@@ -4665,6 +4406,26 @@
 			(type default)
 		)
 		(uuid "45e61273-14f9-49ca-99a5-a8dc6fdcb7b3")
+	)
+	(wire
+		(pts
+			(xy 222.25 128.27) (xy 222.25 133.35)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4e0c1c35-852f-4d46-9bf8-4ce0b7293760")
+	)
+	(wire
+		(pts
+			(xy 234.95 138.43) (xy 234.95 140.97)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "545897d1-85d4-436d-a970-8b2d549a5f71")
 	)
 	(wire
 		(pts
@@ -4698,13 +4459,13 @@
 	)
 	(wire
 		(pts
-			(xy 236.22 66.04) (xy 241.3 66.04)
+			(xy 215.9 133.35) (xy 222.25 133.35)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "67dbab99-db27-4134-9729-349fe7f03d78")
+		(uuid "689e721b-6a78-4185-9677-7478dfcc48cf")
 	)
 	(wire
 		(pts
@@ -4748,6 +4509,16 @@
 	)
 	(wire
 		(pts
+			(xy 215.9 128.27) (xy 222.25 128.27)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7c6e926e-ee6c-48eb-9f3d-2a3fce2b63de")
+	)
+	(wire
+		(pts
 			(xy 257.81 102.87) (xy 257.81 104.14)
 		)
 		(stroke
@@ -4765,16 +4536,6 @@
 			(type default)
 		)
 		(uuid "8ac2d64d-c6bc-4aa2-904d-dbb891dcb98a")
-	)
-	(wire
-		(pts
-			(xy 241.3 63.5) (xy 246.38 63.5)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8b4c28c2-6e2d-48e7-8dae-37f5d2058303")
 	)
 	(wire
 		(pts
@@ -4828,13 +4589,13 @@
 	)
 	(wire
 		(pts
-			(xy 234.95 127) (xy 219.71 127)
+			(xy 215.9 130.81) (xy 218.44 130.81)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "977e74ce-6ee4-4649-bf81-fdfde4511207")
+		(uuid "9a105904-29ae-4a3a-9b2b-3c9c356c9244")
 	)
 	(wire
 		(pts
@@ -4878,13 +4639,13 @@
 	)
 	(wire
 		(pts
-			(xy 219.71 134.62) (xy 219.71 137.16)
+			(xy 222.25 128.27) (xy 234.95 128.27)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "a6b74611-0475-4e65-bef8-e2daf3e6bf49")
+		(uuid "a4a7fb8f-2c98-4434-b983-608cb360d962")
 	)
 	(wire
 		(pts
@@ -4905,16 +4666,6 @@
 			(type default)
 		)
 		(uuid "a9cef5a9-b9c0-4032-a7e4-caa143d0b259")
-	)
-	(wire
-		(pts
-			(xy 116.84 140.97) (xy 129.54 140.97)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ab75358c-69fc-48ad-9ad5-6035d57dac59")
 	)
 	(wire
 		(pts
@@ -4998,6 +4749,16 @@
 	)
 	(wire
 		(pts
+			(xy 215.9 135.89) (xy 218.44 135.89)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cc31f3da-685e-4d07-9f74-7d70cdcdd66b")
+	)
+	(wire
+		(pts
 			(xy 31.75 172.72) (xy 40.64 172.72)
 		)
 		(stroke
@@ -5005,16 +4766,6 @@
 			(type default)
 		)
 		(uuid "cdd4e44f-c758-4e36-9bb8-926f18f6f271")
-	)
-	(wire
-		(pts
-			(xy 129.54 148.59) (xy 142.24 148.59)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ce143fcd-14d5-4478-a36d-2c4f36e25cb0")
 	)
 	(wire
 		(pts
@@ -5038,6 +4789,16 @@
 	)
 	(wire
 		(pts
+			(xy 224.79 58.42) (xy 236.22 58.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d93d319a-5b16-4fd5-af5d-4927882ca15e")
+	)
+	(wire
+		(pts
 			(xy 67.31 95.25) (xy 68.58 95.25)
 		)
 		(stroke
@@ -5048,16 +4809,6 @@
 	)
 	(wire
 		(pts
-			(xy 219.71 127) (xy 219.71 132.08)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "da83f2a2-049e-413d-911a-c77eb6933c34")
-	)
-	(wire
-		(pts
 			(xy 261.62 107.95) (xy 264.16 107.95)
 		)
 		(stroke
@@ -5065,26 +4816,6 @@
 			(type default)
 		)
 		(uuid "daccf2cd-0d3c-43af-bfe1-cff60c7876ca")
-	)
-	(wire
-		(pts
-			(xy 236.22 68.58) (xy 241.3 68.58)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ddd0e5e8-ad4c-4c95-8ae5-89394414ead7")
-	)
-	(wire
-		(pts
-			(xy 241.3 68.58) (xy 247.65 68.58)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "de97d864-55a7-4866-af94-5063ee3301a9")
 	)
 	(wire
 		(pts
@@ -5108,6 +4839,16 @@
 	)
 	(wire
 		(pts
+			(xy 224.79 63.5) (xy 236.22 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f3518855-3e4b-4c8e-b363-2365487cd867")
+	)
+	(wire
+		(pts
 			(xy 152.4 64.77) (xy 154.94 64.77)
 		)
 		(stroke
@@ -5125,6 +4866,16 @@
 			(type default)
 		)
 		(uuid "f6ec4d1f-2d76-422e-803c-43702f31389a")
+	)
+	(wire
+		(pts
+			(xy 210.82 140.97) (xy 234.95 140.97)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fbd04151-18b6-481a-be2b-7a18442dc20e")
 	)
 	(wire
 		(pts
@@ -5147,7 +4898,7 @@
 		(uuid "0b2bf4dc-e232-4b73-91be-29b6e1a0b785")
 	)
 	(label "Dit"
-		(at 247.65 68.58 180)
+		(at 236.22 63.5 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5177,7 +4928,7 @@
 		(uuid "2d08fae9-1899-48a7-8f28-f252af4aa156")
 	)
 	(label "Radio Control"
-		(at 257.81 132.08 180)
+		(at 257.81 133.35 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5247,7 +4998,7 @@
 		(uuid "604a331c-0390-4471-aeed-e53b4dc8afea")
 	)
 	(label "Dah"
-		(at 247.65 66.04 180)
+		(at 236.22 58.42 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5395,6 +5146,129 @@
 			(justify right bottom)
 		)
 		(uuid "fca0480b-f02a-4204-8ac3-1ed4d742e758")
+	)
+	(symbol
+		(lib_id "Connector_Audio:AudioJack2_Dual_Ground_Switch")
+		(at 219.71 63.5 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "0531e4c1-3d3f-4aae-b5b5-29afb8190222")
+		(property "Reference" "J3"
+			(at 218.3765 52.07 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Audio Jack"
+			(at 218.3765 54.61 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "audio_connector:54-00299"
+			(at 218.44 58.42 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 218.44 58.42 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Audio Jack, Dual, 2 Poles (Mono / TS), Grounded Sleeve, Switched Pole (Normalling)"
+			(at 219.71 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ID" "CP1-3515N-ND"
+			(at 219.71 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Supplier" "Digikey"
+			(at 219.71 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "G"
+			(uuid "18c2bf2e-7fb8-4795-8c14-82899b897e79")
+		)
+		(pin "SN2"
+			(uuid "9b87a33c-fb98-4a94-a013-d429c5b11a86")
+		)
+		(pin "S1"
+			(uuid "7d6b2fec-63c4-4a1d-8d83-9b0b0b853e54")
+		)
+		(pin "TN1"
+			(uuid "ae0b9c64-9763-439d-8c9d-40fb6249e2dc")
+		)
+		(pin "S2"
+			(uuid "a2ff8f05-f3e6-4bcb-94e6-77663b79d81d")
+		)
+		(pin "TN2"
+			(uuid "4b614a04-1820-44db-8574-82d7c92258e5")
+		)
+		(pin "T2"
+			(uuid "1d02d772-21ce-4864-8157-03adb3071cf0")
+		)
+		(pin "T1"
+			(uuid "8d28bf55-49e4-458e-be62-d89095a9e2f3")
+		)
+		(pin "SN1"
+			(uuid "06626539-3951-40cd-9898-a79ea4c1c272")
+		)
+		(instances
+			(project "micro-keyer"
+				(path "/8f7feab7-3497-470c-875a-34341021450c"
+					(reference "J3")
+					(unit 1)
+				)
+			)
+		)
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
@@ -5610,6 +5484,7 @@
 		(uuid "18341e8a-3d2c-414d-a1fc-906528c1cbc6")
 		(property "Reference" "C1"
 			(at 120.65 143.5099 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5621,6 +5496,7 @@
 		)
 		(property "Value" "0.1uF"
 			(at 120.65 146.0499 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5995,41 +5871,40 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C")
-		(at 129.54 144.78 0)
+		(lib_id "power:GND")
+		(at 219.71 71.12 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(in_pos_files yes)
-		(dnp yes)
+		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "28f5259d-fdd2-476b-9c07-e282d68a0cf1")
-		(property "Reference" "C2"
-			(at 133.35 143.5099 0)
+		(uuid "2e07a191-7c46-4e0c-96e0-5c3d1eec2ccd")
+		(property "Reference" "#PWR06"
+			(at 219.71 77.47 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
-		(property "Value" "0.1uF"
-			(at 133.35 146.0499 0)
+		(property "Value" "GND"
+			(at 219.71 76.2 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric"
-			(at 130.5052 148.59 0)
+		(property "Footprint" ""
+			(at 219.71 71.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6040,7 +5915,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 129.54 144.78 0)
+			(at 219.71 71.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6050,30 +5925,8 @@
 				)
 			)
 		)
-		(property "Description" "Unpolarized capacitor"
-			(at 129.54 144.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "ID" "1276-1017-2-ND"
-			(at 129.54 144.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Supplier" "Digikey"
-			(at 129.54 144.78 0)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 219.71 71.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6084,15 +5937,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "e73f3c6a-9477-4995-ab36-611717d6e9aa")
-		)
-		(pin "2"
-			(uuid "83f2efd7-0943-4cb6-81cb-054b9b75169d")
+			(uuid "a5da18e4-bb30-4d5a-9493-29e582d04627")
 		)
 		(instances
 			(project "micro-keyer"
 				(path "/8f7feab7-3497-470c-875a-34341021450c"
-					(reference "C2")
+					(reference "#PWR06")
 					(unit 1)
 				)
 			)
@@ -6274,6 +6124,129 @@
 			(project "micro-keyer"
 				(path "/8f7feab7-3497-470c-875a-34341021450c"
 					(reference "JP3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Audio:AudioJack2_Dual_Ground_Switch")
+		(at 210.82 133.35 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "46981e5e-e3e1-41b2-9af8-ffb43dd59b04")
+		(property "Reference" "J4"
+			(at 209.4865 121.92 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Audio Jack"
+			(at 209.4865 124.46 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "audio_connector:54-00299"
+			(at 209.55 128.27 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 209.55 128.27 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Audio Jack, Dual, 2 Poles (Mono / TS), Grounded Sleeve, Switched Pole (Normalling)"
+			(at 210.82 133.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ID" "CP1-3515N-ND"
+			(at 210.82 133.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Supplier" "Digikey"
+			(at 210.82 133.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "G"
+			(uuid "f8a7b04a-4d5b-4b7a-8868-087d4fc61f70")
+		)
+		(pin "SN2"
+			(uuid "9b87a33c-fb98-4a94-a013-d429c5b11a87")
+		)
+		(pin "S1"
+			(uuid "526eef40-99a0-488f-940a-c7c5ec4bd7e8")
+		)
+		(pin "TN1"
+			(uuid "58922aef-15f3-4d02-b2df-10ba618a417e")
+		)
+		(pin "S2"
+			(uuid "a2ff8f05-f3e6-4bcb-94e6-77663b79d81e")
+		)
+		(pin "TN2"
+			(uuid "4b614a04-1820-44db-8574-82d7c92258e6")
+		)
+		(pin "T2"
+			(uuid "1d02d772-21ce-4864-8157-03adb3071cf1")
+		)
+		(pin "T1"
+			(uuid "8b08a86d-dcdb-4cd8-ad0d-6698b9855322")
+		)
+		(pin "SN1"
+			(uuid "3e9e4c50-dc0c-4441-aaf6-a76eee155b2a")
+		)
+		(instances
+			(project "micro-keyer"
+				(path "/8f7feab7-3497-470c-875a-34341021450c"
+					(reference "J4")
 					(unit 1)
 				)
 			)
@@ -6491,111 +6464,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector_Audio:AudioJack3")
-		(at 236.22 66.04 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "53c3c491-7a27-4982-b4ca-3f996d2d1229")
-		(property "Reference" "J3"
-			(at 234.315 57.15 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "Keyer Jack"
-			(at 234.315 59.69 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "audio_connector:Jack_3.5mm_CUI_SJ-3523-SMT_Horizontal"
-			(at 236.22 66.04 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 236.22 66.04 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Audio Jack, 3 Poles (Stereo / TRS)"
-			(at 236.22 66.04 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "ID" "CP-3523SJTR-ND"
-			(at 236.22 66.04 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Supplier" "Digikey"
-			(at 236.22 66.04 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "R"
-			(uuid "c93454ed-e1a2-4478-85f5-a77ab43cdd5e")
-		)
-		(pin "T"
-			(uuid "bbbc2bf7-ec06-4074-92ac-1e5243c895ab")
-		)
-		(pin "S"
-			(uuid "5c4eca4d-7ea1-4ed1-90cd-21b3773dfa74")
-		)
-		(instances
-			(project "micro-keyer"
-				(path "/8f7feab7-3497-470c-875a-34341021450c"
-					(reference "J3")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GND")
 		(at 40.64 154.94 270)
 		(unit 1)
@@ -6669,84 +6537,6 @@
 			(project "micro-keyer"
 				(path "/8f7feab7-3497-470c-875a-34341021450c"
 					(reference "#PWR04")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 246.38 63.5 180)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "60663b85-c94c-4d01-a69c-dc8b1190014c")
-		(property "Reference" "#PWR06"
-			(at 246.38 57.15 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 246.38 58.42 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 246.38 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 246.38 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 246.38 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "c61ada33-6d9e-4d36-9cfa-f07e10951881")
-		)
-		(instances
-			(project "micro-keyer"
-				(path "/8f7feab7-3497-470c-875a-34341021450c"
-					(reference "#PWR06")
 					(unit 1)
 				)
 			)
@@ -7521,7 +7311,8 @@
 	)
 	(symbol
 		(lib_id "Transistor_FET:2N7000")
-		(at 237.49 132.08 180)
+		(at 237.49 133.35 0)
+		(mirror y)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7531,7 +7322,7 @@
 		(dnp no)
 		(uuid "98ef87e7-2f8b-431b-bc43-1db88fca0ce2")
 		(property "Reference" "Q2"
-			(at 231.14 130.8099 0)
+			(at 231.14 134.6201 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7542,7 +7333,7 @@
 			)
 		)
 		(property "Value" "2N7000"
-			(at 232.156 134.112 0)
+			(at 232.156 131.318 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7553,7 +7344,7 @@
 			)
 		)
 		(property "Footprint" "Package_TO_SOT_THT:TO-92_Inline_Wide"
-			(at 232.41 130.175 0)
+			(at 232.41 135.255 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7566,7 +7357,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.vishay.com/docs/70226/70226.pdf"
-			(at 232.41 128.27 0)
+			(at 232.41 137.16 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7578,7 +7369,7 @@
 			)
 		)
 		(property "Description" "0.2A Id, 200V Vds, N-Channel MOSFET, 2.6V Logic Level, TO-92"
-			(at 237.49 132.08 0)
+			(at 237.49 133.35 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7589,7 +7380,7 @@
 			)
 		)
 		(property "ID" "4878-2N7000CT-ND"
-			(at 237.49 132.08 0)
+			(at 237.49 133.35 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7600,7 +7391,7 @@
 			)
 		)
 		(property "Supplier" "Digikey"
-			(at 237.49 132.08 0)
+			(at 237.49 133.35 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7660,7 +7451,7 @@
 				)
 			)
 		)
-		(property "Footprint" "audio_connector:Jack_3.5mm_CUI_SJ1-3515N_Horizontal_RENAME"
+		(property "Footprint" "audio_connector:54-00299"
 			(at 213.36 91.44 0)
 			(hide yes)
 			(show_name no)
@@ -7719,7 +7510,7 @@
 			(uuid "7bbb104c-26f6-4db9-af45-cd70d1d301ef")
 		)
 		(pin "SN2"
-			(uuid "9b87a33c-fb98-4a94-a013-d429c5b11a86")
+			(uuid "9b87a33c-fb98-4a94-a013-d429c5b11a88")
 		)
 		(pin "S1"
 			(uuid "67694325-2081-4523-ba0b-3f3d3a7f2fa6")
@@ -7728,13 +7519,13 @@
 			(uuid "a4a0b086-e2a2-4524-ab8d-818a2b9b60a9")
 		)
 		(pin "S2"
-			(uuid "a2ff8f05-f3e6-4bcb-94e6-77663b79d81d")
+			(uuid "a2ff8f05-f3e6-4bcb-94e6-77663b79d81f")
 		)
 		(pin "TN2"
-			(uuid "4b614a04-1820-44db-8574-82d7c92258e5")
+			(uuid "4b614a04-1820-44db-8574-82d7c92258e7")
 		)
 		(pin "T2"
-			(uuid "1d02d772-21ce-4864-8157-03adb3071cf0")
+			(uuid "1d02d772-21ce-4864-8157-03adb3071cf2")
 		)
 		(pin "T1"
 			(uuid "20eafa50-b3dc-4e06-88f1-b74498b314ab")
@@ -7746,110 +7537,6 @@
 			(project "micro-keyer"
 				(path "/8f7feab7-3497-470c-875a-34341021450c"
 					(reference "J2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C")
-		(at 142.24 144.78 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(fields_autoplaced yes)
-		(uuid "aa653b4e-8677-4aa9-9945-83111953ed64")
-		(property "Reference" "C3"
-			(at 146.05 143.5099 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "0.1uF"
-			(at 146.05 146.0499 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric"
-			(at 143.2052 148.59 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 142.24 144.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Unpolarized capacitor"
-			(at 142.24 144.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "ID" "1276-1017-2-ND"
-			(at 142.24 144.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Supplier" "Digikey"
-			(at 142.24 144.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "515c1b11-e9b1-49e1-b3ce-825496f8681e")
-		)
-		(pin "2"
-			(uuid "a3f06a49-243f-4b5e-900c-522790d8cc46")
-		)
-		(instances
-			(project "micro-keyer"
-				(path "/8f7feab7-3497-470c-875a-34341021450c"
-					(reference "C3")
 					(unit 1)
 				)
 			)
@@ -8109,111 +7796,6 @@
 			(project "micro-keyer"
 				(path "/8f7feab7-3497-470c-875a-34341021450c"
 					(reference "#PWR02")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector_Audio:AudioJack3")
-		(at 214.63 134.62 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "cad86a2b-b282-4d29-b38a-7008bda09741")
-		(property "Reference" "J4"
-			(at 212.725 125.73 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "Radio Jack"
-			(at 212.725 128.27 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "audio_connector:Jack_3.5mm_CUI_SJ-3523-SMT_Horizontal"
-			(at 214.63 134.62 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 214.63 134.62 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Audio Jack, 3 Poles (Stereo / TRS)"
-			(at 214.63 134.62 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "ID" "CP-3523SJTR-ND"
-			(at 214.63 134.62 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Supplier" "Digikey"
-			(at 214.63 134.62 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "R"
-			(uuid "b341a6a4-2153-41e7-989d-d0d59318ed4c")
-		)
-		(pin "T"
-			(uuid "1a72fbe0-26c6-496a-98c4-95df3ec9f14e")
-		)
-		(pin "S"
-			(uuid "b00b2a21-d498-4668-8297-693fd55bbd74")
-		)
-		(instances
-			(project "micro-keyer"
-				(path "/8f7feab7-3497-470c-875a-34341021450c"
-					(reference "J4")
 					(unit 1)
 				)
 			)
