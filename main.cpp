@@ -314,7 +314,7 @@ int main() {
     ));
 
     optionList.push_back(MenuOption("Reset Settings    ->",
-        [](MenuOption& self) {reset(true);for (int i = 0; i < optionList.size(); i++) { optionList.at(i).load(); }drawMenu();}
+        [](MenuOption& self) {reset(true);for (int i = 0; i < optionList.size(); i++) { optionList.at(i).load(); }drawMain();}
     ));
 
     optionList.push_back(MenuOption("Flash Firmware    ->",
