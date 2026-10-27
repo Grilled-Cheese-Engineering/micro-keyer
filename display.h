@@ -35,7 +35,7 @@ void setKeyerMode(int x);
 void drawMain();
 void drawMenu();
 void drawFlashMode();
-
+void reset(bool screen);
 void loadSettings();
 void saveSettings();
 

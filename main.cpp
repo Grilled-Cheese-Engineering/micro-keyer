@@ -84,6 +84,7 @@ bool lastDah = false;
 void print(std::string str);
 void playStr();
 
+
 std::string decodeChar(std::vector<int> elements) {
     std::stringstream stream;
     bool match = true;
@@ -312,9 +313,14 @@ int main() {
         [](MenuOption& self) {self.value = dumbMIDI;}
     ));
 
+    optionList.push_back(MenuOption("Reset Settings    ->",
+        [](MenuOption& self) {reset(true);for (int i = 0; i < optionList.size(); i++) { optionList.at(i).load(); }drawMenu();}
+    ));
+
     optionList.push_back(MenuOption("Flash Firmware    ->",
         [](MenuOption& self) {drawFlashMode(); reset_usb_boot(0, 0);}
     ));
+
     dit_state = !gpio_get(dit_pin);
     dah_state = !gpio_get(dah_pin);
     lastDit = dit_state;
@@ -706,19 +712,27 @@ void setKeyerMode(int x) {
     }
 }
 
+void reset(bool screen) {
+    speed = 20;
+    tone = 340;
+    mute = 0;
+    keyerMode = 1;
+    USBMode[0] = 1;
+    USBMode[1] = 0;
+    USBMode[2] = 1;
+    dumbMIDI = 0;
+    reverse = 0;
+    ssd1306_clear(&disp);
+    ssd1306_draw_string_with_font(&disp, 8 + (128 / 2) - ((13 * 7) / 2), 32 - (8 / 2), 1, font_8x5, "Settings Reset");
+    ssd1306_show(&disp);
+    sleep_ms(2000);
+    saveSettings();
+}
 void loadSettings() {
     const settings* opts = (const settings*)(XIP_BASE + FLASH_TARGET_OFFSET);
 
     if (opts->speed == -1 || opts->tone == -1 || opts->mute == -1 || opts->keyerMode == -1) {
-        speed = 20;
-        tone = 340;
-        mute = 0;
-        keyerMode = 1;
-        USBMode[0] = 1;
-        USBMode[1] = 0;
-        USBMode[2] = 1;
-        dumbMIDI = 0;
-        reverse = 0;
+        reset(false);
     } else {
         speed = opts->speed;
         tone = opts->tone;
