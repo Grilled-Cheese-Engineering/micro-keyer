@@ -37,13 +37,15 @@ The <b>Micro Keyer</b> is a small morse code keyer that can be used as a practic
   </li>
 </ul>
 
-<h2><u><b>Menu Usage:</b></u></h2>
+<h2><u><b>Usage:</b></u></h2>
 <ul>
 <br>
 
-You can clear the decoded text by holding the knob down for 2 seconds.
+<li>You can clear the decoded text by holding the knob down for 2 seconds.</li>
+<li>You can put the micro keyer in to firmware flashing mode my holding down the knob while turning it on. (V1.1 Board only)</li>
 <br>
-  
+  <H3>Menu:</H3>
+  <ul>
   <li>Speed: Sending speed in words per minute.</li>
   <li>Tone: Audio tone for sending in hetrz. (It may not sound exactly right on the built in buzzer compared to a real speaker.)</li>
   <li>Mode:</li> <ol type="1">
@@ -59,4 +61,5 @@ You can clear the decoded text by holding the knob down for 2 seconds.
   <li>MIDI: This will enable the ability to use it as a USB MIDI device.</li>
   <li>Dumb MIDI: This disables some features and only puts out the paddle state over midi. (Experimental)</li>
   <li>Flash Firmware: This puts the device into boot mode to allow for firmware flashing. It will appear on a computer as a USB mass storage device. To flash the firmware just copy the .UF2 firmware file onto it.</li>
-</ul>
+  </ul>
+  </ul>
