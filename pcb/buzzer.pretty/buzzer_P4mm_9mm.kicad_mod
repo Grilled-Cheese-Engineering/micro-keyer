@@ -7,7 +7,7 @@
 		(at 1.146875 -0.025 0)
 		(unlocked yes)
 		(layer "F.SilkS")
-		(uuid "8704ab88-77d0-4cd5-ba78-48dc27b28660")
+		(uuid "371d5901-eb97-4686-8886-b21d87c649c8")
 		(effects
 			(font
 				(size 1 1)
@@ -19,7 +19,7 @@
 		(at 1.146875 -0.025 0)
 		(unlocked yes)
 		(layer "F.Fab")
-		(uuid "b16ba200-9bde-4e48-a07d-7e09ecf6bcfc")
+		(uuid "625465e2-e5b9-40ec-bd5c-435f814541f6")
 		(effects
 			(font
 				(size 1 1)
@@ -32,7 +32,7 @@
 		(unlocked yes)
 		(layer "F.Fab")
 		(hide yes)
-		(uuid "e8f6db86-1ca8-45d8-89d2-766183b7cb95")
+		(uuid "726c069f-0f00-4d6d-814f-a2790ec96152")
 		(effects
 			(font
 				(size 1 1)
@@ -45,7 +45,7 @@
 		(unlocked yes)
 		(layer "F.Fab")
 		(hide yes)
-		(uuid "fcf05619-3321-4233-bb67-53fc975b9ec7")
+		(uuid "05b6793c-db98-4622-9ade-65f4cf0224b0")
 		(effects
 			(font
 				(size 1 1)
@@ -63,7 +63,7 @@
 			(type default)
 		)
 		(layer "F.SilkS")
-		(uuid "c9dd16ae-a143-441f-84d6-8172d0c43317")
+		(uuid "46e0449f-f726-4104-97a5-e1c35977e500")
 	)
 	(fp_line
 		(start 0.746875 -2.275)
@@ -73,7 +73,7 @@
 			(type default)
 		)
 		(layer "F.SilkS")
-		(uuid "045dbfd2-6e8d-4106-9b1d-470a45d08eb0")
+		(uuid "b4c2b7c9-de78-46f3-8a57-708e72e59dcd")
 	)
 	(fp_line
 		(start 0.746875 -1.025)
@@ -83,7 +83,7 @@
 			(type default)
 		)
 		(layer "F.SilkS")
-		(uuid "1286a3e5-c43a-4340-bc18-ec0ac09e61ef")
+		(uuid "2fda8e1a-d271-495b-bfda-3df4d004ae9f")
 	)
 	(fp_line
 		(start 0.746875 -1.025)
@@ -93,7 +93,7 @@
 			(type default)
 		)
 		(layer "F.SilkS")
-		(uuid "1ce637d1-4ba7-4db2-a2bf-5879fa97733e")
+		(uuid "c121cd67-cca9-46d6-8d22-4045a864a1a4")
 	)
 	(fp_line
 		(start 1.496875 1.725)
@@ -103,7 +103,7 @@
 			(type default)
 		)
 		(layer "F.SilkS")
-		(uuid "717cae93-9a63-4cca-ac08-718ff53bfefc")
+		(uuid "90bc37c9-421f-4fb4-a800-593b3f608705")
 	)
 	(fp_line
 		(start 1.746875 0.725)
@@ -113,7 +113,7 @@
 			(type default)
 		)
 		(layer "F.SilkS")
-		(uuid "627a0f8b-320b-43c5-93a3-2f0990a85b35")
+		(uuid "cea4c827-0d29-458f-a0e6-3e27bb477f04")
 	)
 	(fp_line
 		(start 2.496875 0.725)
@@ -123,35 +123,35 @@
 			(type default)
 		)
 		(layer "F.SilkS")
-		(uuid "a903c6f6-623c-4e49-a18a-e16c787e596f")
+		(uuid "d0c1615e-05f5-4d33-bd1b-5ec1f310084a")
 	)
 	(fp_circle
-		(center -1.253125 -0.025)
-		(end 3.246875 -0.025)
+		(center -1.25 0)
+		(end 3.25 0)
 		(stroke
 			(width 0.15)
 			(type solid)
 		)
 		(fill no)
 		(layer "F.SilkS")
-		(uuid "0d561e9f-0794-4271-b6e5-5aa2b8e426f5")
+		(uuid "152efa97-543e-41b6-a772-16450ff29524")
 	)
 	(fp_circle
-		(center -0.003125 -0.025)
-		(end 5.996875 -0.025)
+		(center 0 0)
+		(end 6 0)
 		(stroke
 			(width 0.15)
 			(type solid)
 		)
 		(fill no)
 		(layer "F.SilkS")
-		(uuid "008dec7c-5cf4-4514-a4fc-27a2bda116e1")
+		(uuid "2ef8aaf1-9adc-4f85-a1ce-6f43fcf44f58")
 	)
 	(fp_text user "6.5mm"
 		(at -3.503125 2.725 0)
 		(unlocked yes)
 		(layer "F.SilkS")
-		(uuid "8740a100-8c2e-4d60-a436-1db29e40010f")
+		(uuid "1c05be39-528a-4e2b-916b-dd4be5bdc2cf")
 		(effects
 			(font
 				(size 1 1)
@@ -164,7 +164,7 @@
 		(at -2.003125 -2.525 0)
 		(unlocked yes)
 		(layer "F.SilkS")
-		(uuid "9d79bd67-1087-494c-98d4-94b6f92c4904")
+		(uuid "43ffa86d-aef4-4989-9e2e-f99df208bff1")
 		(effects
 			(font
 				(size 1 1)
@@ -177,7 +177,7 @@
 		(at 0.746875 -0.025 0)
 		(unlocked yes)
 		(layer "F.Fab")
-		(uuid "5276ab60-e9e5-4284-a5d8-a7b0c6720b9b")
+		(uuid "d7265696-7e6d-4098-8a91-efe739869692")
 		(effects
 			(font
 				(size 1 1)
@@ -186,31 +186,31 @@
 		)
 	)
 	(pad "1" thru_hole roundrect
-		(at -3.253125 -0.025)
+		(at -3.25 0)
 		(size 1.27 1.27)
 		(drill 0.8)
 		(layers "*.Cu" "*.Mask")
 		(remove_unused_layers no)
 		(roundrect_rratio 0.15)
-		(uuid "144e52cb-b1ef-4cde-9dd7-7a32b64bcfeb")
+		(uuid "d5fe8270-7d9b-403d-9262-7870f65292a7")
 	)
 	(pad "2" thru_hole roundrect
-		(at 0.746875 -0.025)
+		(at 0.75 0)
 		(size 1.27 1.27)
 		(drill 0.8)
 		(layers "*.Cu" "*.Mask")
 		(remove_unused_layers no)
 		(roundrect_rratio 0.15)
-		(uuid "b413c898-c63b-44dc-9431-72e685478d7c")
+		(uuid "dad8ba02-03d2-4284-b8d8-23d0e53907e7")
 	)
 	(pad "2" thru_hole roundrect
-		(at 3.246875 -0.025)
+		(at 3.25 0)
 		(size 1.27 1.27)
 		(drill 0.8)
 		(layers "*.Cu" "*.Mask")
 		(remove_unused_layers no)
 		(roundrect_rratio 0.15)
-		(uuid "65637db3-7106-4887-bca8-f3ab36db8a9f")
+		(uuid "88e753af-a7d1-4727-b6f5-9b2dc76ec683")
 	)
 	(embedded_fonts no)
 	(model "${KIPRJMOD}/WT-1205.step"
