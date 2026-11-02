@@ -66,6 +66,15 @@ If you want to build it yourself then you can get the parts from <u><b><a href="
       <br>
       <img src="images/open back.jpg" alt="Alt text" height="150">
   </li>
+    <li><h4><u><b>V1.1 Board:</b></u></h4> This version has not been ordered yet but it will have the following improvements:
+      <ul>
+        <li>Slightly shorter board.</li>
+        <li>More sturdy 3.5mm jacks for the radio and keyer ports.</li>
+        <li>Have the ability to put it into flashing mode by holding down the knob while turning it on.</li>
+      </ul>
+      <br>
+      <img src="images/v1.1kicad.png" alt="Alt text" height="150">
+  </li>
 </ul>
 
 
