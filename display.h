@@ -24,7 +24,7 @@ extern bool dumbMIDI;
 extern int selected_item;
 extern int clicked_item;
 
-
+void keyer();
 
 extern std::string decode;
 
@@ -38,6 +38,7 @@ void drawFlashMode();
 void reset(bool screen);
 void loadSettings();
 void saveSettings();
+void print(std::string str);
 
 
 #define MODE_CDC_SERIAL  0
@@ -45,8 +46,6 @@ void saveSettings();
 #define MODE_MIDI 2
 
 #define FLASH_TARGET_OFFSET (2 * 1024 * 1024 - FLASH_SECTOR_SIZE)
-
-
 typedef struct __attribute__((aligned(FLASH_PAGE_SIZE))) {
     int speed;
     int tone;

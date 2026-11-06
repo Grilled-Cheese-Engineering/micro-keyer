@@ -56,6 +56,9 @@ typedef enum {
 	SET_CHARGE_PUMP = 0x8D
 } ssd1306_command_t;
 
+
+extern bool dispbuf[128][64];
+
 /**
 *	@brief holds the configuration
 */

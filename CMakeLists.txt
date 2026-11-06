@@ -65,6 +65,7 @@ target_link_libraries(micro-keyer
         pico_unique_id
         tinyusb_board
         tinyusb_device
+        pico_multicore
         )
 
 

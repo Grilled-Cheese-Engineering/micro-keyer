@@ -30,7 +30,7 @@ void drawMain() {
 
     ssd1306_draw_string_with_font(&disp, 128 - ((status.length() * 5) + (status.length() - 1)), 2, 1, font_8x5, status.c_str());
 
-    ssd1306_draw_string_with_font(&disp, 0, 1, 1, font_8x5, " V1.3");
+    ssd1306_draw_string_with_font(&disp, 0, 2, 1, font_8x5, " V1.3");
     ssd1306_draw_inverted_square(&disp, 0, 0, 129, 10);
 
     std::string arr[] = { "", "", "", "", "" };
@@ -73,6 +73,18 @@ void drawMain() {
     ssd1306_draw_string_with_font(&disp, 0, 2 + (10 * 5), 1, font_8x5, arr[4].c_str());
 
     ssd1306_show(&disp);
+    print("\n\n");
+    // for (int y = 0; y < 64; y++) {
+    //     for (int x = 0; x < 128; x++) {
+    //         if (dispbuf[x][y]) {
+    //             print("#");
+    //             ssd1306_draw_pixel(&disp, x, y);
+    //         } else {
+    //             print(" ");
+    //         }
+    //     }
+    //     print("\n");
+    // }
 }
 
 void drawMenu() {

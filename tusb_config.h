@@ -78,7 +78,7 @@ extern "C" {
     // CDC Buffer Sizes
     #define CFG_TUD_CDC_EP_BUFSIZE    512
     #define CFG_TUD_CDC_RX_BUFSIZE    512
-    #define CFG_TUD_CDC_TX_BUFSIZE    512
+    #define CFG_TUD_CDC_TX_BUFSIZE    16384
 
     // HID Buffer Size
     #define CFG_TUD_HID_EP_BUFSIZE    16
