@@ -26,6 +26,10 @@ extern int clicked_item;
 
 void keyer();
 
+extern float minDit;
+extern float ditDahThreshold;
+extern float maxDah;
+
 extern std::string decode;
 
 void setSpeed(int x, bool reset = true);

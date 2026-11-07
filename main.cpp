@@ -16,12 +16,18 @@
 #include <format>
 #include <string_view>
 
+#include "rotary.h"
+
+
 #include "bsp/board_api.h"
 #include "tusb.h"
 
 #include "usb_descriptors.h"
 
 #include "display.h"
+
+std::optional<Encoder> rot = std::nullopt;
+void gpio_callback(uint gpio, uint32_t events);
 
 const uint8_t* contents;
 uint32_t saved_interrupts;
@@ -32,6 +38,10 @@ int dah_state;
 int last = -1;
 int curent = -1;
 int next = -1;
+
+float minDit = 0.4;
+float ditDahThreshold = 2.4;
+float maxDah = 6;
 
 int speed;
 int tone;
@@ -87,7 +97,6 @@ bool lastDah = false;
 void playStr();
 
 bool dispbuf[128][64] = { 0 };
-
 
 
 std::string decodeChar(std::vector<int> elements) {
@@ -326,24 +335,134 @@ int main() {
         [](MenuOption& self) {drawFlashMode(); reset_usb_boot(0, 0);}
     ));
 
-    dit_state = !gpio_get(dit_pin);
-    dah_state = !gpio_get(dah_pin);
-    lastDit = dit_state;
-    lastDah = dah_state;
-    multicore_launch_core1(keyer);
+    rot.emplace(Encoder(rot_b, rot_a, []() {
+        if (selected_item == -1) {
+            if (speed > 1) {
+                setSpeed(speed - 1);
+                nextdraw = 1;
+            }
+        } else {
+            if (clicked_item > -1) {
+                optionList.at(clicked_item).turnL();
+            } else {
+                if (selected_item > 0) {
+                    selected_item--;
+                    print(std::format("selected {} clicked {}\n", selected_item, clicked_item));
+                }
+            }
+            nextdraw = 2;
+        }
+        }, []() {
+            if (selected_item == -1) {
+                setSpeed(speed + 1);
+                nextdraw = 1;
+            } else {
+                if (clicked_item > -1) {
+                    optionList.at(clicked_item).turnR();
+                } else {
+                    if (selected_item < optionList.size() - 1) {
+                        selected_item++;
+                        print(std::format("selected {} clicked {}\n", selected_item, clicked_item));
+                    }
+                }
+                nextdraw = 2;
+            }
+            }, &gpio_callback));
+
+        gpio_set_irq_enabled_with_callback(rot_a, GPIO_IRQ_EDGE_RISE | GPIO_IRQ_EDGE_FALL, true, &gpio_callback);
+        gpio_set_irq_enabled_with_callback(rot_b, GPIO_IRQ_EDGE_RISE | GPIO_IRQ_EDGE_FALL, true, &gpio_callback);
+
+
+
+        dit_state = !gpio_get(dit_pin);
+        dah_state = !gpio_get(dah_pin);
+        lastDit = dit_state;
+        lastDah = dah_state;
+        multicore_launch_core1(keyer);
+        while (true) {
+
+            tud_task();
+            if (nextdraw == 1) {
+                nextdraw = 0;
+                drawMain();
+            } else if (nextdraw == 2) {
+                nextdraw = 0;
+                drawMenu();
+            }
+            if (playbackStr.length() > 0) {
+                playStr();
+            }
+
+
+            if (!swlock && !gpio_get(rot_sw)) {
+                swlock = true;
+                rotPress = to_ms_since_boot(get_absolute_time());
+                cllock = false;
+            }
+
+            if (swlock && gpio_get(rot_sw)) {
+                swlock = false;
+                if (!cllock) {
+                    if (selected_item == -1) {
+                        selected_item = 1;
+                        print(std::format("selected {} clicked {}\n", selected_item, clicked_item));
+                        for (int i = 0; i < optionList.size(); i++) {
+                            optionList.at(i).load();
+                        }
+                        drawMenu();
+                    } else {
+                        if (clicked_item != -1) {
+                            clicked_item = -1;
+                            optionList.at(selected_item).click();
+                            print(std::format("save\n"));
+                            saveSettings();
+
+                            drawMenu();
+                        } else {
+                            if (optionList.at(selected_item).useBool) {
+                                optionList.at(selected_item).select();
+                                drawMenu();
+                            } else if (optionList.at(selected_item).useAction) {
+                                optionList.at(selected_item).select();
+                            } else {
+                                clicked_item = selected_item;
+                                drawMenu();
+                            }
+
+
+                        }
+                        print(std::format("selected {} clicked {}\n", selected_item, clicked_item));
+                    }
+                }
+
+            }
+            if (swlock && !gpio_get(rot_sw) && to_ms_since_boot(get_absolute_time()) - rotPress > 1000 && !cllock) {
+                cllock = true;
+                decode = "";
+                drawMain();
+            }
+            if (USBMode[1]) {
+                if (tud_hid_ready()) {
+                    if (!usbState && keycode[0] > 0) {
+                        tud_hid_keyboard_report(REPORT_ID_KEYBOARD, 0, keycode);
+                        usbState = true;
+                    } else if (usbState) {
+
+                        keycode[0] = 0;
+                        tud_hid_keyboard_report(REPORT_ID_KEYBOARD, 0, keycode);
+                        usbState = false;
+                    }
+                }
+            }
+        }
+}
+
+void keyer() {
+    last = -1;
+    curent = -1;
+    next = -1;
     while (true) {
 
-        tud_task();
-        if (nextdraw == 1) {
-            nextdraw = 0;
-            drawMain();
-        } else if (nextdraw == 2) {
-            nextdraw = 0;
-            drawMenu();
-        }
-        if (playbackStr.length() > 0) {
-            playStr();
-        }
         dit_state = !gpio_get(dit_pin);
         dah_state = !gpio_get(dah_pin);
         if (USBMode[2] && dumbMIDI) {
@@ -377,335 +496,225 @@ int main() {
             }
             lastDah = dah_state;
             tud_task();
-        }
-
-
-        if (!gpio_get(rot_a) && gpio_get(rot_b) && !rotlock) {
-            rotlock = true;
-            if (selected_item == -1) {
-                setSpeed(speed + 1);
-                drawMain();
-            } else {
-                if (clicked_item > -1) {
-                    optionList.at(clicked_item).turnR();
-                } else {
-                    if (selected_item < optionList.size() - 1) {
-                        selected_item++;
-                        print(std::format("selected {} clicked {}\n", selected_item, clicked_item));
-                    }
-                }
-                drawMenu();
-            }
-            sleep_ms(50);
-
-        }
-        if (gpio_get(rot_a) && !gpio_get(rot_b) && !rotlock) {
-            rotlock = true;
-            if (selected_item == -1) {
-                if (speed > 1) {
-                    setSpeed(speed - 1);
-                    drawMain();
-                }
-            } else {
-                if (clicked_item > -1) {
-                    optionList.at(clicked_item).turnL();
-                } else {
-                    if (selected_item > 0) {
-                        selected_item--;
-                        print(std::format("selected {} clicked {}\n", selected_item, clicked_item));
-                    }
-                }
-                drawMenu();
-            }
-            sleep_ms(50);
-
-        }
-        if (rotlock && gpio_get(rot_a) && gpio_get(rot_b)) {
-            rotlock = false;
-        }
-
-        if (!swlock && !gpio_get(rot_sw)) {
-            swlock = true;
-            rotPress = to_ms_since_boot(get_absolute_time());
-            cllock = false;
-        }
-
-        if (swlock && gpio_get(rot_sw)) {
-            swlock = false;
-            if (!cllock) {
-                if (selected_item == -1) {
-                    selected_item = 1;
-                    print(std::format("selected {} clicked {}\n", selected_item, clicked_item));
-                    for (int i = 0; i < optionList.size(); i++) {
-                        optionList.at(i).load();
-                    }
-                    drawMenu();
-                } else {
-                    if (clicked_item != -1) {
-                        clicked_item = -1;
-                        optionList.at(selected_item).click();
-                        print(std::format("save\n"));
-                        saveSettings();
-
-                        drawMenu();
-                    } else {
-                        if (optionList.at(selected_item).useBool) {
-                            optionList.at(selected_item).select();
-                            drawMenu();
-                        } else if (optionList.at(selected_item).useAction) {
-                            optionList.at(selected_item).select();
-                        } else {
-                            clicked_item = selected_item;
-                            drawMenu();
-                        }
-
-
-                    }
-                    print(std::format("selected {} clicked {}\n", selected_item, clicked_item));
-                }
-            }
-
-        }
-        if (swlock && !gpio_get(rot_sw) && to_ms_since_boot(get_absolute_time()) - rotPress > 1000 && !cllock) {
-            cllock = true;
-            decode = "";
-            drawMain();
-        }
-        if (USBMode[1]) {
-            if (tud_hid_ready()) {
-                if (!usbState && keycode[0] > 0) {
-                    tud_hid_keyboard_report(REPORT_ID_KEYBOARD, 0, keycode);
-                    usbState = true;
-                } else if (usbState) {
-
-                    keycode[0] = 0;
-                    tud_hid_keyboard_report(REPORT_ID_KEYBOARD, 0, keycode);
-                    usbState = false;
-                }
-            }
-        }
-    }
-}
-
-void keyer() {
-    last = -1;
-    curent = -1;
-    next = -1;
-    while (true) {
-        dit_state = !gpio_get(dit_pin);
-        dah_state = !gpio_get(dah_pin);
-        switch (keyerMode) {
-        case 2:
-            if (curent != 1 && (dit_state || dah_state)) {
-                key(true);
-                straightChar = to_ms_since_boot(get_absolute_time());
-                curent = 1;
-                hasSpace = false;
-            } else if (curent == 1 && !dit_state && !dah_state && to_ms_since_boot(get_absolute_time()) - straightChar > 20) {
-                key(false);
-                print(std::format("\n{}", (to_ms_since_boot(get_absolute_time()) - straightChar)));
-                if (to_ms_since_boot(get_absolute_time()) - straightChar > basetime * 0.4 && to_ms_since_boot(get_absolute_time()) - straightChar < basetime * 2.4) {
-                    elements.push_back(dit);
-                } else if (to_ms_since_boot(get_absolute_time()) - straightChar > basetime * 2.4 && to_ms_since_boot(get_absolute_time()) - straightChar < basetime * 6) {
-                    elements.push_back(dah);
-                }
-                curent = -1;
-                lastChar = to_ms_since_boot(get_absolute_time());
-
-            }
-
-            if (to_ms_since_boot(get_absolute_time()) - lastChar > basetime * 7 && !hasSpace && curent == -1) {
-                print(" ");
-                if (USBMode[1]) {
-                    sendKey(" ");
-                }
-                decode += " ";
-                if (selected_item == -1) {
-                    nextdraw = 1;
-                }
-                hasSpace = true;
-                if (recordMode) {
-                    recordArr.pop_back();
-                    recordArr.push_back(space);
-                }
-            } else if (elements.size() > 0 && to_ms_since_boot(get_absolute_time()) - lastChar > basetime * 2.5 && curent == -1) {
-                print("\n" + decodeChar(elements));
-                if (USBMode[1]) {
-                    sendKey(decodeChar(elements));
-                }
-                decode += decodeChar(elements);
-                if (selected_item == -1) {
-                    nextdraw = 1;
-                }
-                elements.clear();
-                if (recordMode && recordArr.size() > 0) {
-                    recordArr.push_back(gap);
-                }
-            }
-
-            break;
-        case 3:
-            if (curent == -1 && dit_state) {
-                doDit();
-            }
-            if (dah_state && curent == -1) {
-                key(true);
-                if (curent != dah) {
+        } else {
+            switch (keyerMode) {
+            case 2:
+                if (curent != 1 && (dit_state || dah_state)) {
+                    key(true);
                     straightChar = to_ms_since_boot(get_absolute_time());
-                }
-                curent = dah;
-
-                hasSpace = false;
-            } else if (!dah_state && (curent == dah || curent == 3)) {
-                if (to_ms_since_boot(get_absolute_time()) - straightChar > 5) {
+                    curent = 1;
+                    hasSpace = false;
+                } else if (curent == 1 && !dit_state && !dah_state && to_ms_since_boot(get_absolute_time()) - straightChar > 20) {
                     key(false);
-                    if (to_ms_since_boot(get_absolute_time()) - straightChar > basetime * 0.4 && to_ms_since_boot(get_absolute_time()) - straightChar < basetime * 2.4) {
+                    print(std::format("\n{}", (to_ms_since_boot(get_absolute_time()) - straightChar)));
+                    if (to_ms_since_boot(get_absolute_time()) - straightChar > basetime * minDit && to_ms_since_boot(get_absolute_time()) - straightChar < basetime * ditDahThreshold) {
                         elements.push_back(dit);
-                    } else if (to_ms_since_boot(get_absolute_time()) - straightChar > basetime * 2.4 && to_ms_since_boot(get_absolute_time()) - straightChar < basetime * 6) {
+                    } else if (to_ms_since_boot(get_absolute_time()) - straightChar > basetime * ditDahThreshold && to_ms_since_boot(get_absolute_time()) - straightChar < basetime * maxDah) {
                         elements.push_back(dah);
                     }
                     curent = -1;
                     lastChar = to_ms_since_boot(get_absolute_time());
-                }
-            }
 
-            if (to_ms_since_boot(get_absolute_time()) - lastChar > basetime * 7 && !hasSpace && curent == -1) {
-                print(" ");
-                if (USBMode[1]) {
-                    sendKey(" ");
                 }
-                decode += " ";
-                if (selected_item == -1) {
-                    nextdraw = 1;
-                }
-                hasSpace = true;
-                if (recordMode) {
-                    recordArr.pop_back();
-                    recordArr.push_back(space);
-                }
-            } else if (elements.size() > 0 && to_ms_since_boot(get_absolute_time()) - lastChar > basetime * 2.5 && curent == -1) {
-                print("\n" + decodeChar(elements));
-                if (USBMode[1]) {
-                    sendKey(decodeChar(elements));
-                }
-                decode += decodeChar(elements);
-                if (selected_item == -1) {
-                    nextdraw = 1;
-                }
-                elements.clear();
-                if (recordMode && recordArr.size() > 0) {
-                    recordArr.push_back(gap);
-                }
-            }
-            break;
-        case 1:
-            if (dah_state && dit_state) {
-                next = 3;
-            } else if (dit_state && !dah_state && next != 3) {
-                if (curent == dah || curent == -1) {
-                    next = dit;
-                }
-            } else if (dah_state && !dit_state && next != 3) {
-                if (curent == dit || curent == -1) {
-                    next = dah;
-                }
-            }
 
-            if (curent == -1) {
-                if (next == dit) {
-                    doDit();
-                    next = -1;
-                } else if (next == dah) {
-                    doDah();
-                    next = -1;
-                } else if (next == 3) {
-                    if (last == dit) {
-                        doDah();
-                    } else if (last == dah) {
-                        doDit();
+                if (to_ms_since_boot(get_absolute_time()) - lastChar > basetime * 7 && !hasSpace && curent == -1) {
+                    print(" ");
+                    if (USBMode[1]) {
+                        sendKey(" ");
                     }
-                    next = -1;
+                    decode += " ";
+                    if (selected_item == -1) {
+                        nextdraw = 1;
+                    }
+                    hasSpace = true;
+                    if (recordMode) {
+                        recordArr.pop_back();
+                        recordArr.push_back(space);
+                    }
+                } else if (elements.size() > 0 && to_ms_since_boot(get_absolute_time()) - lastChar > basetime * ditDahThreshold && curent == -1) {
+                    print("\n" + decodeChar(elements));
+                    if (USBMode[1]) {
+                        sendKey(decodeChar(elements));
+                    }
+                    decode += decodeChar(elements);
+                    if (selected_item == -1) {
+                        nextdraw = 1;
+                    }
+                    elements.clear();
+                    if (recordMode && recordArr.size() > 0) {
+                        recordArr.push_back(gap);
+                    }
                 }
-            }
 
-            if (to_ms_since_boot(get_absolute_time()) - lastChar > basetime * 7 && !hasSpace && curent == -1) {
-                print(" ");
-                if (USBMode[1]) {
-                    sendKey(" ");
-                }
-                decode += " ";
-                if (selected_item == -1) {
-                    nextdraw = 1;
-                }
-                hasSpace = true;
-                if (recordMode) {
-                    recordArr.pop_back();
-                    recordArr.push_back(space);
-                }
-            } else if (elements.size() > 0 && to_ms_since_boot(get_absolute_time()) - lastChar > basetime * 2.5 && curent == -1) {
-                print(decodeChar(elements));
-                if (USBMode[1]) {
-                    sendKey(decodeChar(elements));
-                }
-                decode += decodeChar(elements);
-                if (selected_item == -1) {
-                    nextdraw = 1;
-                }
-                elements.clear();
-                if (recordMode && recordArr.size() > 0) {
-                    recordArr.push_back(gap);
-                }
-            }
-
-            break;
-        case 0:
-
-            if (curent == -1) {
-                if (last == dit && dit_state && dah_state) {
+                break;
+            case 3:
+                if (curent == -1 && dit_state) {
                     doDit();
-                } else if (last == dah && dit_state && dah_state) {
-                    doDah();
-                } else if (dit_state) {
-                    doDit();
-                } else if (dah_state) {
-                    doDah();
                 }
-            }
-            if (to_ms_since_boot(get_absolute_time()) - lastChar > basetime * 7 && !hasSpace && curent == -1) {
-                print(" ");
-                if (USBMode[1]) {
-                    sendKey(" ");
-                }
-                decode += " ";
-                if (selected_item == -1) {
-                    nextdraw = 1;
-                }
-                hasSpace = true;
-                if (recordMode) {
-                    recordArr.pop_back();
-                    recordArr.push_back(space);
-                }
-            } else if (elements.size() > 0 && to_ms_since_boot(get_absolute_time()) - lastChar > basetime * 2.5 && curent == -1) {
-                print(decodeChar(elements));
-                if (USBMode[1]) {
-                    sendKey(decodeChar(elements));
-                }
-                decode += decodeChar(elements);
-                if (selected_item == -1) {
-                    nextdraw = 1;
-                }
-                elements.clear();
-                if (recordMode && recordArr.size() > 0) {
-                    recordArr.push_back(gap);
-                }
-            }
+                if (dah_state && curent == -1) {
+                    key(true);
+                    if (curent != dah) {
+                        straightChar = to_ms_since_boot(get_absolute_time());
+                    }
+                    curent = dah;
 
-            break;
-        default:
-            break;
+                    hasSpace = false;
+                } else if (!dah_state && (curent == dah || curent == 3)) {
+                    if (to_ms_since_boot(get_absolute_time()) - straightChar > 5) {
+                        key(false);
+                        if (to_ms_since_boot(get_absolute_time()) - straightChar > basetime * minDit && to_ms_since_boot(get_absolute_time()) - straightChar < basetime * ditDahThreshold) {
+                            elements.push_back(dit);
+                        } else if (to_ms_since_boot(get_absolute_time()) - straightChar > basetime * ditDahThreshold && to_ms_since_boot(get_absolute_time()) - straightChar < basetime * maxDah) {
+                            elements.push_back(dah);
+                        }
+                        curent = -1;
+                        lastChar = to_ms_since_boot(get_absolute_time());
+                    }
+                }
+
+                if (to_ms_since_boot(get_absolute_time()) - lastChar > basetime * 7 && !hasSpace && curent == -1) {
+                    print(" ");
+                    if (USBMode[1]) {
+                        sendKey(" ");
+                    }
+                    decode += " ";
+                    if (selected_item == -1) {
+                        nextdraw = 1;
+                    }
+                    hasSpace = true;
+                    if (recordMode) {
+                        recordArr.pop_back();
+                        recordArr.push_back(space);
+                    }
+                } else if (elements.size() > 0 && to_ms_since_boot(get_absolute_time()) - lastChar > basetime * ditDahThreshold && curent == -1) {
+                    print("\n" + decodeChar(elements));
+                    if (USBMode[1]) {
+                        sendKey(decodeChar(elements));
+                    }
+                    decode += decodeChar(elements);
+                    if (selected_item == -1) {
+                        nextdraw = 1;
+                    }
+                    elements.clear();
+                    if (recordMode && recordArr.size() > 0) {
+                        recordArr.push_back(gap);
+                    }
+                }
+                break;
+            case 1:
+                if (dah_state && dit_state) {
+                    next = 3;
+                } else if (dit_state && !dah_state && next != 3) {
+                    if (curent == dah || curent == -1) {
+                        next = dit;
+                    }
+                } else if (dah_state && !dit_state && next != 3) {
+                    if (curent == dit || curent == -1) {
+                        next = dah;
+                    }
+                }
+
+                if (curent == -1) {
+                    if (next == dit) {
+                        doDit();
+                        next = -1;
+                    } else if (next == dah) {
+                        doDah();
+                        next = -1;
+                    } else if (next == 3) {
+                        if (last == dit) {
+                            doDah();
+                        } else if (last == dah) {
+                            doDit();
+                        }
+                        next = -1;
+                    }
+                }
+
+                if (to_ms_since_boot(get_absolute_time()) - lastChar > basetime * 7 && !hasSpace && curent == -1) {
+                    print(" ");
+                    if (USBMode[1]) {
+                        sendKey(" ");
+                    }
+                    decode += " ";
+                    if (selected_item == -1) {
+                        nextdraw = 1;
+                    }
+                    hasSpace = true;
+                    if (recordMode) {
+                        recordArr.pop_back();
+                        recordArr.push_back(space);
+                    }
+                } else if (elements.size() > 0 && to_ms_since_boot(get_absolute_time()) - lastChar > basetime * ditDahThreshold && curent == -1) {
+                    print(decodeChar(elements));
+                    if (USBMode[1]) {
+                        sendKey(decodeChar(elements));
+                    }
+                    decode += decodeChar(elements);
+                    if (selected_item == -1) {
+                        nextdraw = 1;
+                    }
+                    elements.clear();
+                    if (recordMode && recordArr.size() > 0) {
+                        recordArr.push_back(gap);
+                    }
+                }
+
+                break;
+            case 0:
+
+                if (curent == -1) {
+                    if (last == dit && dit_state && dah_state) {
+                        doDit();
+                    } else if (last == dah && dit_state && dah_state) {
+                        doDah();
+                    } else if (dit_state) {
+                        doDit();
+                    } else if (dah_state) {
+                        doDah();
+                    }
+                }
+                if (to_ms_since_boot(get_absolute_time()) - lastChar > basetime * 7 && !hasSpace && curent == -1) {
+                    print(" ");
+                    if (USBMode[1]) {
+                        sendKey(" ");
+                    }
+                    decode += " ";
+                    if (selected_item == -1) {
+                        nextdraw = 1;
+                    }
+                    hasSpace = true;
+                    if (recordMode) {
+                        recordArr.pop_back();
+                        recordArr.push_back(space);
+                    }
+                } else if (elements.size() > 0 && to_ms_since_boot(get_absolute_time()) - lastChar > basetime * ditDahThreshold && curent == -1) {
+                    print(decodeChar(elements));
+                    if (USBMode[1]) {
+                        sendKey(decodeChar(elements));
+                    }
+                    decode += decodeChar(elements);
+                    if (selected_item == -1) {
+                        nextdraw = 1;
+                    }
+                    elements.clear();
+                    if (recordMode && recordArr.size() > 0) {
+                        recordArr.push_back(gap);
+                    }
+                }
+
+                break;
+            default:
+                break;
+            }
         }
     }
 }
+
+void gpio_callback(uint gpio, uint32_t events) {
+    rot->check(gpio, events);
+}
+
 
 void setSpeed(int x, bool reset) {
     if (x > 0) {
