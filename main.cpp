@@ -488,6 +488,9 @@ int main() {
 }
 
 void keyer() {
+    last = -1;
+    curent = -1;
+    next = -1;
     while (true) {
         dit_state = !gpio_get(dit_pin);
         dah_state = !gpio_get(dah_pin);
@@ -704,29 +707,36 @@ void keyer() {
     }
 }
 
-void setSpeed(int x) {
+void setSpeed(int x, bool reset) {
     if (x > 0) {
+        if (reset)multicore_reset_core1();
         speed = x;
         basetime = 1200 / speed;
         print(std::format("change speed {}\n", speed));
-        saveSettings();
+        saveSettings(false);
+        if (reset)multicore_launch_core1(keyer);
     }
 
 }
 
-void setTone(int x) {
+void setTone(int x, bool reset) {
     if (x > 0) {
+        if (reset) multicore_reset_core1();
         tone = x;
         level = ((125000000 / 125) / (tone * !mute)) / 2;
         pwm_set_wrap(pwm_gpio_to_slice_num(pwm_pin), (125000000 / 125) / (tone * !mute));
-        saveSettings();
+        saveSettings(false);
+        if (reset)multicore_launch_core1(keyer);
+
     }
 }
 
-void setKeyerMode(int x) {
+void setKeyerMode(int x, bool reset) {
     if (x > -1) {
+        if (reset) multicore_reset_core1();
         keyerMode = x;
-        saveSettings();
+        saveSettings(false);
+        if (reset) multicore_launch_core1(keyer);
     }
 }
 
@@ -763,17 +773,18 @@ void loadSettings() {
         reverse = opts->reverse;
 
     }
-    saveSettings();
-    setTone(tone);
-    setSpeed(speed);
+    setTone(tone, false);
+    setSpeed(speed, false);
 }
 
-void saveSettings() {
+void saveSettings(bool reset) {
+    if (reset)multicore_reset_core1();
     options = { speed, tone, mute, keyerMode,{ USBMode[0],USBMode[1],USBMode[2] },dumbMIDI,reverse };
     uint32_t ints = save_and_disable_interrupts();
     flash_range_erase(FLASH_TARGET_OFFSET, FLASH_SECTOR_SIZE);
     flash_range_program(FLASH_TARGET_OFFSET, (const uint8_t*)&options, FLASH_PAGE_SIZE);
     restore_interrupts(ints);
+    if (reset)multicore_launch_core1(keyer);
 }
 
 void print(std::string str) {

@@ -28,16 +28,16 @@ void keyer();
 
 extern std::string decode;
 
-void setSpeed(int x);
-void setTone(int x);
-void setKeyerMode(int x);
+void setSpeed(int x, bool reset = true);
+void setTone(int x, bool reset = true);
+void setKeyerMode(int x, bool reset = true);
 
 void drawMain();
 void drawMenu();
 void drawFlashMode();
 void reset(bool screen);
 void loadSettings();
-void saveSettings();
+void saveSettings(bool reset = true);
 void print(std::string str);
 
 
