@@ -1,34 +1,37 @@
+#pragma once
+#ifndef CHARS_H
+#define CHARS_H
 #include <vector>
 #include <string>
-const uint dit = 1;
-const uint dah = 0;
-const uint gap = 2;
-const uint space = 3;
-const uint end = 4;
+inline const uint dit = 1;
+inline const uint dah = 0;
+inline const uint gap = 2;
+inline const uint space = 3;
+inline const uint end = 4;
 
-int dit_pin = 26;
-int dah_pin = 27;
-int pwm_pin = 28;
+inline int dit_pin = 26;
+inline int dah_pin = 27;
+inline int pwm_pin = 28;
 
-int radio_pin = 4;
+inline int radio_pin = 4;
 
-int uart_rx_pin = 1;
-int uart_tx_pin = 0;
+inline int uart_rx_pin = 1;
+inline int uart_tx_pin = 0;
 
-int rot_a = 5;
-int rot_b = 2;
-int rot_sw = 3;
+inline int rot_a = 5;
+inline int rot_b = 2;
+inline int rot_sw = 3;
 
-int display_scl = 7;
-int display_sda = 6;
+inline int display_scl = 7;
+inline int display_sda = 6;
 
-int batt_adc_pin = 29;
-int batt_adc_en_pin = 19;
+inline int batt_adc_pin = 29;
+inline int batt_adc_en_pin = 19;
 #define I2C_PORT i2c1
 
 
-std::string sp = " ";
-std::vector<std::vector<int>> chars = {
+inline std::string sp = " ";
+inline std::vector<std::vector<int>> chars = {
     { dit, dah },                     // A
     { dah, dit, dit, dit },           // B
     { dah, dit, dah, dit },           // C
@@ -75,7 +78,7 @@ std::vector<std::vector<int>> chars = {
 
 };
 
-std::vector<std::string> strs = {
+inline std::vector<std::string> strs = {
     "A",
     "B",
     "C",
@@ -120,3 +123,4 @@ std::vector<std::string> strs = {
     "<BK>",
     "<BT>"
 };
+#endif

@@ -11,10 +11,10 @@
 #include "hardware/adc.h"
 #include "pico/bootrom.h"
 #include "pico/multicore.h"
-#include "chars.h"
 #include "sstream"
 #include <format>
 #include <string_view>
+#include "display.h"
 
 #include "rotary.h"
 
@@ -24,7 +24,6 @@
 
 #include "usb_descriptors.h"
 
-#include "display.h"
 
 std::optional<Encoder> rot = std::nullopt;
 void gpio_callback(uint gpio, uint32_t events);
@@ -48,6 +47,7 @@ int tone;
 int mute;
 
 int level;
+int currentLevel = 0;
 int basetime;
 
 int keyerMode;
@@ -136,6 +136,7 @@ void sendKey(std::string s) {
 
 void key(bool x) {
     if (x) {
+        currentLevel = level;
         pwm_set_gpio_level(pwm_pin, level);
         gpio_pull_up(radio_pin);
         if (USBMode[2] && !dumbMIDI) {
@@ -146,6 +147,7 @@ void key(bool x) {
             tud_midi_n_stream_write(0, 0, msg, 4);
         }
     } else {
+        currentLevel = 0;
         pwm_set_gpio_level(pwm_pin, 0);
         gpio_pull_down(radio_pin);
         if (USBMode[2] && !dumbMIDI) {
@@ -331,6 +333,10 @@ int main() {
         [](MenuOption& self) {reset(true);for (int i = 0; i < optionList.size(); i++) { optionList.at(i).load(); } selected_item = -1; clicked_item = -1; setSpeed(speed); setTone(tone); drawMain();}
     ));
 
+    optionList.push_back(MenuOption("About             ->",
+        [](MenuOption& self) {drawInfo();}
+    ));
+
     optionList.push_back(MenuOption("Flash Firmware    ->",
         [](MenuOption& self) {drawFlashMode(); reset_usb_boot(0, 0);}
     ));
@@ -371,8 +377,6 @@ int main() {
 
         gpio_set_irq_enabled_with_callback(rot_a, GPIO_IRQ_EDGE_RISE | GPIO_IRQ_EDGE_FALL, true, &gpio_callback);
         gpio_set_irq_enabled_with_callback(rot_b, GPIO_IRQ_EDGE_RISE | GPIO_IRQ_EDGE_FALL, true, &gpio_callback);
-
-
 
         dit_state = !gpio_get(dit_pin);
         dah_state = !gpio_get(dah_pin);
@@ -499,6 +503,10 @@ void keyer() {
         } else {
             switch (keyerMode) {
             case 2:
+                if (curent == -1 && !dit_state && !dah_state && currentLevel != 0) {
+                    currentLevel = 0;
+                    pwm_set_gpio_level(pwm_pin, 0);
+                }
                 if (curent != 1 && (dit_state || dah_state)) {
                     key(true);
                     straightChar = to_ms_since_boot(get_absolute_time());
@@ -548,6 +556,10 @@ void keyer() {
 
                 break;
             case 3:
+                if (curent == -1 && !dah_state && currentLevel != 0) {
+                    currentLevel = 0;
+                    pwm_set_gpio_level(pwm_pin, 0);
+                }
                 if (curent == -1 && dit_state) {
                     doDit();
                 }

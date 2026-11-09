@@ -48,8 +48,8 @@ public:
         static uint8_t state = 0;
         static int8_t accumulator = 0;
 
-        bool A = gpio_get(rot_b);
-        bool B = gpio_get(rot_a);
+        bool A = gpio_get(pinA);
+        bool B = gpio_get(pinB);
 
         state = (state << 2) & 0x0F;
         state |= (A << 1) | B;

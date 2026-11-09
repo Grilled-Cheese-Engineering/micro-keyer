@@ -30,7 +30,7 @@ void drawMain() {
 
     ssd1306_draw_string_with_font(&disp, 128 - ((status.length() * 5) + (status.length() - 1)), 2, 1, font_8x5, status.c_str());
 
-    ssd1306_draw_string_with_font(&disp, 0, 2, 1, font_8x5, " V1.3");
+    ssd1306_draw_string_with_font(&disp, 0, 2, 1, font_8x5, std::format(" V{}", PICO_PROGRAM_VERSION_STRING).c_str());
     ssd1306_draw_inverted_square(&disp, 0, 0, 129, 10);
 
     std::string arr[] = { "", "", "", "", "" };
@@ -125,6 +125,28 @@ void drawMenu() {
 
 void drawFlashMode() {
     ssd1306_clear(&disp);
-    ssd1306_draw_string_with_font(&disp, 8 + (128 / 2) - ((13 * 7) / 2), 32 - (8 / 2), 1, font_8x5, "Flashing Mode");
+    ssd1306_draw_string_with_font(&disp, (128 - (13 * 5)) / 2, (64 - 8) / 2, 1, font_8x5, "Flashing Mode");
     ssd1306_show(&disp);
+}
+
+void drawInfo() {
+    ssd1306_clear(&disp);
+    ssd1306_draw_string_with_font(&disp, 0, 1, 1, font_8x5, std::format("Micro Keyer V{}", PICO_PROGRAM_VERSION_STRING).c_str());
+    ssd1306_draw_string_with_font(&disp, 0, 1 + (2 * 11), 1, font_8x5, "Firmware by:");
+    ssd1306_draw_string_with_font(&disp, 0, 1 + (3 * 11), 1, font_8x5, "Lucas Moidel KO6LBA");
+    ssd1306_draw_string_with_font(&disp, 0, 1 + (5 * 11), 1, font_8x5, std::format("Git Hash: {}", kGitHash).c_str());
+    ssd1306_show(&disp);
+    bool clicked = false;
+    while (true) {
+        if (gpio_get(rot_sw) && clicked) {
+
+            clicked_item = -1;
+            selected_item = -1;
+            nextdraw = 1;
+            break;
+        }
+        if (!gpio_get(rot_sw)) {
+            clicked = true;
+        }
+    }
 }

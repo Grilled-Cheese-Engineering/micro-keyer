@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef MENU_OPTION_H
 #define MENU_OPTION_H
 extern "C" {
@@ -10,6 +12,10 @@ extern "C" {
 #include <functional>
 #include "hardware/flash.h"
 #include "hardware/sync.h"
+#include "git_version.h"
+#include "chars.h"
+
+
 
 extern ssd1306_t disp;
 
@@ -30,6 +36,8 @@ extern float minDit;
 extern float ditDahThreshold;
 extern float maxDah;
 
+extern int nextdraw;
+
 extern std::string decode;
 
 void setSpeed(int x, bool reset = true);
@@ -39,6 +47,7 @@ void setKeyerMode(int x, bool reset = true);
 void drawMain();
 void drawMenu();
 void drawFlashMode();
+void drawInfo();
 void reset(bool screen);
 void loadSettings();
 void saveSettings(bool reset = true);
