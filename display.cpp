@@ -90,6 +90,7 @@ void drawMain() {
 void drawMenu() {
     std::stringstream str;
     ssd1306_clear(&disp);
+
     int offset = selected_item - 3;
     if (offset <= 0) {
         offset = 0;

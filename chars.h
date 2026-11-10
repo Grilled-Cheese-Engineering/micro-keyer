@@ -29,6 +29,15 @@ inline int batt_adc_pin = 29;
 inline int batt_adc_en_pin = 19;
 #define I2C_PORT i2c1
 
+inline int defSpeed = 20;
+inline int defTone = 340;
+inline int defMute = 0;
+inline int defKeyerMode = 1;
+inline int defUSBMode0 = 1;
+inline int defUSBMode1 = 0;
+inline int defUSBMode2 = 1;
+inline int defDumbMIDI = 0;
+inline int defReverse = 0;
 
 inline std::string sp = " ";
 inline std::vector<std::vector<int>> chars = {

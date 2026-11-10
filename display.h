@@ -74,22 +74,20 @@ extern settings options;
 class MenuOption {
 public:
 
-    MenuOption(std::string nameStr, std::string f, int val, int maxVal, int minVal, std::function<void(MenuOption&)> inc, std::function<void(MenuOption&)> dec, std::function<void(MenuOption&)> app, std::function<void(MenuOption&)> load) :
-        name(nameStr), format(f), value(val), incVal(inc), decVal(dec), appVal(app), loadVal(load), maxValue(maxVal), minValue(minVal) {
+    MenuOption(std::string nameStr, std::string f, int val, int defaultVal, int maxVal, int minVal, std::function<void(MenuOption&)> inc, std::function<void(MenuOption&)> dec, std::function<void(MenuOption&)> app, std::function<void(MenuOption&)> load) :
+        name(nameStr), format(f), value(val), incVal(inc), defaultvalue(defaultVal), decVal(dec), appVal(app), loadVal(load), maxValue(maxVal), minValue(minVal) {
     }
 
-    MenuOption(std::string nameStr, std::vector<std::string> strArr, int val, std::function<void(MenuOption&)> inc, std::function<void(MenuOption&)> dec, std::function<void(MenuOption&)> app, std::function<void(MenuOption&)> load) :
-        name(nameStr), arr(strArr), incVal(inc), decVal(dec), appVal(app), loadVal(load), useValueIndex(true) {
+    MenuOption(std::string nameStr, std::vector<std::string> strArr, int val, int defaultVal, std::function<void(MenuOption&)> inc, std::function<void(MenuOption&)> dec, std::function<void(MenuOption&)> app, std::function<void(MenuOption&)> load) :
+        name(nameStr), arr(strArr), defaultvalue(defaultVal), incVal(inc), decVal(dec), appVal(app), loadVal(load), useValueIndex(true) {
         if (val >= 0 && val < arr.size()) {
             valueIndex = val;
         }
     }
 
-    MenuOption(std::string nameStr, int val, std::function<void(MenuOption&)> act, std::function<void(MenuOption&)> load) :
-        name(nameStr), action(act), loadVal(load), useBool(true) {
-        if (val >= 0 && val < arr.size()) {
-            valueIndex = val;
-        }
+    MenuOption(std::string nameStr, int val, int defaultVal, std::function<void(MenuOption&)> act, std::function<void(MenuOption&)> load) :
+        name(nameStr), value(val), defaultvalue(defaultVal), action(act), loadVal(load), useBool(true) {
+
     }
 
     MenuOption(std::string nameStr, std::function<void(MenuOption&)> act) :
@@ -104,6 +102,7 @@ public:
     uint32_t valueIndex = 0;
     std::vector<std::string> arr;
     int value;
+    int defaultvalue;
     int maxValue;
     int minValue = 0;
     std::function<void(MenuOption&)> incVal = [](MenuOption& self) {};
@@ -125,6 +124,36 @@ public:
     }
     void select() {
         action(*this);
+    }
+    void reset() {
+        if (!useAction && !useBool && !useValueIndex) {
+            if (value != defaultvalue) {
+                value = defaultvalue;
+                if (useAction) {
+                    select();
+                } else {
+                    click();
+                }
+            }
+        } else if (useValueIndex) {
+            if (valueIndex != defaultvalue) {
+                valueIndex = defaultvalue;
+                if (useAction) {
+                    select();
+                } else {
+                    click();
+                }
+            }
+        } else if (useBool) {
+            if (value != defaultvalue) {
+                value = defaultvalue;
+                if (useAction) {
+                    select();
+                } else {
+                    click();
+                }
+            }
+        }
     }
 };
 

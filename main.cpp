@@ -276,7 +276,7 @@ int main() {
         [](MenuOption& self) {clicked_item = -1; selected_item = -1; drawMain();}
     ));
 
-    optionList.push_back(MenuOption("Speed", "{} WPM", speed, 100, 0,
+    optionList.push_back(MenuOption("Speed", "{} WPM", speed, defSpeed, 100, 0,
         [](MenuOption& self) {self.value += 1; setSpeed(self.value);},
         [](MenuOption& self) {if (self.value > 1) { self.value -= 1; setSpeed(self.value); }},
         [](MenuOption& self) {setSpeed(self.value);},
@@ -284,7 +284,7 @@ int main() {
     ));
 
 
-    optionList.push_back(MenuOption("Tone", "{} Hz", tone, 1000, 0,
+    optionList.push_back(MenuOption("Tone", "{} Hz", tone, defTone, 1000, 0,
         [](MenuOption& self) {self.value += 10; setTone(self.value);},
         [](MenuOption& self) {if (self.value > 10) { self.value -= 10; setTone(self.value); }},
         [](MenuOption& self) {setTone(self.value);},
@@ -292,39 +292,41 @@ int main() {
 
     ));
 
-    optionList.push_back(MenuOption("Mode", std::vector<std::string>{"Iambic A", "Iambic B", "Straight key", "Bug Emu"}, keyerMode,
+    optionList.push_back(MenuOption("Mode", std::vector<std::string>{"Iambic A", "Iambic B", "Straight key", "Bug Emu"}, keyerMode, defKeyerMode,
         [](MenuOption& self) {if (self.valueIndex < 3) { self.valueIndex++; setKeyerMode(self.valueIndex); }},
         [](MenuOption& self) {if (self.valueIndex > 0) { self.valueIndex--; setKeyerMode(self.valueIndex); }},
         [](MenuOption& self) {setKeyerMode(self.valueIndex);},
         [](MenuOption& self) {self.valueIndex = keyerMode;}
     ));
 
-    optionList.push_back(MenuOption("Reverse", reverse,
-        [](MenuOption& self) {self.value = !self.value; reverse = self.value; if (self.value) { dit_pin = 27;dah_pin = 26; } else { dit_pin = 26;dah_pin = 27; }saveSettings();},
+    optionList.push_back(MenuOption("Reverse", reverse, defReverse,
+        [](MenuOption& self) {
+            self.value = !self.value; reverse = self.value; if (self.value) { dit_pin = 27;dah_pin = 26; } else { dit_pin = 26;dah_pin = 27; }saveSettings();
+        },
         [](MenuOption& self) {self.value = reverse;}
     ));
 
-    optionList.push_back(MenuOption("Mute", mute,
+    optionList.push_back(MenuOption("Mute", mute, defMute,
         [](MenuOption& self) {self.value = !self.value; mute = self.value; setTone(tone);},
         [](MenuOption& self) {self.value = mute;}
     ));
 
-    optionList.push_back(MenuOption("Serial", USBMode[0],
+    optionList.push_back(MenuOption("Serial", USBMode[0], defUSBMode0,
         [](MenuOption& self) {self.value = !self.value; USBMode[0] = self.value; saveSettings();},
         [](MenuOption& self) {self.value = USBMode[0];}
     ));
 
-    optionList.push_back(MenuOption("HID", USBMode[1],
+    optionList.push_back(MenuOption("HID", USBMode[1], defUSBMode1,
         [](MenuOption& self) {self.value = !self.value; USBMode[1] = self.value; saveSettings();},
         [](MenuOption& self) {self.value = USBMode[1];}
     ));
 
-    optionList.push_back(MenuOption("MIDI", USBMode[2],
+    optionList.push_back(MenuOption("MIDI", USBMode[2], defUSBMode2,
         [](MenuOption& self) {self.value = !self.value; USBMode[2] = self.value; saveSettings();},
         [](MenuOption& self) {self.value = USBMode[2];}
     ));
 
-    optionList.push_back(MenuOption("Dumb MIDI", dumbMIDI,
+    optionList.push_back(MenuOption("Dumb MIDI", dumbMIDI, defDumbMIDI,
         [](MenuOption& self) {self.value = !self.value; dumbMIDI = self.value; saveSettings();},
         [](MenuOption& self) {self.value = dumbMIDI;}
     ));
@@ -441,9 +443,15 @@ int main() {
 
             }
             if (swlock && !gpio_get(rot_sw) && to_ms_since_boot(get_absolute_time()) - rotPress > 1000 && !cllock) {
-                cllock = true;
-                decode = "";
-                drawMain();
+                if (selected_item != -1) {
+                    cllock = true;
+                    optionList.at(selected_item).reset();
+                    drawMenu();
+                } else {
+                    cllock = true;
+                    decode = "";
+                    drawMain();
+                }
             }
             if (USBMode[1]) {
                 if (tud_hid_ready()) {
@@ -762,20 +770,15 @@ void setKeyerMode(int x, bool reset) {
 }
 
 void reset(bool screen) {
-    speed = 20;
-    tone = 340;
-    mute = 0;
-    keyerMode = 1;
-    USBMode[0] = 1;
-    USBMode[1] = 0;
-    USBMode[2] = 1;
-    dumbMIDI = 0;
-    reverse = 0;
+    for (int i = 0; i < optionList.size(); i++) {
+        optionList.at(i).reset();
+    }
     ssd1306_clear(&disp);
     ssd1306_draw_string_with_font(&disp, 8 + (128 / 2) - ((13 * 7) / 2), 32 - (8 / 2), 1, font_8x5, "Settings Reset");
     ssd1306_show(&disp);
     sleep_ms(2000);
     saveSettings();
+    decode = "";
 }
 void loadSettings() {
     const settings* opts = (const settings*)(XIP_BASE + FLASH_TARGET_OFFSET);
