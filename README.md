@@ -73,7 +73,9 @@ If you want to build it yourself then you can get the parts from <u><b><a href="
         <li>Have the ability to put it into flashing mode by holding down the knob while turning it on.</li>
       </ul>
       <br>
-      <img src="images/v1.1kicad.png" alt="Alt text" height="150">
+      <img src="images/v1.1kicad.png" alt="Alt text" height="150"><br>
+      <b>Update: I (Lucas) am a dumbass and put the rotary encored switch trace too close to the i2c data pin for the display, and because of this the device thinks that the button is being pressed rapidly at all times. I have not yet confirmed that crosstalk is the problem but it is my current hypothesis. The other possibility is that there is some weird behavior when you connect the boot pin to a gpio pin and then pull it up. Either way I now have ~25 useless PCBs. V1.2 will be coming soon. :(</b><br>
+       <img src="images/fah.png" alt="Alt text" height="300">
   </li>
 </ul>
 
