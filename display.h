@@ -75,7 +75,7 @@ class MenuOption {
 public:
 
     MenuOption(std::string nameStr, std::string f, int val, int defaultVal, int maxVal, int minVal, std::function<void(MenuOption&)> inc, std::function<void(MenuOption&)> dec, std::function<void(MenuOption&)> app, std::function<void(MenuOption&)> load) :
-        name(nameStr), format(f), value(val), incVal(inc), defaultvalue(defaultVal), decVal(dec), appVal(app), loadVal(load), maxValue(maxVal), minValue(minVal) {
+        name(nameStr), format(f), value(val), incVal(inc), defaultvalue(defaultVal), decVal(dec), appVal(app), loadVal(load), maxValue(maxVal), minValue(minVal), useValue(true) {
     }
 
     MenuOption(std::string nameStr, std::vector<std::string> strArr, int val, int defaultVal, std::function<void(MenuOption&)> inc, std::function<void(MenuOption&)> dec, std::function<void(MenuOption&)> app, std::function<void(MenuOption&)> load) :
@@ -96,6 +96,7 @@ public:
 
     std::string name = "Option";
     std::string format = "{}";
+    bool useValue = false;
     bool useValueIndex = false;
     bool useBool = false;
     bool useAction = false;
@@ -126,32 +127,15 @@ public:
         action(*this);
     }
     void reset() {
-        if (!useAction && !useBool && !useValueIndex) {
+        if (useValue || useBool) {
             if (value != defaultvalue) {
                 value = defaultvalue;
-                if (useAction) {
-                    select();
-                } else {
-                    click();
-                }
+                click();
             }
         } else if (useValueIndex) {
             if (valueIndex != defaultvalue) {
                 valueIndex = defaultvalue;
-                if (useAction) {
-                    select();
-                } else {
-                    click();
-                }
-            }
-        } else if (useBool) {
-            if (value != defaultvalue) {
-                value = defaultvalue;
-                if (useAction) {
-                    select();
-                } else {
-                    click();
-                }
+                click();
             }
         }
     }

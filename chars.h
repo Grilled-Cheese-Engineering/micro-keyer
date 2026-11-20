@@ -11,6 +11,7 @@ inline const uint end = 4;
 
 inline int dit_pin = 26;
 inline int dah_pin = 27;
+
 inline int pwm_pin = 28;
 
 inline int radio_pin = 4;

@@ -28,9 +28,6 @@
 std::optional<Encoder> rot = std::nullopt;
 void gpio_callback(uint gpio, uint32_t events);
 
-const uint8_t* contents;
-uint32_t saved_interrupts;
-
 int dit_state;
 int dah_state;
 
@@ -777,6 +774,7 @@ void reset(bool screen) {
     ssd1306_draw_string_with_font(&disp, 8 + (128 / 2) - ((13 * 7) / 2), 32 - (8 / 2), 1, font_8x5, "Settings Reset");
     ssd1306_show(&disp);
     sleep_ms(2000);
+
     saveSettings();
     decode = "";
 }
@@ -784,7 +782,15 @@ void loadSettings() {
     const settings* opts = (const settings*)(XIP_BASE + FLASH_TARGET_OFFSET);
 
     if (opts->speed == -1 || opts->tone == -1 || opts->mute == -1 || opts->keyerMode == -1) {
-        reset(false);
+        speed = defSpeed;
+        tone = defTone;
+        mute = defMute;
+        keyerMode = defKeyerMode;
+        USBMode[0] = defUSBMode0;
+        USBMode[1] = defUSBMode1;
+        USBMode[2] = defUSBMode2;
+        dumbMIDI = defDumbMIDI;
+        reverse = defReverse;
     } else {
         speed = opts->speed;
         tone = opts->tone;

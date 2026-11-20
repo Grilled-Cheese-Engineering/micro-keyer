@@ -138,7 +138,7 @@ inline void ssd1306_invert(ssd1306_t* p, uint8_t inv) {
 
 inline void ssd1306_clear(ssd1306_t* p) {
     memset(p->buffer, 0, p->bufsize);
-    //memset(dispbuf, 0, sizeof(dispbuf));
+    memset(dispbuf, 0, sizeof(dispbuf));
 }
 
 void ssd1306_clear_pixel(ssd1306_t* p, uint32_t x, uint32_t y) {
