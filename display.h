@@ -11,7 +11,17 @@ extern "C" {
 #include <vector>
 #include <functional>
 #include "hardware/flash.h"
+#include "pico/stdlib.h"
+#include "hardware/pio.h"
+#include "hardware/timer.h"
+#include "hardware/i2c.h"
+#include "pico/time.h"
+#include "hardware/uart.h"
+#include "hardware/pwm.h"
 #include "hardware/sync.h"
+#include "hardware/adc.h"
+#include "pico/bootrom.h"
+#include "pico/multicore.h"
 #include "git_version.h"
 #include "chars.h"
 
@@ -26,6 +36,8 @@ extern bool USBMode[3];
 extern int keyerMode;
 extern bool reverse;
 extern bool dumbMIDI;
+
+extern int highScore;
 
 extern int selected_item;
 extern int clicked_item;
@@ -53,6 +65,7 @@ void loadSettings();
 void saveSettings(bool reset = true);
 void print(std::string str);
 
+void game();
 
 #define MODE_CDC_SERIAL  0
 #define MODE_HID 1
@@ -67,6 +80,7 @@ typedef struct __attribute__((aligned(FLASH_PAGE_SIZE))) {
     bool USBMode[3];
     bool dumbMIDI;
     bool reverse;
+    int highScore;
 } settings;
 
 extern settings options;

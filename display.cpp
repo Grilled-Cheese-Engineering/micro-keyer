@@ -7,6 +7,7 @@
 
 ssd1306_t disp;
 
+
 void drawMain() {
 
     ssd1306_clear(&disp);
@@ -14,18 +15,18 @@ void drawMain() {
 
     gpio_pull_up(19);
     sleep_ms(2);
-    float v = 0.0;
-    int x = 0;
+
+    uint32_t x = 0;
     for (int i = 0; i < 50; i++) {
         x += adc_read();
     }
     gpio_pull_down(19);
 
-    x /= 50;
+    float avg = x / 50.0f;
+    float v = ((avg / 4095.0f) * 3.3f) * 2.0f;
 
-    v = (((x * 2.0) / 1243.24324) - 3) * 83.33;
+    std::string voltage = std::format(" {:.2f}% ", std::clamp(((v - 3.3f) / (4.1f - 3.3f)) * 100.0f, 0.0f, 100.0f));
 
-    std::string voltage = std::format(" {:.2f}% ", v);
     ssd1306_draw_string_with_font(&disp, 128 - ((voltage.length() * 5) + (voltage.length() - 1)) - ((status.length() * 5) + (status.length() - 1)) - 8, 2, 1, font_8x5, voltage.c_str());
 
     ssd1306_draw_string_with_font(&disp, 128 - ((status.length() * 5) + (status.length() - 1)), 2, 1, font_8x5, status.c_str());

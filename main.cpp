@@ -1,16 +1,4 @@
 #include <iostream>
-#include "pico/stdlib.h"
-#include "hardware/pio.h"
-#include "hardware/timer.h"
-#include "hardware/i2c.h"
-#include "pico/time.h"
-#include "hardware/uart.h"
-#include "hardware/pwm.h"
-#include "hardware/flash.h"
-#include "hardware/sync.h"
-#include "hardware/adc.h"
-#include "pico/bootrom.h"
-#include "pico/multicore.h"
 #include "sstream"
 #include <format>
 #include <string_view>
@@ -439,6 +427,12 @@ int main() {
                 }
 
             }
+            if (swlock && !gpio_get(rot_sw) && to_ms_since_boot(get_absolute_time()) - rotPress > 4000) {
+                multicore_reset_core1();
+                while (true) {
+                    game();
+                }
+            }
             if (swlock && !gpio_get(rot_sw) && to_ms_since_boot(get_absolute_time()) - rotPress > 1000 && !cllock) {
                 if (selected_item != -1) {
                     cllock = true;
@@ -770,11 +764,11 @@ void reset(bool screen) {
     for (int i = 0; i < optionList.size(); i++) {
         optionList.at(i).reset();
     }
+    highScore = 0;
     ssd1306_clear(&disp);
     ssd1306_draw_string_with_font(&disp, 8 + (128 / 2) - ((13 * 7) / 2), 32 - (8 / 2), 1, font_8x5, "Settings Reset");
     ssd1306_show(&disp);
     sleep_ms(2000);
-
     saveSettings();
     decode = "";
 }
@@ -791,6 +785,7 @@ void loadSettings() {
         USBMode[2] = defUSBMode2;
         dumbMIDI = defDumbMIDI;
         reverse = defReverse;
+        highScore = 0;
     } else {
         speed = opts->speed;
         tone = opts->tone;
@@ -801,6 +796,7 @@ void loadSettings() {
         USBMode[2] = opts->USBMode[2];
         dumbMIDI = opts->dumbMIDI;
         reverse = opts->reverse;
+        highScore = opts->highScore;
 
     }
     setTone(tone, false);
@@ -809,7 +805,7 @@ void loadSettings() {
 
 void saveSettings(bool reset) {
     if (reset)multicore_reset_core1();
-    options = { speed, tone, mute, keyerMode,{ USBMode[0],USBMode[1],USBMode[2] },dumbMIDI,reverse };
+    options = { speed, tone, mute, keyerMode,{ USBMode[0],USBMode[1],USBMode[2] },dumbMIDI,reverse, highScore };
     uint32_t ints = save_and_disable_interrupts();
     flash_range_erase(FLASH_TARGET_OFFSET, FLASH_SECTOR_SIZE);
     flash_range_program(FLASH_TARGET_OFFSET, (const uint8_t*)&options, FLASH_PAGE_SIZE);
